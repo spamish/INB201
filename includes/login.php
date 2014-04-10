@@ -1,64 +1,88 @@
-<?php function login($username, $password) {
-    $con = new PDO("mysql:host=localhost;dbname=inb201","inb201","password");
-    $query = $con->prepare("SELECT username, password
-        FROM login WHERE username = '$username'");
-    $query->bindValue(':username', $username);
-    $query->bindValue(':password', $password);
-    $query->execute();
+<?php
+    include('lib/password.php');
+    
+    function login($email, $password)
+    {
+        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        $query = $con -> prepare("
+            SELECT email, hash
+            FROM login
+            WHERE email = '$email'
+        ");
+        $query -> bindValue(':email', $email);
+        $query -> execute();
 
-    $result = $query->fetchAll();
-    $rows = count($result,0);
-
-    if($result[0]['password'] == $password) {
-        return 1;
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
+        
+        $hash = $result[0]['hash'];
+        return password_verify($password, $hash);
     }
-    return 0;
-}
-function id($username) {
-    $con = new PDO("mysql:host=localhost;dbname=inb201","inb201","password");
-    $query = $con->prepare("SELECT username, id
-        FROM login WHERE username = '$username'");
-    $query->bindValue(':username', $username);
-    $query->execute();
+    
+    function id($email)
+    {
+        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        $query = $con -> prepare("
+            SELECT email, id
+            FROM login
+            WHERE email = '$email'
+        ");
+        $query -> bindValue(':email', $email);
+        $query -> execute();
 
-    $result = $query->fetchAll();
-    $rows = count($result,0);
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
 
-    return $result[0]['id'];
-}
-function firstname($username) {
-    $con = new PDO("mysql:host=localhost;dbname=inb201","inb201","password");
-    $query = $con->prepare("SELECT username, firstname
-        FROM login WHERE username = '$username'");
-    $query->bindValue(':username', $username);
-    $query->execute();
+        return $result[0]['id'];
+    }
+    
+    function firstname($email)
+    {
+        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        $query = $con -> prepare("
+            SELECT email, firstname
+            FROM login
+            WHERE email = '$email'
+        ");
+        $query -> bindValue(':email', $email);
+        $query -> execute();
 
-    $result = $query->fetchAll();
-    $rows = count($result,0);
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
 
-    return $result[0]['firstname'];
-}
-function surname($username) {
-    $con = new PDO("mysql:host=localhost;dbname=inb201","inb201","password");
-    $query = $con->prepare("SELECT username, surname
-        FROM login WHERE username = '$username'");
-    $query->bindValue(':username', $username);
-    $query->execute();
+        return $result[0]['firstname'];
+    }
+    
+    function surname($email)
+    {
+        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        $query = $con -> prepare("
+            SELECT email, surname
+            FROM login
+            WHERE email = '$email'
+        ");
+        $query -> bindValue(':email', $email);
+        $query -> execute();
 
-    $result = $query->fetchAll();
-    $rows = count($result,0);
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
 
-    return $result[0]['surname'];
-}
-function role($username) {
-    $con = new PDO("mysql:host=localhost;dbname=inb201","inb201","password");
-    $query = $con->prepare("SELECT username, role
-        FROM login WHERE username = '$username'");
-    $query->bindValue(':username', $username);
-    $query->execute();
+        return $result[0]['surname'];
+    }
+    
+    function role($email){
+        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        $query = $con -> prepare("
+            SELECT email, role
+            FROM login
+            WHERE email = '$email'
+        ");
+        $query -> bindValue(':email', $email);
+        $query -> execute();
 
-    $result = $query->fetchAll();
-    $rows = count($result,0);
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
 
-    return $result[0]['role'];
-} ?>
+        return $result[0]['role'];
+    }
+?>

@@ -1,124 +1,100 @@
 body {
-    background-color:#a3b4b8;
-    font-family: georgia,sans-serif;
+    background-color:#acd;
     color:#333;
+    font-family: georgia,sans-serif;
     margin:0;
     padding:0;
 }
  
 #wrapper {
-    width:95%;
-    background-color:#f8f8f8;
-    margin:0 auto;
+    background-color:#eef;
     border-left:1px solid #ccc;
     border-right:1px solid #ccc;
+    margin:0 auto;
+    width:1200px;
 }
 
 #header {
-    width:100%;
-    height:80px;
-    background-color:#4ba2b8;
-    margin:0 auto;
-    margin-bottom:25px;
-    border-bottom:1px solid #ccc;
+    background-color:#0ac;
     border-top:1px solid #ccc;
-}
-
-#header h1 {
-    padding:10px;
-    font-size:24px;
-}
-
-#content {
-    background-color:#dfe4e6;
-    width:68%;
-    float:left;
-    padding:10px;
-    margin-left:10px;
-    margin-bottom:25px;
+    height:80px;
+    margin:0px 0px 10px 0px;
+    padding-left:20px;
+    width:1180px;
 }
 
 #sidebar {
-    width:120px;
+    background-color:#08f;
     float:left;
-    margin-bottom:25px;
+    margin-top:10px;
+    width:140px;
 }
 
-#sidebar a {
-    text-decoration:none;
-    margin-bottom:5px;
-}
-
-#functions {
-    background-color:#7fd5eb;
-    width:12%;
-    float:right;
+#content {
+    background-color:#cee;
+    float:left;
+    margin:10px 20px 30px 20px;
     padding:10px;
-    margin-bottom:25px;
-    border-right:1px solid #ccc;
+    width:860px;
 }
 
-#functions a {
-    text-decoration:none;
-}
-
-#functions li {
-    list-style:none;
+#pageActions {
+    background-color:#08f;
+    float:right;
+    margin-top:10px;
+    width:140px;
 }
 
 #footer {
     clear:both;
-    width:960px;
-    height:70px;
+    width:100%;
+    height:55px;
     border-top:1px solid #ccc;
 }
 
-#footer p {
-    padding:10px;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#view {
+    background-color:#ffffff;
+    border: 1px solid black;
+    border-collapse:collapse;
+    text-align:left;
+    width:100%;
 }
 
-.btnNavigation {
-	-moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
-	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #004487) );
-	background:-moz-linear-gradient( center top, #79bbff 5%, #004487 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#004487');
-	background-color:#79bbff;
-	-webkit-border-top-left-radius:0px;
-	-moz-border-radius-topleft:0px;
-	border-top-left-radius:0px;
-	-webkit-border-top-right-radius:20px;
-	-moz-border-radius-topright:20px;
-	border-top-right-radius:20px;
-	-webkit-border-bottom-right-radius:20px;
-	-moz-border-radius-bottomright:20px;
-	border-bottom-right-radius:20px;
-	-webkit-border-bottom-left-radius:0px;
-	-moz-border-radius-bottomleft:0px;
-	border-bottom-left-radius:0px;
-	text-indent:0;
-	border:1px solid #84bbf3;
-	display:inline-block;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:15px;
-	font-weight:bold;
-	font-style:normal;
-	height:40px;
-	line-height:40px;
-	width:120px;
-	text-decoration:none;
-	text-align:center;
-	text-shadow:1px 1px 0px #528ecc;
+th {
+    background-color:#BBffff;
+    border: 1px solid black;
+    padding-left:15px;
+    width:15%;
 }
-.btnNavigation:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #004487), color-stop(1, #79bbff) );
-	background:-moz-linear-gradient( center top, #004487 5%, #79bbff 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#004487', endColorstr='#79bbff');
-	background-color:#004487;
-}.btnNavigation:active {
-	position:relative;
-	top:1px;
+
+#email th {
+    width:20%;
 }
-/* This button was generated using CSSButtonGenerator.com */
+
+#edit th {
+    width:10px;
+}
+
+#cell {
+    border-right:1px solid black;
+    text-align:left;
+    padding-left:15px;
+}
+
+#alt {
+    background-color:#DDffff;
+}
