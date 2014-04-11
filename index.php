@@ -5,6 +5,8 @@
     {
         session_destroy();
     }
+    session_start();
+    $_SESSION['layer'] = -1;
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -25,12 +27,12 @@
                 <form action="redirect.php" method="post">
                     <table>
                         <tr>
-                            <td>Email</td>
-                            <td><input type="text" name="email" autofocus required></td>
+                            <td>Username</td>
+                            <td><input type="text" name="username" autofocus ></td>
                         </tr>
                         <tr>
                             <td>Password</td>
-                            <td><input type="password" name="password" required></td>
+                            <td><input type="password" name="password" ></td>
                         </tr>
                         <tr>
                             <td></td>

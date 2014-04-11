@@ -10,7 +10,7 @@
                 break;
         }
         
-        switch ($_SESSION['role']) {
+        switch ($_SESSION['position']) {
             case "doctor": //Display links if user has doctors access. ?>
                 
                 <a href="<?php echo $append . "home.php"?>"
@@ -56,6 +56,7 @@
                     id="btnPageActions">Home</a><br>
                 <a href="<?php echo $append . "admin/staff_view.php"?>"
                     id="btnPageActions">Staff</a><br>
+                <?php include($append . "admin/links_staff.php"); ?>
                 <a href="<?php echo $append . "admin/procedure_view.php"?>"
                     id="btnPageActions">Procedures</a><br>
                 <a href="<?php echo $append . "admin/facility_view.php"?>"
@@ -64,7 +65,11 @@
                     id="btnPageActions">Insurance</a><br>
                 <a href="<?php echo $append . "admin/log_view.php"?>"
                     id="btnPageActions">Logs and Reports</a><br>
-                <?php break;
+                <a href=""
+                    id="btnPageActions">Export Salaries</a><br>
+            <?php
+                //administratorLinks($append);
+                break;
             
             default: break; //Display no links unless authorised.
         }

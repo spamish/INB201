@@ -1,22 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('../includes/functions.php');
-    include('../lib/password.php');
     session_start();
     $_SESSION['layer'] = 1;
+    include('../includes/functions.php');
+    include_once('../lib/password.php');
     if (1 /*unique*/) {
-        $email = $_POST['firstname'] . ".";
-        $email .= $_POST['surname'] . "@touch.com";
-        $email = strtolower($email);
+        echo $username = $_POST['username'];
+        echo $firstName = $_POST['firstName'];
+        echo $surname = $_POST['surname'];
+        echo $dateOfBirth = $_POST['dateOfBirth'];
+        echo $phoneNumber = $_POST['phoneNumber'];
+        echo $payGrade = $_POST['payGrade'];
+        echo $position = $_POST['position'];
+        echo $ward = $_POST['ward'];
         
-        $firstname = $_POST['firstname'];
-        $surname = $_POST['surname'];
-        $role = $_POST['role'];
-        
-        $password = substr(md5(rand()), 0, 10);
+        $password = "password"; //substr(md5(rand()), 0, 10);
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        createStaff($email, $firstname, $surname, $role, $hash);
+        createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward, $hash);
     }
 ?>
 
@@ -39,10 +40,14 @@
                     Temporary password is <?php echo $password?></p>
                     <table id="">
                         <tr>
-                            <th>Email</th>
+                            <th>Username</th>
                             <th>First Name</th>
                             <th>Surname</th>
-                            <th>Role</th>
+                            <th>Date of Birth</th>
+                            <th>Phone Number</th>
+                            <th>Pay Grade</th>
+                            <th>Position</th>
+                            <th>Ward</th>
                         </tr>
                         
                         <?php
@@ -55,10 +60,14 @@
                             <td><?php echo $staff[$count][1]; ?></td>
                             <td><?php echo $staff[$count][2]; ?></td>
                             <td><?php echo $staff[$count][3]; ?></td>
+                            <td><?php echo $staff[$count][4]; ?></td>
+                            <td><?php echo $staff[$count][5]; ?></td>
+                            <td><?php echo $staff[$count][6]; ?></td>
+                            <td><?php echo $staff[$count][7]; ?></td>
                         </tr>
                     </table>
                 <?php } else { ?>
-                    <p>Passwords didn't match.</p>
+                    <p>The username is already in use.</p>
                 <?php } ?>
             </div> <!-- end #content -->
             

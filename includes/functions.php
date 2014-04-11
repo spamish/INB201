@@ -1,9 +1,42 @@
 <?php
+    $dbName = "inb201project";
+    $dbUser = "teamtouch";
+    $dbPassword = "JFQQ4v2rXs";
+
+    if ($_SESSION['layer'] == -1)
+    {
+        include('lib/password.php');
+    }
+    else
+    {
+        include('../lib/password.php');
+    }
+    
+    function login($username, $password)
+    {
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con -> prepare("
+            SELECT username, hash
+            FROM employeeinfo
+            WHERE username = '$username'
+        ");
+        $query -> bindValue(':username', $username);
+        $query -> execute();
+
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
+        
+        $hash = $result[0]['hash'];
+        return password_verify($password, $hash);
+    }
+    
     function tally()
     {
-        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
         $query = $con -> prepare("
-            SELECT * FROM login
+            SELECT * FROM employeeinfo
         ");
         $query -> execute();
 
@@ -12,10 +45,11 @@
 
     function staff()
     {
-        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
         $query = $con -> prepare("
-            SELECT email, firstname, surname, role
-            FROM login
+            SELECT username, firstName, surname, dateOfBirth, phoneNumber, payGrade, position, ward
+            FROM employeeinfo
         ");
         $query -> execute();
 
@@ -25,12 +59,47 @@
         return $result;
     }
     
-    function createStaff($email, $firstname, $surname, $role, $hash)
+    function employeeInfoUsername($username)
     {
-        $con = new PDO("mysql:host=localhost;dbname=inb201", "inb201", "password");
-        $query = $con -> query("
-            INSERT INTO login(email,firstname,surname,role,hash)
-            VALUES ('$email', '$firstname', '$surname', '$role', '$hash')
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con -> prepare("
+            SELECT id, username, firstName, surname, dateOfBirth, phoneNumber, payGrade, position, ward
+            FROM employeeinfo
+            WHERE username = '$username'
+        ");
+        $query -> execute();
+
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
+
+        return $result[0];
+    }
+    
+    function employeeInfosId($id)
+    {
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con -> prepare("
+            SELECT id, username, firstName, surname, dateOfBirth, phoneNumber, payGrade, position, ward
+            FROM employeeinfo
+            WHERE id = '$id'
+        ");
+        $query -> execute();
+
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
+
+        return $result;
+    }
+    
+    function createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward, $hash)
+    {
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con->query("
+            INSERT INTO employeeinfo (username, firstName, surname, dateOfBirth, phoneNumber, payGrade, position, ward, hash)
+            VALUES ('1', '$username', '$firstName', '$surname', '$dateOfBirth', '$phoneNumber', '$payGrade', '$position', '$ward', '$hash')
         ");
     }
 ?>

@@ -21,9 +21,9 @@
             <?php include('includes/header.php'); ?>
             <?php include('includes/sidebar.php'); ?>
             
-            <div id="content"> <!-- All content goes here -->
+            <!--<div id="content"> <!-- All content goes here --
                 
-                <h2>Welcome <?php echo $_SESSION['firstname']; ?></h2>
+                <h2>Welcome <?php //echo $_SESSION['firstName']; ?></h2>
                 
             </div> <!-- end #content -->
             

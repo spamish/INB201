@@ -5,7 +5,7 @@
     {
         session_start();
     }
-    include('includes/login.php');
+    include('includes/functions.php');
     $_SESSION['layer'] = -1;
 ?>
 
@@ -24,17 +24,19 @@
             
             <div id="content" style="margin-left:160px;"> <!-- All content goes here -->
                 
-                <?php if (login($_POST['email'], $_POST['password'])) {
-                    $_SESSION['id'] = id($_POST['email']);
-                    $_SESSION['firstname'] = firstname($_POST['email']);
-                    $_SESSION['surname'] = surname($_POST['email']);
-                    $_SESSION['role'] = role($_POST['email']); ?>
+                <?php
+                    if (login($_POST['username'], $_POST['password'])) {
+                        $employee = employeeInfoUsername($_POST['username']);
+                        $_SESSION['id'] = $employee[0];
+                        $_SESSION['firstName'] = $employee[2];
+                        $_SESSION['position'] = $employee[7];
+                    ?>
                     
-                    <h2>Welcome <?php echo $_SESSION['firstname']; ?></h2>
+                    <h2>Welcome <?php echo $_SESSION['firstName']; ?></h2>
                     <p>Creating your session and redirecting now.</p>
                 <?php } else { ?>
                     <h2>Login Failed.</h2>
-                    <p>Incorrect email or password</p>
+                    <p>Incorrect username or password</p>
                 <?php } ?>
                 
             </div> <!-- end #content -->
@@ -45,7 +47,7 @@
     </body>
 
     <?php
-        if (login($_POST['email'], $_POST['password'])) {
+        if (login($_POST['username'], $_POST['password'])) { 
             header( "refresh:1; url=home.php");
         } else {
             header( "refresh:1; url=index.php");
