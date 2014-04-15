@@ -2,7 +2,6 @@
 
 <?php
     session_start();
-    $_SESSION['layer'] = 2;
     include('../includes/functions.php');
 ?>
 

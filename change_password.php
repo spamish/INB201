@@ -17,9 +17,32 @@
             <?php include('includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
-                
-                <p>Changing password is done here</p>
-                
+                <form action="change_password_summary.php" method="post">
+                    <table>
+                        <tr>
+                            <td align="right">Current Password</td>
+                            <td align="left"><input type="password" name="password_old" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Confirm Current Password</td>
+                            <td align="left"><input type="password" name="confirm_old" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right">New Password</td>
+                            <td align="left"><input type="password" name="password_new" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Confirm New Password</td>
+                            <td align="left"><input type="password" name="confirm_new" required/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td align="left">
+                                <input type="submit" value="Save">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
             </div> <!-- end #content -->
             
             <?php include('includes/footer.php'); ?>

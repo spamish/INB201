@@ -1,4 +1,4 @@
-body {
+body {	
     background-color:#acd;
     color:#333;
     font-family: georgia,sans-serif;
@@ -6,7 +6,7 @@ body {
     padding:0;
 }
  
-#wrapper {
+#wrapper {	
     background-color:#eef;
     border-left:1px solid #ccc;
     border-right:1px solid #ccc;
@@ -14,7 +14,7 @@ body {
     width:1200px;
 }
 
-#header {
+#header {	
     background-color:#0ac;
     border-top:1px solid #ccc;
     height:80px;
@@ -23,7 +23,7 @@ body {
     width:1180px;
 }
 
-#sidebar {
+#sidebar {	
     background-color:#08f;
     float:left;
     margin-top:10px;
@@ -32,17 +32,10 @@ body {
 
 #content {
     background-color:#cee;
-    float:left;
+    float:right;
     margin:10px 20px 30px 20px;
     padding:10px;
-    width:860px;
-}
-
-#pageActions {
-    background-color:#08f;
-    float:right;
-    margin-top:10px;
-    width:140px;
+    width:1000px;
 }
 
 #footer {
@@ -51,20 +44,6 @@ body {
     height:55px;
     border-top:1px solid #ccc;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #view {
     background-color:#ffffff;

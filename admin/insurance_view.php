@@ -2,7 +2,6 @@
 
 <?php
     session_start();
-    $_SESSION['layer'] = 1;
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

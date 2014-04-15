@@ -2,36 +2,6 @@
     $dbName = "inb201project";
     $dbUser = "teamtouch";
     $dbPassword = "JFQQ4v2rXs";
-
-    if (   strpos($_SERVER["PHP_SELF"], "home")
-        || strpos($_SERVER["PHP_SELF"], "index")
-        || strpos($_SERVER["PHP_SELF"], "redirect"))
-    {
-        include('lib/password.php');
-    }
-    else
-    {
-        include('../lib/password.php');
-    }
-    
-    function login($username, $password)
-    {
-        global $dbName, $dbUser, $dbPassword;
-        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
-        $query = $con -> prepare("
-            SELECT username, hash
-            FROM employeeinfo
-            WHERE username = '$username'
-        ");
-        $query -> bindValue(':username', $username);
-        $query -> execute();
-
-        $result = $query -> fetchAll();
-        $rows = count($result, 0);
-        
-        $hash = $result[0]['hash'];
-        return password_verify($password, $hash);
-    }
     
     function tally()
     {
@@ -61,6 +31,27 @@
         return $result;
     }
     
+    function checkIfExists($username)
+    {
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con -> prepare("
+            SELECT count(1)
+            FROM employeeinfo
+            WHERE username = '$username'
+        ");
+        $query -> execute();
+
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
+        
+        if ($result[0])
+        {
+            return 0;
+        }
+        return 1;
+    }
+    
     function employeeInfoUsername($username)
     {
         global $dbName, $dbUser, $dbPassword;
@@ -78,7 +69,7 @@
         return $result[0];
     }
     
-    function employeeInfosId($id)
+    function employeeInfoId($id)
     {
         global $dbName, $dbUser, $dbPassword;
         $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
@@ -101,7 +92,27 @@
         $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
         $query = $con->query("
             INSERT INTO employeeinfo (username, firstName, surname, dateOfBirth, phoneNumber, payGrade, position, ward, hash)
-            VALUES ('1', '$username', '$firstName', '$surname', '$dateOfBirth', '$phoneNumber', '$payGrade', '$position', '$ward', '$hash')
+            VALUES ('$username', '$firstName', '$surname', '$dateOfBirth', '$phoneNumber', '$payGrade', '$position', '$ward', '$hash')
         ");
+    }
+    
+    function editStaff($id, $username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward)
+    {
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con->query("
+            UPDATE employeeinfo
+            SET username='$username',
+                firstName='$firstName',
+                surname='$surname',
+                dateOfBirth='$dateOfBirth',
+                phoneNumber='$phoneNumber',
+                payGrade='$payGrade',
+                position='$position',
+                ward='$ward'
+            WHERE id='$id'
+        ");
+        $query->bindValue(':id', $id);
+        $query->execute();
     }
 ?>

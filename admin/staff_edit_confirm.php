@@ -6,6 +6,7 @@
     include_once('../lib/password.php');
     $check = checkIfExists($_POST['username']);
     if ($check[0]) {
+        $id = $_POST['id'];
         $username = $_POST['username'];
         $firstName = $_POST['firstName'];
         $surname = $_POST['surname'];
@@ -15,9 +16,7 @@
         $position = $_POST['position'];
         $ward = $_POST['ward'];
         
-        $password = substr(md5(rand()), 0, 10);
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward, $hash);
+        editStaff($id, $username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward);
     }
 ?>
 
@@ -36,10 +35,10 @@
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
                 <?php $check = checkIfExists($_POST['username']);
-                if ($check[0])
-                { ?>
-                    <p>Account creation successful.<br>
-                    Temporary password is <?php echo $password?></p>
+                if ($check[0]) {
+                    $staff = staff();
+                    $id = $id - 1; ?>
+                    <p>Account edit successful.</p>
                     <table id="">
                         <tr>
                             <th>Username</th>
@@ -51,26 +50,18 @@
                             <th>Position</th>
                             <th>Ward</th>
                         </tr>
-                        
-                        <?php
-                            $count = tally() - 1;
-                            $staff = staff();
-                        ?>
-                        
                         <tr>
-                            <td><?php echo $staff[$count][0]; ?></td>
-                            <td><?php echo $staff[$count][1]; ?></td>
-                            <td><?php echo $staff[$count][2]; ?></td>
-                            <td><?php echo $staff[$count][3]; ?></td>
-                            <td><?php echo $staff[$count][4]; ?></td>
-                            <td><?php echo $staff[$count][5]; ?></td>
-                            <td><?php echo $staff[$count][6]; ?></td>
-                            <td><?php echo $staff[$count][7]; ?></td>
+                            <td><?php echo $staff[$id][0]; ?></td>
+                            <td><?php echo $staff[$id][1]; ?></td>
+                            <td><?php echo $staff[$id][2]; ?></td>
+                            <td><?php echo $staff[$id][3]; ?></td>
+                            <td><?php echo $staff[$id][4]; ?></td>
+                            <td><?php echo $staff[$id][5]; ?></td>
+                            <td><?php echo $staff[$id][6]; ?></td>
+                            <td><?php echo $staff[$id][7]; ?></td>
                         </tr>
                     </table>
-                <?php }
-                else
-                { ?>
+                <?php } else { ?>
                     <p>The username is already in use.</p>
                 <?php } ?>
             </div> <!-- end #content -->
@@ -82,7 +73,7 @@
     <?php
         $check = checkIfExists($_POST['username']);
         if (!$check[0]) {
-            header( "refresh:1; url=staff_add.php");
+            header( "refresh:1; url=staff_view.php");
         }
         exit;
     ?>

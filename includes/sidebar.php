@@ -1,7 +1,8 @@
 <div id="sidebar">
     <?php
         if (   strpos($_SERVER["PHP_SELF"], "home")
-            || strpos($_SERVER["PHP_SELF"], "password"))
+            || strpos($_SERVER["PHP_SELF"], "password")
+            || strpos($_SERVER["PHP_SELF"], "template"))
         {
             $append = "";
         }
@@ -55,7 +56,13 @@
             
                 <a href="<?php echo $append . "home.php"?>"
                     id="btnSidebar">Home</a><br>
-                <?php include($append . 'admin/admin_links.php');
+                <?php if (strpos($_SERVER["PHP_SELF"], "home"))
+                { ?>
+                    <a href="<?php echo $append . "template.php"?>"
+                        id="btnSidebar" style="margin-left:10px;">Template</a><br>
+                <?php }
+                
+                include($append . 'admin/admin_links.php');
                 break;
             
             default: break; //Display no links unless authorised.

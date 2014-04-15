@@ -7,14 +7,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
         <title>T.O.U.C.H. Online System</title>
     </head>
     
     <body>
         <div id="wrapper">
-            <?php include('../includes/header.php'); ?>
-            <?php include('../includes/sidebar.php'); ?>
+            <?php include('includes/header.php'); ?>
+            <?php include('includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
                 
@@ -22,7 +22,7 @@
                 
             </div> <!-- end #content -->
             
-            <?php include('../includes/footer.php'); ?>
+            <?php include('includes/footer.php'); ?>
         </div> <!-- End #wrapper -->
     </body>
 </html>

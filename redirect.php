@@ -5,7 +5,27 @@
     {
         session_start();
     }
+    include('lib/password.php');
     include('includes/functions.php');
+    
+    function login($username, $password)
+    {
+        global $dbName, $dbUser, $dbPassword;
+        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
+        $query = $con -> prepare("
+            SELECT username, hash
+            FROM employeeinfo
+            WHERE username = '$username'
+        ");
+        $query -> bindValue(':username', $username);
+        $query -> execute();
+
+        $result = $query -> fetchAll();
+        $rows = count($result, 0);
+        
+        $hash = $result[0]['hash'];
+        return password_verify($password, $hash);
+    }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
