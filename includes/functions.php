@@ -3,7 +3,9 @@
     $dbUser = "teamtouch";
     $dbPassword = "JFQQ4v2rXs";
 
-    if ($_SESSION['layer'] == -1)
+    if (   strpos($_SERVER["PHP_SELF"], "home")
+        || strpos($_SERVER["PHP_SELF"], "index")
+        || strpos($_SERVER["PHP_SELF"], "redirect"))
     {
         include('lib/password.php');
     }

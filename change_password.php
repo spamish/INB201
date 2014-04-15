@@ -7,27 +7,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-        <meta name="author" content="" />
         <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
         <title>T.O.U.C.H. Online System</title>
     </head>
     
     <body>
         <div id="wrapper">
-            
             <?php include('includes/header.php'); ?>
             <?php include('includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
                 
-                <h2>Welcome <?php echo $_SESSION['firstName']; ?></h2>
+                <p>Changing password is done here</p>
                 
             </div> <!-- end #content -->
             
             <?php include('includes/footer.php'); ?>
-            
         </div> <!-- End #wrapper -->
     </body>
 </html>
