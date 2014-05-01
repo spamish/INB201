@@ -4,8 +4,8 @@
     include('../includes/start_session.php');
     include('../includes/functions.php');
     
-    $count = countTable("insurance");
-    $policy = viewTable("insurance");
+    $count = countTable("salaries");
+    $salary = viewTable("salaries");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,15 +22,13 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Insurance Policies</h2>
-                <form action="/inb201/admin/insurance_edit.php" method="post">
+                <h2>Staff Salaries</h2>
+                <form action="/inb201/admin/salaries_edit.php" method="post">
                     <table>
                         <tr>
-                            <th>Policy Name</th>
-                            <th>Provider</th>
-                            <th>Benefit Description</th>
-                            <th>Rebate Percent</th>
-                            <th>Maximum Rebate</th>
+                            <th>Salary ID</th>
+                            <th>Salary Amount</th>
+                            <th>Next Payment Date</th>
                             <td><input type="submit" value="Edit" style="float:right;"></td>
                             <td><input type="submit" value="Delete" style="float:right;"></td>
                             
@@ -44,11 +42,9 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $policy[$i]["policyName"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["provider"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["benefit"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["rebatePercent"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["rebateMaximum"]; ?></td>
+                                    <td id="tableCell"><?php echo $salary[$i]["salaryID"]; ?></td>
+                                    <td id="tableCell"><?php echo $salary[$i]["ward"]; ?></td>
+                                    <td id="tableCell"><?php echo $salary[$i]["nextDate"]; ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="edit"
                                             value="<?php echo $i ?>">

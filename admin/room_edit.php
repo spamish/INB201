@@ -3,16 +3,16 @@
 <?php
     include('../includes/start_session.php');
     include('../includes/functions.php');
-    $id = $_POST['edit'];
+    echo $id = $_POST['edit'];
     $staff = staffInfoId($id);
-    $username = $staff["username"];
-    $firstName = $staff["firstName"];
-    $surname = $staff["surname"];
-    $dateOfBirth = $staff["dateOfBirth"];
-    $phoneNumber = $staff["phoneNumber"];
-    $salary = $staff["salary"];
-    $position = $staff["position"];
-    $ward = $staff["ward"];
+    $username = $staff[0][1];
+    $firstName = $staff[0][2];
+    $surname = $staff[0][3];
+    $dateOfBirth = $staff[0][4];
+    $phoneNumber = $staff[0][5];
+    $salary = $staff[0][6];
+    $position = $staff[0][7];
+    $ward = $staff[0][8];
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -34,9 +34,7 @@
                     <table>
                         <tr>
                             <td align="right">Password</td>
-                            <td align="left">
-                                <input id="btnSubmit" type="submit" name="btnReset" value="Reset">
-                            </td>
+                            <td align="left"><input type="submit" name="btnReset" value="Reset"><br>
                         <tr>
                             <td align="right">Username</td>
                             <td align="left">
@@ -172,7 +170,7 @@
                         <tr>
                             <td></td>
                             <td align="left">
-                                <input id="btnSubmit" type="submit" name="btnUpdate" value="Save">
+                                <input type="submit" name="btnUpdate" value="Save">
                                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                             </td>
                         </tr>

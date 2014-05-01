@@ -1,23 +1,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    session_start();
+    include('../includes/start_session.php');
     include('../includes/functions.php');
     include_once('../lib/password.php');
-    $check = checkIfExists($_POST['username']);
-    if ($check[0]) {
+    $check = !checkStaffExists($_POST['username']);
+    
+    if ($check) {
         $username = $_POST['username'];
         $firstName = $_POST['firstName'];
         $surname = $_POST['surname'];
         $dateOfBirth = $_POST['dateOfBirth'];
         $phoneNumber = $_POST['phoneNumber'];
-        $payGrade = $_POST['payGrade'];
+        $salary = $_POST['salary'];
         $position = $_POST['position'];
         $ward = $_POST['ward'];
         
         $password = substr(md5(rand()), 0, 10);
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward, $hash);
+        
+        addStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward, $hash);
+        $staff = staffInfoUsername($username);
+        $id = $staff["staffID"];
     }
 ?>
 
@@ -35,55 +39,42 @@
 
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
-                <?php $check = checkIfExists($_POST['username']);
-                if ($check[0])
+                <?php if ($check)
                 { ?>
                     <p>Account creation successful.<br>
-                    Temporary password is <?php echo $password?></p>
-                    <table id="">
-                        <tr>
-                            <th>Username</th>
-                            <th>First Name</th>
-                            <th>Surname</th>
-                            <th>Date of Birth</th>
-                            <th>Phone Number</th>
-                            <th>Pay Grade</th>
-                            <th>Position</th>
-                            <th>Ward</th>
+                    Temporary password is "<?php echo $password?>"</p>
+                    <table>
+                        <tr id="tableRowHeader">
+                            <th id="tableHeader">Username</th>
+                            <th id="tableHeader">First Name</th>
+                            <th id="tableHeader">Surname</th>
+                            <th id="tableHeader">Date of Birth</th>
+                            <th id="tableHeader">Phone Number</th>
+                            <th id="tableHeader">Salary</th>
+                            <th id="tableHeader">Position</th>
+                            <th id="tableHeader">Ward</th>
                         </tr>
                         
-                        <?php
-                            $count = tally() - 1;
-                            $staff = staff();
-                        ?>
-                        
-                        <tr>
-                            <td><?php echo $staff[$count][0]; ?></td>
-                            <td><?php echo $staff[$count][1]; ?></td>
-                            <td><?php echo $staff[$count][2]; ?></td>
-                            <td><?php echo $staff[$count][3]; ?></td>
-                            <td><?php echo $staff[$count][4]; ?></td>
-                            <td><?php echo $staff[$count][5]; ?></td>
-                            <td><?php echo $staff[$count][6]; ?></td>
-                            <td><?php echo $staff[$count][7]; ?></td>
+                        <tr id="tableRowA">
+                            <td id="tableCell"><?php echo $staff["username"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["firstName"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["surname"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["dateOfBirth"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["phoneNumber"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["salary"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["position"]; ?></td>
+                            <td id="tableCell"><?php echo $staff["ward"]; ?></td>
                         </tr>
                     </table>
                 <?php }
                 else
                 { ?>
                     <p>The username is already in use.</p>
+                    <a id="btnSubmit" href="staff_add.php">Try Again</a>
                 <?php } ?>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>
         </div> <!-- End #wrapper -->
     </body>
-    
-    <?php
-        $check = checkIfExists($_POST['username']);
-        if (!$check[0]) {
-            header( "refresh:1; url=staff_add.php");
-        }
-        exit;
-    ?>
 </html>

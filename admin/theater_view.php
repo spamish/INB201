@@ -4,8 +4,8 @@
     include('../includes/start_session.php');
     include('../includes/functions.php');
     
-    $count = countTable("insurance");
-    $policy = viewTable("insurance");
+    $count = countTable("theaters");
+    $rooms = viewTable("theaters");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,15 +22,13 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Insurance Policies</h2>
-                <form action="/inb201/admin/insurance_edit.php" method="post">
+                <h2>Operating Theaters</h2>
+                <form action="/inb201/admin/theater_edit.php" method="post">
                     <table>
                         <tr>
-                            <th>Policy Name</th>
-                            <th>Provider</th>
-                            <th>Benefit Description</th>
-                            <th>Rebate Percent</th>
-                            <th>Maximum Rebate</th>
+                            <th>Theater Room</th>
+                            <th>Ward</th>
+                            <th>Schedule ID</th>
                             <td><input type="submit" value="Edit" style="float:right;"></td>
                             <td><input type="submit" value="Delete" style="float:right;"></td>
                             
@@ -44,11 +42,9 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $policy[$i]["policyName"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["provider"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["benefit"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["rebatePercent"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["rebateMaximum"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["roomNumber"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["ward"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["schedule"]; ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="edit"
                                             value="<?php echo $i ?>">

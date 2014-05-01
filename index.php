@@ -1,10 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    if (session_status() != PHP_SESSION_NONE)
-    {
-        session_destroy();
-    }
+    session_start();
+    session_destroy();
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -18,23 +16,23 @@
         <div id="wrapper">
             <?php include('includes/header.php'); ?>
             
-            <div id="content" style="margin-left:160px;"> <!-- All content goes here -->
+            <div id="login"> <!-- All login content goes here -->
                 
                 <h2>Please enter your email and password to begin.</h2>
                 
                 <form action="redirect.php" method="post">
-                    <table>
+                    <table id="loginTable">
                         <tr>
-                            <td>Username</td>
-                            <td><input type="text" name="username" autofocus ></td>
+                            <td id="loginCell">Username</td>
+                            <td id="loginCell"><input type="text" name="username" required autofocus ></td>
                         </tr>
                         <tr>
-                            <td>Password</td>
-                            <td><input type="password" name="password" ></td>
+                            <td id="loginCell">Password</td>
+                            <td id="loginCell"><input type="password" name="password" required></td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td><input type="submit" value="Submit"></td>
+                            <td><input id="btnSubmit" type="submit" value="Submit"></td>
                         </tr>
                     </table>
                 </form>

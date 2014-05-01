@@ -4,8 +4,8 @@
     include('../includes/start_session.php');
     include('../includes/functions.php');
     
-    $count = countTable("insurance");
-    $policy = viewTable("insurance");
+    $count = countTable("rooms");
+    $rooms = viewTable("rooms");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,18 +22,18 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Insurance Policies</h2>
-                <form action="/inb201/admin/insurance_edit.php" method="post">
+                <h2>Patient Rooms</h2>
+                <form action="/inb201/admin/room_edit.php" method="post">
                     <table>
-                        <tr>
-                            <th>Policy Name</th>
-                            <th>Provider</th>
-                            <th>Benefit Description</th>
-                            <th>Rebate Percent</th>
-                            <th>Maximum Rebate</th>
-                            <td><input type="submit" value="Edit" style="float:right;"></td>
-                            <td><input type="submit" value="Delete" style="float:right;"></td>
-                            
+                        <tr id="tableRowHeader">
+                            <th id="tableHeader">Room Number</th>
+                            <th id="tableHeader">Ward</th>
+                            <th id="tableHeader">Room Capacity</th>
+                            <th id="tableHeader">Occupied Beds</th>
+                            <td><input id="btnSubmit" type="submit"
+                                value="Edit" style="float:right;"></td>
+                            <td><input id="btnSubmit" type="submit"
+                                value="Delete" style="float:right;"></td>
                         </tr>
                         <?php for ($i = 0; $i < $count; $i++) {
                             if ($i % 2 == 0)
@@ -44,11 +44,10 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $policy[$i]["policyName"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["provider"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["benefit"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["rebatePercent"]; ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]["rebateMaximum"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["roomNumber"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["ward"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["roomCapacity"]; ?></td>
+                                    <td id="tableCell"><?php echo $rooms[$i]["occupiedBeds"]; ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="edit"
                                             value="<?php echo $i ?>">

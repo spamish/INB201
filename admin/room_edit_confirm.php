@@ -11,7 +11,7 @@
         $password = substr(md5(rand()), 0, 10);
         $hash = password_hash($password, PASSWORD_DEFAULT);
         
-        changePassword($id, $hash);
+        resetPassword($id, $hash);
     }
     else if (isset($_POST['btnUpdate']))
     {
@@ -25,8 +25,6 @@
         $ward = $_POST['ward'];
         
         editStaff($id, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward);
-        
-        $staff = viewTable("staff");
     }
 ?>
 
@@ -49,7 +47,9 @@
                     <p>Password reset, temporary password is "<?php echo $password;?>"</p>
                 <?php }
                 else if (isset($_POST['btnUpdate']))
-                { ?>
+                {
+                    $staff = viewStaff();
+                    $id = $id - 1; ?>
                     <p>Account edit successful.</p>
                     <table>
                         <tr id="tableRowHeader">
@@ -63,14 +63,14 @@
                             <th id="tableHeader">Ward</th>
                         </tr>
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $staff[$id]["username"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["firstName"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["surname"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["dateOfBirth"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["phoneNumber"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["salary"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["position"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["ward"]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][0]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][1]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][2]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][3]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][4]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][5]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][6]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id][7]; ?></td>
                         </tr>
                     </table>
                 <?php } ?>

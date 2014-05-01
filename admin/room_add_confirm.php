@@ -4,29 +4,20 @@
     include('../includes/start_session.php');
     include('../includes/functions.php');
     include_once('../lib/password.php');
-    
-    if (isset($_POST['btnReset']))
-    {
-        $id = $_POST['id'];
-        $password = substr(md5(rand()), 0, 10);
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-        
-        changePassword($id, $hash);
-    }
-    else if (isset($_POST['btnUpdate']))
-    {
-        $id = $_POST['id'];
+    $check = checkIfExists($_POST['username']);
+    if ($check) {
+        $username = $_POST['username'];
         $firstName = $_POST['firstName'];
         $surname = $_POST['surname'];
         $dateOfBirth = $_POST['dateOfBirth'];
         $phoneNumber = $_POST['phoneNumber'];
-        $salary = $_POST['salary'];
+        $payGrade = $_POST['payGrade'];
         $position = $_POST['position'];
         $ward = $_POST['ward'];
         
-        editStaff($id, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward);
-        
-        $staff = viewTable("staff");
+        $password = substr(md5(rand()), 0, 10);
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $payGrade, $position, $ward, $hash);
     }
 ?>
 
@@ -44,13 +35,9 @@
 
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
-                <?php if (isset($_POST['btnReset']))
+                <?php if ($check)
                 { ?>
-                    <p>Password reset, temporary password is "<?php echo $password;?>"</p>
-                <?php }
-                else if (isset($_POST['btnUpdate']))
-                { ?>
-                    <p>Account edit successful.</p>
+                    <p>Adding of room successful.</p>
                     <table>
                         <tr id="tableRowHeader">
                             <th id="tableHeader">Username</th>
@@ -58,25 +45,42 @@
                             <th id="tableHeader">Surname</th>
                             <th id="tableHeader">Date of Birth</th>
                             <th id="tableHeader">Phone Number</th>
-                            <th id="tableHeader">Salary</th>
+                            <th id="tableHeader">Pay Grade</th>
                             <th id="tableHeader">Position</th>
                             <th id="tableHeader">Ward</th>
                         </tr>
+                        
+                        <?php
+                            $count = tallyRooms() - 1;
+                            $staff = viewStaff();
+                        ?>
+                        
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $staff[$id]["username"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["firstName"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["surname"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["dateOfBirth"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["phoneNumber"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["salary"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["position"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["ward"]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][0]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][1]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][2]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][3]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][4]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][5]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][6]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$count][7]; ?></td>
                         </tr>
                     </table>
+                <?php }
+                else
+                { ?>
+                    <p>The username is already in use.</p>
                 <?php } ?>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>
         </div> <!-- End #wrapper -->
     </body>
+    
+    <?php
+        if (!$check) {
+            header( "refresh:1; url=staff_add.php");
+        }
+        exit;
+    ?>
 </html>

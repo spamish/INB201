@@ -1,43 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    session_start();
+    include('includes/start_session.php');
     include('lib/password.php');
     include('includes/functions.php');
+    require_once('includes/connect_database.php');
     
     function checkPassword($password)
     {
-        global $dbName, $dbUser, $dbPassword;
-        $id = $_SESSION['id'];
-        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
-        $query = $con -> prepare("
-            SELECT id, hash
-            FROM employeeinfo
-            WHERE id = '$id'
-        ");
-        $query -> bindValue(':id', $id);
-        $query -> execute();
-
-        $result = $query -> fetchAll();
-        $rows = count($result, 0);
+        global $resource;
+        $id = $_SESSION['login'];
         
-        $hash = $result[0]['hash'];
+        $sql = "SELECT staffID, hash
+                FROM staff
+                WHERE staffID = '$id'";
+        $records = mysql_query($sql, $resource)
+            or die("Problem reading table: " . mysql_error());
+        
+        $resuts = mysql_fetch_array($records);
+        $hash = $resuts["hash"];
+        
         return password_verify($password, $hash);
     }
     
-    function changePassword($hash)
+    $check = (
+           ($_POST['password_old'] == $_POST['confirm_old'])
+        && ($_POST['password_new'] == $_POST['confirm_new'])
+        && checkPassword($_POST['password_old'])
+    );
+    
+    if ($check)
     {
-        global $dbName, $dbUser, $dbPassword;
-        $id = $_SESSION['id'];
-        $con = new PDO("mysql:host=localhost;dbname=$dbName", $dbUser, $dbPassword);
-        $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = $con->prepare("
-            UPDATE employeeinfo
-            SET hash='$hash'
-            WHERE id='$id'
-        ");
-        $query->bindValue(':id', $id);
-        $query->execute();
+        $hash = password_hash($_POST['password_new'], PASSWORD_DEFAULT);
+        changePassword($_SESSION['login'], $hash);
     }
 ?>
 
@@ -55,29 +50,18 @@
             
             <div id="content"> <!-- All content goes here -->
                 <?php
-                    if (   ($_POST['password_old'] == $_POST['confirm_old'])
-                        && ($_POST['password_new'] == $_POST['confirm_new'])
-                        && checkPassword($_POST['password_old']))
-                    {
-                        $hash = password_hash($_POST['password_new'], PASSWORD_DEFAULT);
-                        changePassword($hash);
-                        ?>
+                    if ($check)
+                    { ?>
                         <h2>Password Change Successful</h2>
+                        <a id="btnSubmit" href="home.php">Return to home</a>
                     <?php }
                     else
                     { ?>
                         <h2>Password Change Failed</h2>
-                        <?php
-                        if ($_POST['password_old'] == $_POST['confirm_old']) {
-                            echo "Old Match";
-                        }
-                        if ($_POST['password_new'] == $_POST['confirm_new']) {
-                            echo "New Match";
-                        }
-                        if (checkPassword($_POST['password_old'])) {
-                            echo "Passwords Match";
-                        }
-                    }
+                        <p>Either new passwords do not match, old passwords
+                           do not match or the old password is incorrect.</p>
+                        <a id="btnSubmit" href="change_password.php">Try Again</a>
+                    <?php }
                 ?>
             </div> <!-- end #content -->
             

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    session_start();
+    include('includes/start_session.php');
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -18,27 +18,35 @@
             
             <div id="content"> <!-- All content goes here -->
                 <form action="change_password_summary.php" method="post">
-                    <table>
+                    <table id="passwordTable">
                         <tr>
-                            <td align="right">Current Password</td>
-                            <td align="left"><input type="password" name="password_old" required/></td>
+                            <td id="passwordCell" align="right">Current Password</td>
+                            <td id="passwordCell" align="left">
+                                <input type="password" name="password_old" required/>
+                            </td>
                         </tr>
                         <tr>
-                            <td align="right">Confirm Current Password</td>
-                            <td align="left"><input type="password" name="confirm_old" required/></td>
+                            <td id="passwordCell" align="right">Confirm Current Password</td>
+                            <td id="passwordCell" align="left">
+                                <input type="password" name="confirm_old" required/>
+                            </td>
                         </tr>
                         <tr>
-                            <td align="right">New Password</td>
-                            <td align="left"><input type="password" name="password_new" required/></td>
+                            <td id="passwordCell" align="right">New Password</td>
+                            <td id="passwordCell" align="left">
+                                <input type="password" name="password_new" required/>
+                            </td>
                         </tr>
                         <tr>
-                            <td align="right">Confirm New Password</td>
-                            <td align="left"><input type="password" name="confirm_new" required/></td>
+                            <td id="passwordCell" align="right">Confirm New Password</td>
+                            <td id="passwordCell" align="left">
+                                <input type="password" name="confirm_new" required/>
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td align="left">
-                                <input type="submit" value="Save">
+                                <input id="btnSubmit" type="submit" value="Save">
                             </td>
                         </tr>
                     </table>

@@ -1,8 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    session_start();
+    include('../includes/start_session.php');
     include('../includes/functions.php');
+    
+    $count = countTable("staff");
+    $staff = viewTable("staff");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -20,41 +23,43 @@
             <div id="content"> <!-- All content goes here -->
 
                 <h2>Staff Members</h2>
-                <form action="staff_edit.php" method="post">
-                    <table id="">
-                        <tr>
-                            <th>Username</th>
-                            <th>First Name</th>
-                            <th>Surname</th>
-                            <th>Date of Birth</th>
-                            <th>Phone Number</th>
-                            <th>Pay Grade</th>
-                            <th>Position</th>
-                            <th>Ward</th>
-                            <td><input type="submit" value="Edit" style="float:right;"></td>
+                <form action="/inb201/admin/staff_edit.php" method="post">
+                    <table>
+                        <tr id="tableRowHeader">
+                            <th id="tableHeader">Username</th>
+                            <th id="tableHeader">First Name</th>
+                            <th id="tableHeader">Surname</th>
+                            <th id="tableHeader">Date of Birth</th>
+                            <th id="tableHeader">Phone Number</th>
+                            <th id="tableHeader">Salary</th>
+                            <th id="tableHeader">Position</th>
+                            <th id="tableHeader">Ward</th>
+                            <td><input id="btnSubmit" type="submit"
+                                value="Edit" style="float:right;"></td>
                         </tr>
-                        <?php
-                            $count = tally();
-                            $staff = staff();
-                            for ($i = 0; $i < $count; $i++) {
-                                //if ($i % 2 == 0) { ?>
-                                    <tr id="" name="">
-                                        <td id=""><?php echo $staff[$i][0]; ?></td>
-                                        <td id=""><?php echo $staff[$i][1]; ?></td>
-                                        <td id=""><?php echo $staff[$i][2]; ?></td>
-                                        <td id=""><?php echo $staff[$i][3]; ?></td>
-                                        <td id=""><?php echo $staff[$i][4]; ?></td>
-                                        <td id=""><?php echo $staff[$i][5]; ?></td>
-                                        <td id=""><?php echo $staff[$i][6]; ?></td>
-                                        <td id=""><?php echo $staff[$i][7]; ?></td>
-                                        <td>
-                                        <?php if (($i + 1) != $_SESSION['id']) { ?>
-                                            <input type="radio" name="edit"
-                                                value="<?php echo $i ?>" style="float:right;"></td>
-                                            <?php } ?>
-                                    </tr>
+                        <?php for ($i = 0; $i < $count; $i++) {
+                            if ($i % 2 == 0)
+                            { ?>
+                                <tr id="tableRowA">
                             <?php }
-                        ?>
+                            else
+                            { ?>
+                                <tr id="tableRowB">
+                            <?php } ?>
+                                    <td id="tableCell"><?php echo $staff[$i]["username"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["firstName"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["surname"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["dateOfBirth"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["phoneNumber"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["salary"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["position"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["ward"]; ?></td>
+                                    <td><?php if ($i != $_SESSION['login']) { ?>
+                                        <input id="radio" type="radio" name="edit"
+                                            value="<?php echo $i ?>">
+                                    <?php } ?></td>
+                                </tr>
+                        <?php } ?>
                     </table>
                 </form>
             </div> <!-- end #content -->
