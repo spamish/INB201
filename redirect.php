@@ -24,7 +24,6 @@
     $check = login($_POST['username'], $_POST['password']);
     if ($check)
     {
-        session_start();
         $staff = staffInfoUsername($_POST['username']);
         $_SESSION['login'] = $staff[0];
         $_SESSION['firstName'] = $staff[2];
@@ -32,7 +31,6 @@
     }
     else
     {
-        session_start();
         $_SESSION['login'] = "";
     }
 ?>

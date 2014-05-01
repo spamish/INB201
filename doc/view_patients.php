@@ -4,8 +4,8 @@
     include('../includes/start_session.php');
     include('../includes/functions.php');
     
-    $count = countTable("staff");
-    $staff = viewTable("staff");
+    $count = countTable("patients");
+    $patient = viewTable("patients");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,20 +22,19 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Staff Members</h2>
-                <form action="/inb201/admin/staff_edit.php" method="post">
+                <h2>View Patients</h2>
+                <form action="/inb201/admin/room_edit.php" method="post">
                     <table>
                         <tr id="tableRowHeader">
-                            <th id="tableHeader">Username</th>
+                            <th id="tableHeader">Patient ID</th>
                             <th id="tableHeader">First Name</th>
                             <th id="tableHeader">Surname</th>
-                            <th id="tableHeader">Date of Birth</th>
-                            <th id="tableHeader">Phone Number</th>
-                            <th id="tableHeader">Salary</th>
-                            <th id="tableHeader">Position</th>
-                            <th id="tableHeader">Ward</th>
+                            <th id="tableHeader">Room</th>
+                            <th id="tableHeader"></th>
                             <td><input id="btnSubmit" type="submit"
                                 value="Edit" style="float:right;"></td>
+                            <td><input id="btnSubmit" type="submit"
+                                value="Delete" style="float:right;"></td>
                         </tr>
                         <?php for ($i = 0; $i < $count; $i++) {
                             if ($i % 2 == 0)
@@ -46,19 +45,15 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $staff[$i]["username"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["firstName"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["surname"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["dateOfBirth"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["phoneNumber"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["salary"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["position"]; ?></td>
-                                    <td id="tableCell"><?php echo $staff[$i]["ward"]; ?></td>
-                                    <td><?php if ($i != $_SESSION['login'] - 1) { ?>
+                                    <td id="tableCell"><?php echo $patient[$i]["roomNumber"]; ?></td>
+                                    <td id="tableCell"><?php echo $patient[$i]["ward"]; ?></td>
+                                    <td id="tableCell"><?php echo $patient[$i]["roomCapacity"]; ?></td>
+                                    <td id="tableCell"><?php echo $patient[$i]["occupiedBeds"]; ?></td>
+                                    <td>
                                         <input id="radio" type="radio" name="edit"
                                             value="<?php echo $i ?>">
-                                    <?php } ?></td>
-                                </tr>
+                                    </td>
+                                <tr>
                         <?php } ?>
                     </table>
                 </form>
