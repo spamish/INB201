@@ -1,39 +1,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('lib/password.php');
-    include('includes/functions.php');
-    require_once('includes/connect_database.php');
+    require('includes/password_functions.php');
+    require('includes/functions.php');
     
-    function login($username, $password)
+    $staff = getStaffInfo($_POST['username']);
+    if ($staff != null)
     {
-        global $resource;
-        
-        $sql = "SELECT username, hash
-                FROM staff
-                WHERE username = '$username'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
-        
-        $resuts = mysql_fetch_array($records);
-        $hash = $resuts["hash"];
-        
-        return password_verify($password, $hash);
-    }
-    
-    $check = login($_POST['username'], $_POST['password']);
-    if ($check)
-    {
-        session_start();
-        $staff = staffInfoUsername($_POST['username']);
-        $_SESSION['login'] = $staff[0];
-        $_SESSION['firstName'] = $staff[2];
-        $_SESSION['position'] = $staff[7];
+        $check = verifyPassword($staff['staffID'], $_POST['password']);
     }
     else
     {
-        session_start();
-        $_SESSION['login'] = "";
+        $check = false;
+    }
+    
+    if ($check)
+    {
+        $_SESSION['login'] = $staff['staffID'];
+        $_SESSION['firstName'] = $staff['firstName'];
+        $_SESSION['surname'] = $staff['surname'];
+        $_SESSION['position'] = $staff['position'];
+    }
+    else
+    {
+        $_SESSION['login'] = null;
     }
 ?>
 
@@ -54,7 +44,9 @@
                 
                 <?php if ($check)
                 { ?>
-                    <h2>Welcome <?php echo $_SESSION['firstName']; ?></h2>
+                    <h2>Welcome
+                        <?php echo $_SESSION['firstName'] ?>
+                    </h2>
                     <p>Creating your session and redirecting now.</p>
                 <?php } else { ?>
                     <h2>Login Failed.</h2>

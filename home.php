@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('includes/start_session.php');
+    require('includes/start_session.php');
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,7 +22,7 @@
             
             <div id="content"> <!-- All content goes here -->
                 
-                <h2>Welcome <?php echo $_SESSION['firstName']; ?></h2>
+                <h2>Welcome <?php echo $_SESSION['firstName'] . " " . $_SESSION['surname'] ?></h2>
                 
             </div> <!-- end #content -->
             

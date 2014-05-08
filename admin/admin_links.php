@@ -55,14 +55,3 @@
 <?php } ?>
 
 <a id="btnSidebar" href="/inb201/admin/logs_view.php">Logs &amp Reports</a><br>
-
-
-<?php /* Template for adding staff functions.
-    <a id="btnSidebar" href="/inb201/admin/[function_view].php">[View Function]</a><br>
-
-    <?php if (strpos($_SERVER["PHP_SELF"], "[function]"))
-    { ?>
-        <a href="/inb201/admin/[function_subfunction].php" id="btnPageActions"
-            style="margin-left:10px;">[Perform Subfunction]</a><br>
-    <?php } ?>
-*/ ?>

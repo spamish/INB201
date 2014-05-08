@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('../includes/start_session.php');
-    include('../includes/functions.php');
+    require('../includes/start_session.php');
+    require('../includes/functions.php');
     
     $count = countTable("salaries");
     $salary = viewTable("salaries");
@@ -29,11 +29,11 @@
                             <th>Salary ID</th>
                             <th>Salary Amount</th>
                             <th>Next Payment Date</th>
-                            <td><input type="submit" value="Edit" style="float:right;"></td>
-                            <td><input type="submit" value="Delete" style="float:right;"></td>
+                            <td><input type="submit" name="edit" value="Edit" style="float:right;"></td>
+                            <td><input type="submit" name="delete" value="Delete" style="float:right;"></td>
                             
                         </tr>
-                        <?php for ($i = 0; $i < $count; $i++) {
+                        <?php for ($i = 1; $i <= $count; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -42,9 +42,9 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $salary[$i]["salaryID"]; ?></td>
-                                    <td id="tableCell"><?php echo $salary[$i]["ward"]; ?></td>
-                                    <td id="tableCell"><?php echo $salary[$i]["nextDate"]; ?></td>
+                                    <td id="tableCell"><?php echo $salary[$i]['salaryID'] ?></td>
+                                    <td id="tableCell"><?php echo $salary[$i]['ward'] ?></td>
+                                    <td id="tableCell"><?php echo $salary[$i]['nextDate'] ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="edit"
                                             value="<?php echo $i ?>">

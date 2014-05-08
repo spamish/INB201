@@ -2,7 +2,20 @@
 
 <?php
     require('../includes/start_session.php');
+    require('../includes/admin_functions.php');
     require('../includes/functions.php');
+    
+    if (isset($_POST['remove']))
+    {
+        if(isset($_POST['id']))
+        {
+            $id = $_POST['id'];
+            $theater = viewTable("theaters");
+            
+            deleteRoom("theaters", $theater[$id]['roomNumber']);
+        }
+        header ("Location: theater_view.php");
+    }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -18,7 +31,7 @@
             <?php include('../includes/sidebar.php'); ?>
             <div id="content"> <!-- All content goes here -->
                 <h2>Add Room</h2>
-                <form action="room_add_confirm.php" method="post" style="float:left;width=50%;">
+                <form action="theater_add_confirm.php" method="post" style="float:left;width=50%;">
                     <table>
                         <tr>
                             <td align="right">Ward</td>
@@ -34,10 +47,6 @@
                                 </select>
                             </td>
                             <td align="left"><input type="text" name="roomNumber" required/></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Number of Beds</td>
-                            <td align="left"><input type="text" name="roomCapacity" required/></td>
                         </tr>
                         <tr>
                             <td align="right"></td>

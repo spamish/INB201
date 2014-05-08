@@ -1,21 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('../includes/start_session.php');
-    include('../includes/functions.php');
-    include_once('../lib/password.php');
+    require('../includes/start_session.php');
+    require('../includes/admin_functions.php');
+    require('../includes/password_functions.php');
+    require('../includes/functions.php');
     
-    if (isset($_POST['btnReset']))
+    $id = $_POST['id'];
+    if (isset($_POST['reset']))
     {
-        $id = $_POST['id'];
         $password = substr(md5(rand()), 0, 10);
-        $hash = password_hash($password, PASSWORD_DEFAULT);
         
-        changePassword($id, $hash);
+        changePassword($id, $password);
     }
-    else if (isset($_POST['btnUpdate']))
+    elseif (isset($_POST['update']))
     {
-        $id = $_POST['id'];
         $firstName = $_POST['firstName'];
         $surname = $_POST['surname'];
         $dateOfBirth = $_POST['dateOfBirth'];
@@ -44,11 +43,11 @@
 
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
-                <?php if (isset($_POST['btnReset']))
+                <?php if (isset($_POST['reset']))
                 { ?>
-                    <p>Password reset, temporary password is "<?php echo $password;?>"</p>
+                    <p>Password reset, temporary password is "<?php echo $password ?>"</p>
                 <?php }
-                else if (isset($_POST['btnUpdate']))
+                else if (isset($_POST['update']))
                 { ?>
                     <p>Account edit successful.</p>
                     <table>
@@ -63,14 +62,14 @@
                             <th id="tableHeader">Ward</th>
                         </tr>
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $staff[$id]["username"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["firstName"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["surname"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["dateOfBirth"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["phoneNumber"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["salary"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["position"]; ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]["ward"]; ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['username'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['firstName'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['surname'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['dateOfBirth'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['phoneNumber'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['salary'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['position'] ?></td>
+                            <td id="tableCell"><?php echo $staff[$id]['ward'] ?></td>
                         </tr>
                     </table>
                 <?php } ?>

@@ -10,19 +10,21 @@
         header ("Location: room_view.php");
     }
     $id = $_POST['id'];
-    $rooms = viewTable("rooms");
+    $equipment = viewTable("equipment");
     
-    if (isset($_POST['remove']) && ($rooms[$id]['occupiedBeds'] == 0))
+    if (isset($_POST['remove'])) //Check for populated schedule.
     {
-        deleteRoom("rooms", $rooms[$id]['roomNumber']);
+        deleteRoom("equipment", $equipment[$id]['roomNumber']);
         header ("Location: room_view.php");
     }
     elseif (isset($_POST['update']))
     {
-        $roomNumber = $rooms[$id]['roomNumber'];
-        $ward = $rooms[$id]['ward'];
-        $roomCapacity = $rooms[$id]['roomCapacity'];
-        $occupiedBeds = $rooms[$id]['occupiedBeds'];
+        $roomNumber = $equipment[$id]['roomNumber'];
+        $type = $equipment[$id]['type'];
+        $schedule = $equipment[$id]['schedule'];
+        $staff = $equipment[$id]['staff'];
+        
+        editEquipment($id, $type, $staff);
     }
 ?>
 
@@ -41,29 +43,29 @@
                 <?php if (isset($_POST['update']))
                 { ?>
                     <h2>Edit Room</h2>
-                    <form action="room_edit_confirm.php" method="post" style="float:left;width=50%;">
+                    <form action="equipment_edit_confirm.php" method="post" style="float:left;width=50%;">
                         <table>
                             <tr>
-                                <td align="right">Ward</td>
-                                <td align="left">Room Number</td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <?php echo $ward ?>
-                                </td>
+                                <td align="right">Room Number</td>
                                 <td align="left">
                                     <?php echo $roomNumber ?>
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right">Number of Beds</td>
-                                <td align="left"><input type="text" name="roomCapacity" 
-                                    required value="<?php echo $roomCapacity ?>"/></td>
+                                <td align="right">Schedule ID</td>
+                                <td align="left">
+                                    <?php echo $schedule ?>
+                                </td>
                             </tr>
                             <tr>
-                                <td align="right">Occupied Beds</td>
+                                <td align="right">Operator Staff ID</td>
+                                <td align="left"><input type="text" name="staff" 
+                                    required value="<?php echo $staff ?>"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right">Equipment Description</td>
                                 <td align="left">
-                                    <?php echo $occupiedBeds ?>
+                                    <textarea rows="4" cols="32" name="type"><?php echo $type ?></textarea>
                                 </td>
                             </tr>
                             <tr>

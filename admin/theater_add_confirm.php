@@ -5,17 +5,18 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $id = $_POST['id'];
-    $roomCapacity = $_POST['roomCapacity'];
-    $rooms = viewTable("rooms");
-    $check = ($roomCapacity >= $rooms[$id]['occupiedBeds']);
+    $check = !searchAllRooms($_POST['roomNumber']);
     
     if ($check)
     {
-        editRoom($id, $roomCapacity);
+        $roomNumber = $_POST['roomNumber'];
+        $ward = $_POST['ward'];
+        $schedule = $roomNumber;
+        
+        createTheater($roomNumber, $ward, $schedule);
     }
     
-    $rooms = viewTable("rooms");
+    $theater = searchAllRooms($roomNumber);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -34,30 +35,33 @@
                 <h2>Summary</h2>
                 <?php if ($check)
                 { ?>
-                    <p>Updating of room successful.</p>
+                    <p>Adding of operating theater successful.</p>
                     <table>
                         <tr id="tableRowHeader">
-                            <th id="tableHeader">Room Number</th>
-                            <th id="tableHeader">Ward</th>
-                            <th id="tableHeader">Room Capacity</th>
-                            <th id="tableHeader">Occupied Beds</th>
+                            <th>Ward</th>
+                            <th>Room Number</th>
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $rooms[$id]['roomNumber'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['ward'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['roomCapacity'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['occupiedBeds'] ?></td>
+                            <td><?php echo $theater['ward'] ?></td>
+                            <td><?php echo $theater['roomNumber'] ?></td>
                         </tr>
                     </table>
                 <?php }
                 else
                 { ?>
-                    <p>Updating of room unsuccessful. Would result in insufficient beds.</p>
+                    <p>The room already exists.</p>
                 <?php } ?>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>
         </div> <!-- End #wrapper -->
     </body>
+    
+    <?php
+        if (!$check) {
+            header( "refresh:1; url=staff_add.php");
+        }
+        exit;
+    ?>
 </html>

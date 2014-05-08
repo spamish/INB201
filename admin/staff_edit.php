@@ -1,25 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('../includes/start_session.php');
-    include('../includes/functions.php');
-    $id = $_POST['edit'];
-    $staff = staffInfoId($id);
-    $username = $staff["username"];
-    $firstName = $staff["firstName"];
-    $surname = $staff["surname"];
-    $dateOfBirth = $staff["dateOfBirth"];
-    $phoneNumber = $staff["phoneNumber"];
-    $salary = $staff["salary"];
-    $position = $staff["position"];
-    $ward = $staff["ward"];
+    require('../includes/start_session.php');
+    require('../includes/admin_functions.php');
+    
+    if (!isset($_POST['id']))
+    {
+        header ("Location: staff_view.php");
+    }
+    $id = $_POST['id'];
+    
+    $staff = searchStaff($id);
+    $username = $staff['username'];
+    $firstName = $staff['firstName'];
+    $surname = $staff['surname'];
+    $dateOfBirth = $staff['dateOfBirth'];
+    $phoneNumber = $staff['phoneNumber'];
+    $salary = $staff['salary'];
+    $position = $staff['position'];
+    $ward = $staff['ward'];
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script type="text/javascript" src="../includes/lib/calendar.js"></script>
+        <script type="text/javascript" src="../includes/javascripting.js"></script>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -35,7 +43,7 @@
                         <tr>
                             <td align="right">Password</td>
                             <td align="left">
-                                <input id="btnSubmit" type="submit" name="btnReset" value="Reset">
+                                <input id="btnSubmit" type="submit" name="reset" value="Reset">
                             </td>
                         <tr>
                             <td align="right">Username</td>
@@ -73,7 +81,7 @@
                         </tr>
                         <tr>
                             <td align="right">Salary</td>
-                            <td align="right"><select name="salary">
+                            <td align="left"><select name="salary">
                                 <?php if ($salary == 'A') { ?>
                                     <option value="A" selected>A</option>
                                 <?php } else { ?>
@@ -172,8 +180,8 @@
                         <tr>
                             <td></td>
                             <td align="left">
-                                <input id="btnSubmit" type="submit" name="btnUpdate" value="Save">
-                                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                <input id="btnSubmit" type="submit" name="update" value="Save">
+                                <input type="hidden" name="id" value="<?php echo $id ?>">
                             </td>
                         </tr>
                     </table>

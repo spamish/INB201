@@ -6,16 +6,18 @@
     require('../includes/functions.php');
     
     $id = $_POST['id'];
-    $roomCapacity = $_POST['roomCapacity'];
-    $rooms = viewTable("rooms");
-    $check = ($roomCapacity >= $rooms[$id]['occupiedBeds']);
+    $equipment = viewTable("equipment");
+    $check = 1;
     
     if ($check)
     {
-        editRoom($id, $roomCapacity);
+        $type = $_POST['type'];
+        $staff = $_POST['staff'];
+        
+        editEquipment($id, $type, $staff);
     }
     
-    $rooms = viewTable("rooms");
+    $equipment = viewTable("equipment");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -34,26 +36,26 @@
                 <h2>Summary</h2>
                 <?php if ($check)
                 { ?>
-                    <p>Updating of room successful.</p>
+                    <p>Updating of medical equipment successful.</p>
                     <table>
-                        <tr id="tableRowHeader">
-                            <th id="tableHeader">Room Number</th>
-                            <th id="tableHeader">Ward</th>
-                            <th id="tableHeader">Room Capacity</th>
-                            <th id="tableHeader">Occupied Beds</th>
+                        <tr>
+                            <th>Room Number</th>
+                            <th>Schedule ID</th>
+                            <th>Operator Staff ID</th>
+                            <th>Equipment Description</th>
                         </tr>
                         
-                        <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $rooms[$id]['roomNumber'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['ward'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['roomCapacity'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['occupiedBeds'] ?></td>
+                        <tr>
+                            <td><?php echo $equipment[$id]['roomNumber'] ?></td>
+                            <td><?php echo $equipment[$id]['schedule'] ?></td>
+                            <td><?php echo $equipment[$id]['staff'] ?></td>
+                            <td><?php echo $equipment[$id]['type'] ?></td>
                         </tr>
                     </table>
                 <?php }
                 else
                 { ?>
-                    <p>Updating of room unsuccessful. Would result in insufficient beds.</p>
+                    <p></p>
                 <?php } ?>
             </div> <!-- end #content -->
             

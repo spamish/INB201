@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('../includes/start_session.php');
-    include('../includes/functions.php');
+    require('../includes/start_session.php');
+    require('../includes/functions.php');
     
     $count = countTable("equipment");
     $equipment = viewTable("equipment");
@@ -27,14 +27,16 @@
                     <table>
                         <tr>
                             <th>Equipment Room</th>
-                            <th>Type of Equipment</th>
-                            <th>Schedule ID</th>
-                            <th>Operating Staff Member</th>
-                            <td><input type="submit" value="Edit" style="float:right;"></td>
-                            <td><input type="submit" value="Delete" style="float:right;"></td>
+                            <th>Operator Staff ID</th>
+                            <th>Equipment Tag</th>
+                            <th>Equipment Name</th>
+                            <td><input id="btnSubmit" type="submit" name="update"
+                                value="Update" style="float:right;"></td>
+                            <td><input id="btnSubmit" type="submit" name="remove"
+                                value="Remove" style="float:right;"></td>
                             
                         </tr>
-                        <?php for ($i = 0; $i < $count; $i++) {
+                        <?php for ($i = 1; $i <= $count; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -43,13 +45,13 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $equipment[$i]["equipmentRoom"]; ?></td>
-                                    <td id="tableCell"><?php echo $equipment[$i]["type"]; ?></td>
-                                    <td id="tableCell"><?php echo $equipment[$i]["schedule"]; ?></td>
-                                    <td id="tableCell"><?php echo $equipment[$i]["staff"]; ?></td>
+                                    <td><?php echo $equipment[$i]['roomNumber'] ?></td>
+                                    <td><?php echo $equipment[$i]['staff'] ?></td>
+                                    <td><?php echo strstr($equipment[$i]['type'], "-", true) ?></td>
+                                    <td><?php echo substr($equipment[$i]['type'], strrpos($equipment[$i]['type'], "- ") + 1) ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="edit"
-                                            value="<?php echo $i ?>">
+                                        <input id="radio" type="radio" name="id"
+                                            value="<?php echo $equipment[$i]['equipmentID'] ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

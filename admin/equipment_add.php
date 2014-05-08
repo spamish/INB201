@@ -17,27 +17,20 @@
             <?php include('../includes/header.php'); ?>
             <?php include('../includes/sidebar.php'); ?>
             <div id="content"> <!-- All content goes here -->
-                <h2>Add Room</h2>
-                <form action="room_add_confirm.php" method="post" style="float:left;width=50%;">
+                <h2>Add Medical Equipment</h2>
+                <form action="equipment_add_confirm.php" method="post" style="float:left;width=50%;">
                     <table>
                         <tr>
-                            <td align="right">Ward</td>
-                            <td align="left">Room Number</td>
-                        </tr>
-                        <tr>
-                            <td align="right">
-                                <select name="ward">
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                </select>
-                            </td>
+                            <td align="right">Room Number</td>
                             <td align="left"><input type="text" name="roomNumber" required/></td>
                         </tr>
                         <tr>
-                            <td align="right">Number of Beds</td>
-                            <td align="left"><input type="text" name="roomCapacity" required/></td>
+                            <td align="right">Operator Staff ID</td>
+                            <td align="left"><input type="text" name="staff" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">Equipment Description</td>
+                            <td align="left"><textarea rows="4" cols="32" name="type"></textarea></td>
                         </tr>
                         <tr>
                             <td align="right"></td>

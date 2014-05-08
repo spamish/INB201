@@ -1,38 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
-    include('includes/start_session.php');
-    include('lib/password.php');
-    include('includes/functions.php');
-    require_once('includes/connect_database.php');
-    
-    function checkPassword($password)
-    {
-        global $resource;
-        $id = $_SESSION['login'];
-        
-        $sql = "SELECT staffID, hash
-                FROM staff
-                WHERE staffID = '$id'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
-        
-        $resuts = mysql_fetch_array($records);
-        $hash = $resuts["hash"];
-        
-        return password_verify($password, $hash);
-    }
+    require('includes/start_session.php');
+    require('includes/password_functions.php');
+    require('includes/functions.php');
     
     $check = (
            ($_POST['password_old'] == $_POST['confirm_old'])
         && ($_POST['password_new'] == $_POST['confirm_new'])
-        && checkPassword($_POST['password_old'])
+        && verifyPassword($_SESSION['login'], $_POST['password_old'])
     );
     
     if ($check)
     {
-        $hash = password_hash($_POST['password_new'], PASSWORD_DEFAULT);
-        changePassword($_SESSION['login'], $hash);
+        changePassword($_SESSION['login'], $_POST['password_new']);
     }
 ?>
 
