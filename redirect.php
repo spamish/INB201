@@ -16,7 +16,6 @@
     
     if ($check)
     {
-<<<<<<< HEAD
         $_SESSION['login'] = $staff['staffID'];
         $_SESSION['firstName'] = $staff['firstName'];
         $_SESSION['surname'] = $staff['surname'];
@@ -25,16 +24,6 @@
     else
     {
         $_SESSION['login'] = null;
-=======
-        $staff = staffInfoUsername($_POST['username']);
-        $_SESSION['login'] = $staff[0];
-        $_SESSION['firstName'] = $staff[2];
-        $_SESSION['position'] = $staff[7];
-    }
-    else
-    {
-        $_SESSION['login'] = "";
->>>>>>> master
     }
 ?>
 

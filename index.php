@@ -4,11 +4,7 @@
     if(isset($_SESSION))
     {
         //Destroy current session
-<<<<<<< HEAD
         session_unset();
-=======
-        session_destroy();
->>>>>>> master
     }
 ?>
 
