@@ -46,6 +46,7 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
+<<<<<<< HEAD
                                     <td id="tableCell"><?php echo $staff[$i]['username'] ?></td>
                                     <td id="tableCell"><?php echo $staff[$i]['firstName'] ?></td>
                                     <td id="tableCell"><?php echo $staff[$i]['surname'] ?></td>
@@ -57,6 +58,19 @@
                                     <td><?php if ($i != $_SESSION['login']) { ?>
                                         <input id="radio" type="radio" name="id"
                                             value="<?php echo $staff[$i]['staffID'] ?>">
+=======
+                                    <td id="tableCell"><?php echo $staff[$i]["username"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["firstName"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["surname"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["dateOfBirth"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["phoneNumber"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["salary"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["position"]; ?></td>
+                                    <td id="tableCell"><?php echo $staff[$i]["ward"]; ?></td>
+                                    <td><?php if ($i != $_SESSION['login'] - 1) { ?>
+                                        <input id="radio" type="radio" name="edit"
+                                            value="<?php echo $i ?>">
+>>>>>>> master
                                     <?php } ?></td>
                                 </tr>
                         <?php } ?>
