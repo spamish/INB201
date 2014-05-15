@@ -20,11 +20,11 @@
     elseif (isset($_POST['update']))
     {
         $roomNumber = $equipment[$id]['roomNumber'];
-        $type = $equipment[$id]['type'];
-        $schedule = $equipment[$id]['schedule'];
-        $staff = $equipment[$id]['staff'];
+        $code = $equipment[$id]['code'];
+        $duration = $equipment[$id]['duration'];
+        $description = $equipment[$id]['description'];
         
-        editEquipment($id, $type, $staff);
+        editEquipment($id, $code, $duration, $description);
     }
 ?>
 
@@ -50,22 +50,22 @@
                                 <td align="left">
                                     <?php echo $roomNumber ?>
                                 </td>
+                            <tr>
+                                <td align="right">Test Code</td>
+                                <td align="left"><input type="text" name="code" 
+                                    required value="<?php echo $code ?>"/></td>
+                            </tr>
                             </tr>
                             <tr>
-                                <td align="right">Schedule ID</td>
+                                <td align="right">Test Duration</td>
+                                <td align="left"><input type="text" name="duration" 
+                                    required value="<?php echo $duration ?>"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right">Test Description</td>
                                 <td align="left">
-                                    <?php echo $schedule ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">Operator Staff ID</td>
-                                <td align="left"><input type="text" name="staff" 
-                                    required value="<?php echo $staff ?>"/></td>
-                            </tr>
-                            <tr>
-                                <td align="right">Equipment Description</td>
-                                <td align="left">
-                                    <textarea rows="4" cols="32" name="type"><?php echo $type ?></textarea>
+                                    <textarea rows="4" cols="32"
+                                        name="description"><?php echo $description ?></textarea>
                                 </td>
                             </tr>
                             <tr>

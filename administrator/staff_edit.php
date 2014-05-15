@@ -4,7 +4,7 @@
     require('../includes/start_session.php');
     require('../includes/admin_functions.php');
     
-    if (!isset($_POST['id']))
+    if ($_POST['id'] == $_SESSION['login'])
     {
         header ("Location: staff_view.php");
     }

@@ -5,6 +5,7 @@
     require('includes/functions.php');
     
     $staff = getStaffInfo($_POST['username']);
+    
     if ($staff != null)
     {
         $check = verifyPassword($staff['staffID'], $_POST['password']);
@@ -15,7 +16,7 @@
     }
     
     if ($check)
-    {
+    {   session_start();
         $_SESSION['login'] = $staff['staffID'];
         $_SESSION['firstName'] = $staff['firstName'];
         $_SESSION['surname'] = $staff['surname'];

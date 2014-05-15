@@ -52,24 +52,24 @@
                     <p>Account edit successful.</p>
                     <table>
                         <tr id="tableRowHeader">
-                            <th id="tableHeader">Username</th>
-                            <th id="tableHeader">First Name</th>
-                            <th id="tableHeader">Surname</th>
-                            <th id="tableHeader">Date of Birth</th>
-                            <th id="tableHeader">Phone Number</th>
-                            <th id="tableHeader">Salary</th>
-                            <th id="tableHeader">Position</th>
-                            <th id="tableHeader">Ward</th>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Date of Birth</th>
+                            <th>Phone Number</th>
+                            <th>Salary</th>
+                            <th>Position</th>
+                            <th>Ward</th>
                         </tr>
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $staff[$id]['username'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['firstName'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['surname'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['dateOfBirth'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['phoneNumber'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['salary'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['position'] ?></td>
-                            <td id="tableCell"><?php echo $staff[$id]['ward'] ?></td>
+                            <td><?php echo $staff[$id]['username'] ?></td>
+                            <td><?php echo $staff[$id]['firstName'] ?></td>
+                            <td><?php echo $staff[$id]['surname'] ?></td>
+                            <td><?php echo $staff[$id]['dateOfBirth'] ?></td>
+                            <td><?php echo $staff[$id]['phoneNumber'] ?></td>
+                            <td><?php echo $staff[$id]['salary'] ?></td>
+                            <td><?php echo position($staff[$id]['position']) ?></td>
+                            <td><?php echo $staff[$id]['ward'] ?></td>
                         </tr>
                     </table>
                 <?php } ?>

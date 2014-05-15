@@ -4,8 +4,7 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $count = countTable("salaries");
-    $salary = viewTable("salaries");
+    $theaters = viewTable("theaters");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,18 +21,16 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Staff Salaries</h2>
-                <form action="/inb201/admin/salaries_edit.php" method="post">
+                <h2>Operating Theaters</h2>
+                <form action="theater_add.php" method="post">
                     <table>
                         <tr>
-                            <th>Salary ID</th>
-                            <th>Salary Amount</th>
-                            <th>Next Payment Date</th>
-                            <td><input type="submit" name="edit" value="Edit" style="float:right;"></td>
-                            <td><input type="submit" name="delete" value="Delete" style="float:right;"></td>
+                            <th><a href="theater_view.php?order=roomNumber">Theater Room</th>
+                            <td><input id="btnSubmit" type="submit" name="remove"
+                                value="Remove" style="float:right;"></td>
                             
                         </tr>
-                        <?php for ($i = 1; $i <= $count; $i++) {
+                        <?php for ($i = 1; $i <= $theaters[0]; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -42,12 +39,10 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $salary[$i]['salaryID'] ?></td>
-                                    <td id="tableCell"><?php echo $salary[$i]['ward'] ?></td>
-                                    <td id="tableCell"><?php echo $salary[$i]['nextDate'] ?></td>
+                                    <td><?php echo "g" . roomNumber($theaters[$i]['roomNumber']) ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="edit"
-                                            value="<?php echo $i ?>">
+                                        <input id="radio" type="radio" name="id"
+                                            value="<?php echo $theaters[$i]['theaterID'] ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

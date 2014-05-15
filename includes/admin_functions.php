@@ -1,15 +1,43 @@
 <?php
-    require_once('connect_database.php');
+    require_once('classes.php');
+    
+    function position($position)
+    {
+        switch($position)
+        {
+            case "doctor":
+                return "Doctor";
+                break;
+            case "surgeon":
+                return "Surgeon";
+                break;
+            case "nurse":
+                return "Nurse";
+                break;
+            case "receptionist":
+                return "Receptionist";
+                break;
+            case "technician":
+                return "Medical Technician";
+                break;
+            case "administrator":
+                return "System Administrator";
+                break;
+            default:
+                return "Inactive";
+                break;
+        }
+    }
     
     function searchStaff($id)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "SELECT *
                 FROM staff
                 WHERE staffID = '$id'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $records = mysql_query($sql, $resource);
 
         return mysql_fetch_array($records);
     }
@@ -19,42 +47,57 @@
         
     }
     
-    function searchAllRooms($roomNumber)
+    function searchRooms($roomNumber, $ward)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         //Search for the room number in all relevant tables.
         $sql = "SELECT *
                 FROM rooms
-                WHERE roomNumber = '$roomNumber'";
-        $result = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+                WHERE roomNumber = '$roomNumber'
+                AND ward = '$ward'";
+        $result = mysql_query($sql, $resource);
         $room = mysql_fetch_array($result);
+        
+        if ($room)
+        {
+            return $room;
+        }
+    }
+    
+    function searchTheaters($roomNumber)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "SELECT *
                 FROM theaters
                 WHERE roomNumber = '$roomNumber'";
-        $result = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $result = mysql_query($sql, $resource);
         $theater = mysql_fetch_array($result);
+        
+        if ($theater)
+        {
+            return $theater;
+        }
+    }
+    
+    function searchEquipment($roomNumber)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "SELECT *
                 FROM equipment
                 WHERE roomNumber = '$roomNumber'";
-        $result = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $result = mysql_query($sql, $resource);
         $equipment = mysql_fetch_array($result);
         
-        //Return the details corresponding to a matching room.
-        if ($room):
-            return $room;
-        elseif ($theater):
-            return $theater;
-        elseif ($equipment):
+        if ($equipment)
+        {
             return $equipment;
-        else: //Or return nothing.
-            return null;
-        endif;
+        }
     }
     
     function searchProcedure()
@@ -69,19 +112,17 @@
     
     function createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward, $hash)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "SELECT *
                 FROM staff";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
-        
+        $records = mysql_query($sql, $resource);
         $count = mysql_num_rows($records) + 1;
         
         $sql = "INSERT INTO staff (staffID, username, firstName, surname, dateOfBirth, phoneNumber, salary, position, ward, hash)
                 VALUES ('$count', '$username', '$firstName', '$surname', '$dateOfBirth', '$phoneNumber', '$salary', '$position', '$ward', '$hash')";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $records = mysql_query($sql, $resource);
     }
     
     function createSalary()
@@ -91,7 +132,8 @@
     
     function createRoom($roomNumber, $ward, $roomCapacity, $occupiedBeds)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $id = 1;
         
@@ -101,25 +143,25 @@
             $sql = "SELECT *
                     FROM rooms
                     WHERE roomID = '$id'";
-            $records = mysql_query($sql, $resource)
-                or die("Problem reading table: " . mysql_error());
+            $records = mysql_query($sql, $resource);
             
             //Add data when unique index is found.
             if (!mysql_fetch_array($records))
             {
                 $sql = "INSERT INTO rooms (roomID, roomNumber, ward, roomCapacity, occupiedBeds)
                         VALUES ('$id', '$roomNumber', '$ward', '$roomCapacity', '$occupiedBeds')";
-                $records = mysql_query($sql, $resource)
-                    or die("Problem reading table: " . mysql_error());
+                $records = mysql_query($sql, $resource);
+                
                 return;
             }
             $id++;
         }
     }
     
-    function createEquipment($roomNumber, $type, $schedule, $staff)
+    function createEquipment($roomNumber, $code, $duration, $description)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $id = 1;
         
@@ -129,17 +171,16 @@
             $sql = "SELECT *
                     FROM equipment
                     WHERE equipmentID = '$id'";
-            $records = mysql_query($sql, $resource)
-                or die("Problem reading table: " . mysql_error());
+            $records = mysql_query($sql, $resource);
             
             //Add data when unique index is found.
             if (!mysql_fetch_array($records))
             {
                 //Add data to table.
-                $sql = "INSERT INTO equipment (equipmentID, roomNumber, type, schedule, staff)
-                        VALUES ('$id', '$roomNumber', '$type', '$schedule', '$staff')";
-                $records = mysql_query($sql, $resource)
-                    or die("Problem reading table: " . mysql_error());
+                $sql = "INSERT INTO equipment (equipmentID, roomNumber, code, duration, description)
+                        VALUES ('$id', '$roomNumber', '$code', '$duration', '$description')";
+                $records = mysql_query($sql, $resource);
+                
                 return;
             }
             $id++;
@@ -148,7 +189,8 @@
     
     function createTheater($roomNumber, $ward, $schedule)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $id = 1;
         
@@ -158,8 +200,7 @@
             $sql = "SELECT *
                     FROM theaters
                     WHERE theaterID = '$id'";
-            $records = mysql_query($sql, $resource)
-                or die("Problem reading table: " . mysql_error());
+            $records = mysql_query($sql, $resource);
             
             //Add data when unique index is found.
             if (!mysql_fetch_array($records))
@@ -167,8 +208,8 @@
                 //Add data to table.
                 $sql = "INSERT INTO theaters (theaterID, roomNumber, ward, schedule)
                         VALUES ('$id', '$roomNumber', '$ward', '$schedule')";
-                $records = mysql_query($sql, $resource)
-                    or die("Problem reading table: " . mysql_error());
+                $records = mysql_query($sql, $resource);
+                
                 return;
             }
             $id++;
@@ -187,7 +228,8 @@
     
     function editStaff($id, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "UPDATE staff
                 SET firstName = '$firstName',
@@ -198,8 +240,7 @@
                     position = '$position',
                     ward = '$ward'
                 WHERE staffID = '$id'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $records = mysql_query($sql, $resource);
     }
     
     function editSalary()
@@ -209,25 +250,26 @@
     
     function editRoom($id, $roomCapacity)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "UPDATE rooms
                 SET roomCapacity = '$roomCapacity'
                 WHERE roomID = '$id'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $records = mysql_query($sql, $resource);
     }
     
-    function editEquipment($id, $type, $staff)
+    function editEquipment($id, $code, $duration, $description)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         $sql = "UPDATE equipment
-                SET type = '$type',
-                    staff = '$staff'
+                SET code = '$code',
+                    duration = '$duration',
+                    description = '$description'
                 WHERE equipmentID = '$id'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $records = mysql_query($sql, $resource);
     }
     
     function editProcedure()
@@ -247,13 +289,13 @@
     
     function deleteRoom($table, $roomNumber)
     {
-        global $resource;
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
         //Delete value.
         $sql = "DELETE FROM $table
                 WHERE roomNumber = '$roomNumber'";
-        $records = mysql_query($sql, $resource)
-            or die("Problem reading table: " . mysql_error());
+        $records = mysql_query($sql, $resource);
     }
     
     function deleteProcedure()

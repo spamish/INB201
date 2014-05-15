@@ -4,8 +4,11 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $count = countTable("theaters");
-    $theaters = viewTable("theaters");
+    if (isset($_GET['order'])):
+        $rooms = viewTable("rooms", $_GET['order']);
+    else:
+        $rooms = viewTable("rooms");
+    endif;
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,18 +25,20 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Operating Theaters</h2>
-                <form action="/inb201/admin/theater_add.php" method="post">
+                <h2>Patient Rooms</h2>
+                <form action="room_edit.php" method="post">
                     <table>
                         <tr>
-                            <th>Theater Room</th>
-                            <th>Ward</th>
-                            <th>Schedule ID</th>
+                            <th><a href="room_view.php?order=roomNumber">Room Number</a></th>
+                            <th><a href="room_view.php?order=ward">Ward</a></th>
+                            <th><a href="room_view.php?order=roomCapacity">Room Capacity</th>
+                            <th>Occupied Beds</th>
+                            <td><input id="btnSubmit" type="submit" name="update"
+                                value="Update" style="float:right;"></td>
                             <td><input id="btnSubmit" type="submit" name="remove"
                                 value="Remove" style="float:right;"></td>
-                            
                         </tr>
-                        <?php for ($i = 1; $i <= $count; $i++) {
+                        <?php for ($i = 1; $i <= $rooms[0]; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -42,12 +47,13 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td><?php echo $theaters[$i]['roomNumber'] ?></td>
-                                    <td><?php echo $theaters[$i]['ward'] ?></td>
-                                    <td><?php echo $theaters[$i]['schedule'] ?></td>
+                                    <td><?php echo strtolower($rooms[$i]['ward']) . roomNumber($rooms[$i]['roomNumber']) ?></td>
+                                    <td><?php echo $rooms[$i]['ward'] ?></td>
+                                    <td><?php echo $rooms[$i]['roomCapacity'] ?></td>
+                                    <td><?php echo $rooms[$i]['occupiedBeds'] ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="id"
-                                            value="<?php echo $theaters[$i]['theaterID'] ?>">
+                                            value="<?php echo $rooms[$i]['roomID'] ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

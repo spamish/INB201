@@ -9,13 +9,12 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script type="text/javascript" src="../includes/lib/calendar.js"></script>
         <script type="text/javascript" src="../includes/javascripting.js"></script>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
-    <body onload="init()">
+    <body onload="calendar.set('date')">
         <div id="wrapper">
             <?php include('../includes/header.php'); ?>
             <?php include('../includes/sidebar.php'); ?>
@@ -30,16 +29,15 @@
                                     trigger server to generate the next lowest unique
                                     number available in the staff table.
                                 -->
-                                <td align="right">Generate Username:</td>
+                                <td align="right">Generate Username</td>
                                 <td align="left">
-                                    Yes<input id="radio" type="radio" name="generate">
-                                    No<input id="radio" type="radio" name="generate">
+                                    <input id="checkbox" type="checkbox" name="generate" onchange="setUsername()">
                                 </td>
                             </tr>
                             
                             <tr>
                                 <td align="right">Username</td>
-                                <td align="left"><input type="text" name="username" required/></td>
+                                <td align="left"><input id="username" type="text" name="username" required/></td>
                             </tr>
                             
                             <tr>
@@ -62,6 +60,11 @@
                                 <td align="left"><input type="text" name="phoneNumber"/></td>
                             </tr>
                             
+                            <td>Home Phone</td>
+                            <td>Address</td>
+                            <td>Roster</td>
+                            <td>Salary</td>
+                            
                             <tr>
                                 <td align="right">Salary</td>
                                 <td align="left">
@@ -79,9 +82,10 @@
                             <tr>
                                 <td align="right">Position</td>
                                 <td align="left">
-                                    <select name="position"> <!--onchange="setWard()">-->
+                                    <select id="position" name="position" onchange="setWard()">
                                         <option value="inactive">Inactive</option>
                                         <option value="doctor">Doctor</option>
+                                        <option value="surgeon">Surgeon</option>
                                         <option value="nurse">Nurse</option>
                                         <option value="receptionist">Receptionist</option>
                                         <option value="technician">Medical Technician</option>
@@ -89,13 +93,14 @@
                                     </select>
                                 </td>
                                 <td align="right">
-                                    <select name="ward">
+                                    <select id="ward" name="ward">
                                         <option value="A">A</option>
                                         <option value="B">B</option>
                                         <option value="C">C</option>
                                         <option value="D">D</option>
                                         <option value="E">E</option>
                                         <option value="F">F</option>
+                                        <option value="G">G</option>
                                     </select>
                                 </td>
                             </tr>

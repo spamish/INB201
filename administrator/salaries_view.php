@@ -4,8 +4,7 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $count = countTable("rooms");
-    $rooms = viewTable("rooms");
+    $salary = viewTable("salaries");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,20 +21,18 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Patient Rooms</h2>
-                <form action="/inb201/admin/room_edit.php" method="post">
+                <h2>Staff Salaries</h2>
+                <form action="salaries_edit.php" method="post">
                     <table>
                         <tr>
-                            <th>Room Number</th>
-                            <th>Ward</th>
-                            <th>Room Capacity</th>
-                            <th>Occupied Beds</th>
-                            <td><input id="btnSubmit" type="submit" name="update"
-                                value="Update" style="float:right;"></td>
-                            <td><input id="btnSubmit" type="submit" name="remove"
-                                value="Remove" style="float:right;"></td>
+                            <th>Salary ID</th>
+                            <th>Salary Amount</th>
+                            <th>Next Payment Date</th>
+                            <td><input type="submit" name="edit" value="Edit" style="float:right;"></td>
+                            <td><input type="submit" name="delete" value="Delete" style="float:right;"></td>
+                            
                         </tr>
-                        <?php for ($i = 1; $i <= $count; $i++) {
+                        <?php for ($i = 1; $i <= $salary[0]; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -44,13 +41,12 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $rooms[$i]['roomNumber'] ?></td>
-                                    <td id="tableCell"><?php echo $rooms[$i]['ward'] ?></td>
-                                    <td id="tableCell"><?php echo $rooms[$i]['roomCapacity'] ?></td>
-                                    <td id="tableCell"><?php echo $rooms[$i]['occupiedBeds'] ?></td>
+                                    <td><?php echo $salary[$i]['salaryID'] ?></td>
+                                    <td><?php echo $salary[$i]['ward'] ?></td>
+                                    <td><?php echo $salary[$i]['nextDate'] ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="id"
-                                            value="<?php echo $rooms[$i]['roomID'] ?>">
+                                        <input id="radio" type="radio" name="edit"
+                                            value="<?php echo $i ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

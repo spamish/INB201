@@ -4,8 +4,7 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $count = countTable("equipment");
-    $equipment = viewTable("equipment");
+    $policy = viewTable("insurance");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,21 +21,20 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Medical Equipment</h2>
-                <form action="/inb201/admin/equipment_edit.php" method="post">
+                <h2>Insurance Policies</h2>
+                <form action="" method="post">
                     <table>
                         <tr>
-                            <th>Equipment Room</th>
-                            <th>Operator Staff ID</th>
-                            <th>Equipment Tag</th>
-                            <th>Equipment Name</th>
-                            <td><input id="btnSubmit" type="submit" name="update"
-                                value="Update" style="float:right;"></td>
-                            <td><input id="btnSubmit" type="submit" name="remove"
-                                value="Remove" style="float:right;"></td>
+                            <th>Policy Name</th>
+                            <th>Provider</th>
+                            <th>Benefit Description</th>
+                            <th>Rebate Percent</th>
+                            <th>Maximum Rebate</th>
+                            <td><input id="btnSubmit" type="submit" name="edit" value="Edit" style="float:right;"></td>
+                            <td><input id="btnSubmit" type="submit" name="delete" value="Delete" style="float:right;"></td>
                             
                         </tr>
-                        <?php for ($i = 1; $i <= $count; $i++) {
+                        <?php for ($i = 1; $i <= $policy[0]; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -45,13 +43,14 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td><?php echo $equipment[$i]['roomNumber'] ?></td>
-                                    <td><?php echo $equipment[$i]['staff'] ?></td>
-                                    <td><?php echo strstr($equipment[$i]['type'], "-", true) ?></td>
-                                    <td><?php echo substr($equipment[$i]['type'], strrpos($equipment[$i]['type'], "- ") + 1) ?></td>
+                                    <td><?php echo $policy[$i]['policyName'] ?></td>
+                                    <td><?php echo $policy[$i]['provider'] ?></td>
+                                    <td><?php echo $policy[$i]['benefit'] ?></td>
+                                    <td><?php echo $policy[$i]['rebatePercent'] ?></td>
+                                    <td><?php echo $policy[$i]['rebateMaximum'] ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="id"
-                                            value="<?php echo $equipment[$i]['equipmentID'] ?>">
+                                        <input id="radio" type="radio" name="edit"
+                                            value="<?php echo $i ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

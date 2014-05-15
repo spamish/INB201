@@ -11,29 +11,34 @@
             $append = "../";
         }
         switch ($_SESSION['position']) {
-            case "doctor": //Display links if user has doctors access. ?>
-                <a id="btnSidebar" href="/inb201/home.php">Home</a>
-                <a id="btnSidebar" href="/inb201/"></a>
-                <?php break;
+            case "doctor": //Display links if user has doctors access.
+                echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';
+                include($append . 'doctor/doc_links.php');
+                break;
             
-            case "nurse": //Display links if user has nurses access. ?>
-                <a id="btnSidebar" href="/inb201/home.php">Home</a>
-                <a id="btnSidebar" href="/inb201/"></a>
-                <?php break;
+            case "surgeon": //Display links if user has surgeon access.
+                echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';
+                include($append . 'surgeon/surg_links.php');
+                break;
             
-            case "receptionist": //Display links if user has receptionist access. ?>
-                <a id="btnSidebar" href="/inb201/home.php">Home</a>
-                <a id="btnSidebar" href="/inb201/"></a>
-                <?php break;
+            case "nurse": //Display links if user has nurses access.
+                echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';
+                include($append . 'nurse/nurse_links.php');
+                break;
             
-            case "technician": //Display links if user has medical technician access. ?>
-                <a id="btnSidebar" href="/inb201/home.php">Home</a>
-                <a id="btnSidebar" href="/inb201/"></a>
-                <?php break;
+            case "receptionist": //Display links if user has receptionist access.
+                echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';
+                include($append . 'receptionist/recep_links.php');
+                break;
             
-            case "administrator": //Display links if user has system administrator access. ?>
-                <a id="btnSidebar" href="/inb201/home.php">Home</a><br>
-                <?php include($append . 'admin/admin_links.php');
+            case "technician": //Display links if user has medical technician access.
+                echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';
+                include($append . 'technician/tech_links.php');
+                break;
+            
+            case "administrator": //Display links if user has system administrator access.
+                echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';
+                include($append . 'administrator/admin_links.php');
                 break;
             
             default: break; //Display no links unless authorised.

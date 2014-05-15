@@ -4,8 +4,7 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $count = countTable("insurance");
-    $policy = viewTable("insurance");
+    $procedure = viewTable("procedure");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,20 +21,16 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Insurance Policies</h2>
-                <form action="/inb201/admin/insurance_edit.php" method="post">
+                <h2>Operating Procedures</h2>
+                <form action="" method="post">
                     <table>
                         <tr>
-                            <th>Policy Name</th>
-                            <th>Provider</th>
-                            <th>Benefit Description</th>
-                            <th>Rebate Percent</th>
-                            <th>Maximum Rebate</th>
-                            <td><input id="btnSubmit" type="submit" name="edit" value="Edit" style="float:right;"></td>
-                            <td><input id="btnSubmit" type="submit" name="delete" value="Delete" style="float:right;"></td>
+                            <th>Procedure Name</th>
+                            <td><input type="submit" name="edit" value="Edit" style="float:right;"></td>
+                            <td><input type="submit" name="delete" value="Delete" style="float:right;"></td>
                             
                         </tr>
-                        <?php for ($i = 1; $i <= $count; $i++) {
+                        <?php for ($i = 1; $i <= $procedure[0]; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -44,11 +39,7 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $policy[$i]['policyName'] ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]['provider'] ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]['benefit'] ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]['rebatePercent'] ?></td>
-                                    <td id="tableCell"><?php echo $policy[$i]['rebateMaximum'] ?></td>
+                                    <td id="tableCell"><?php echo $procedure[$i]['procedureName'] ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="edit"
                                             value="<?php echo $i ?>">

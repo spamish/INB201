@@ -6,14 +6,27 @@
     require('../includes/password_functions.php');
     require('../includes/functions.php');
     
-    $check = !getStaffInfo($_POST['username']);
-    
-    if ($check) {
+    if(isset($_POST['generate']))
+    {
+        $username = 0;
+        while(!getStaffInfo($username))
+        {
+            $username++;
+        }
+    }
+    else
+    {
         $username = $_POST['username'];
+        $check = !getStaffInfo($username);
+    }
+    
+    if ($check)
+    {
         $firstName = $_POST['firstName'];
         $surname = $_POST['surname'];
         $dateOfBirth = $_POST['dateOfBirth'];
         $phoneNumber = $_POST['phoneNumber'];
+        
         $salary = $_POST['salary'];
         $position = $_POST['position'];
         $ward = $_POST['ward'];
@@ -47,25 +60,25 @@
                     Temporary password is "<?php echo $password ?>"</p>
                     <table>
                         <tr id="tableRowHeader">
-                            <th id="tableHeader">Username</th>
-                            <th id="tableHeader">First Name</th>
-                            <th id="tableHeader">Surname</th>
-                            <th id="tableHeader">Date of Birth</th>
-                            <th id="tableHeader">Phone Number</th>
-                            <th id="tableHeader">Salary</th>
-                            <th id="tableHeader">Position</th>
-                            <th id="tableHeader">Ward</th>
+                            <th>Username</th>
+                            <th>First Name</th>
+                            <th>Surname</th>
+                            <th>Date of Birth</th>
+                            <th>Phone Number</th>
+                            <th>Salary</th>
+                            <th>Position</th>
+                            <th>Ward</th>
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $staff['username'] ?></td>
-                            <td id="tableCell"><?php echo $staff['firstName'] ?></td>
-                            <td id="tableCell"><?php echo $staff['surname'] ?></td>
-                            <td id="tableCell"><?php echo $staff['dateOfBirth'] ?></td>
-                            <td id="tableCell"><?php echo $staff['phoneNumber'] ?></td>
-                            <td id="tableCell"><?php echo $staff['salary'] ?></td>
-                            <td id="tableCell"><?php echo $staff['position'] ?></td>
-                            <td id="tableCell"><?php echo $staff['ward'] ?></td>
+                            <td><?php echo $staff['username'] ?></td>
+                            <td><?php echo $staff['firstName'] ?></td>
+                            <td><?php echo $staff['surname'] ?></td>
+                            <td><?php echo $staff['dateOfBirth'] ?></td>
+                            <td><?php echo $staff['phoneNumber'] ?></td>
+                            <td><?php echo $staff['salary'] ?></td>
+                            <td><?php echo position($staff['position']) ?></td>
+                            <td><?php echo $staff['ward'] ?></td>
                         </tr>
                     </table>
                 <?php }

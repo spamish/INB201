@@ -4,8 +4,7 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $count = countTable("procedure");
-    $procedure = viewTable("procedure");
+    $equipment = viewTable("equipment");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -22,16 +21,21 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Operating Procedures</h2>
-                <form action="/inb201/admin/theater_procedure_details.php" method="post">
+                <h2>Medical Equipment</h2>
+                <form action="equipment_edit.php" method="post">
                     <table>
                         <tr>
-                            <th>Procedure Name</th>
-                            <td><input type="submit" name="edit" value="Edit" style="float:right;"></td>
-                            <td><input type="submit" name="delete" value="Delete" style="float:right;"></td>
+                            <th><a href="equipment_view.php?order=roomNumber">Equipment Room</th>
+                            <th><a href="equipment_view.php?order=code">Test Code</th>
+                            <th><a href="equipment_view.php?order=duration">Test Duration</th>
+                            <th>Test Description</th>
+                            <td><input id="btnSubmit" type="submit" name="update"
+                                value="Update" style="float:right;"></td>
+                            <td><input id="btnSubmit" type="submit" name="remove"
+                                value="Remove" style="float:right;"></td>
                             
                         </tr>
-                        <?php for ($i = 1; $i <= $count; $i++) {
+                        <?php for ($i = 1; $i <= $equipment[0]; $i++) {
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -40,10 +44,13 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td id="tableCell"><?php echo $procedure[$i]['procedureName'] ?></td>
+                                    <td><?php echo "e" . roomNumber($equipment[$i]['roomNumber']) ?></td>
+                                    <td><?php echo $equipment[$i]['code'] ?></td>
+                                    <td><?php echo $equipment[$i]['duration'] ?></td>
+                                    <td><?php echo $equipment[$i]['description'] ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="edit"
-                                            value="<?php echo $i ?>">
+                                        <input id="radio" type="radio" name="id"
+                                            value="<?php echo $equipment[$i]['equipmentID'] ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

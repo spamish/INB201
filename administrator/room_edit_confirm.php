@@ -37,17 +37,17 @@
                     <p>Updating of room successful.</p>
                     <table>
                         <tr id="tableRowHeader">
-                            <th id="tableHeader">Room Number</th>
-                            <th id="tableHeader">Ward</th>
-                            <th id="tableHeader">Room Capacity</th>
-                            <th id="tableHeader">Occupied Beds</th>
+                            <th>Room Number</th>
+                            <th>Ward</th>
+                            <th>Room Capacity</th>
+                            <th>Occupied Beds</th>
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $rooms[$id]['roomNumber'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['ward'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['roomCapacity'] ?></td>
-                            <td id="tableCell"><?php echo $rooms[$id]['occupiedBeds'] ?></td>
+                            <td><?php echo $rooms[$id]['roomNumber'] ?></td>
+                            <td><?php echo $rooms[$id]['ward'] ?></td>
+                            <td><?php echo $rooms[$id]['roomCapacity'] ?></td>
+                            <td><?php echo $rooms[$id]['occupiedBeds'] ?></td>
                         </tr>
                     </table>
                 <?php }

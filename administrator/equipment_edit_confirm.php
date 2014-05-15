@@ -11,10 +11,11 @@
     
     if ($check)
     {
-        $type = $_POST['type'];
-        $staff = $_POST['staff'];
+        $code = $_POST['code'];
+        $duration = $_POST['duration'];
+        $description = $_POST['description'];
         
-        editEquipment($id, $type, $staff);
+        editEquipment($id, $code, $duration, $description);
     }
     
     $equipment = viewTable("equipment");
@@ -40,16 +41,16 @@
                     <table>
                         <tr>
                             <th>Room Number</th>
-                            <th>Schedule ID</th>
-                            <th>Operator Staff ID</th>
-                            <th>Equipment Description</th>
+                            <th>Test Code</th>
+                            <th>Test Duration</th>
+                            <th>Test Description</th>
                         </tr>
                         
                         <tr>
                             <td><?php echo $equipment[$id]['roomNumber'] ?></td>
-                            <td><?php echo $equipment[$id]['schedule'] ?></td>
-                            <td><?php echo $equipment[$id]['staff'] ?></td>
-                            <td><?php echo $equipment[$id]['type'] ?></td>
+                            <td><?php echo $equipment[$id]['code'] ?></td>
+                            <td><?php echo $equipment[$id]['duration'] ?></td>
+                            <td><?php echo $equipment[$id]['description'] ?></td>
                         </tr>
                     </table>
                 <?php }
