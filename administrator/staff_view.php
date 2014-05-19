@@ -15,7 +15,7 @@
         $sort = false;
     }
     
-    $staff = viewTable("staff", $order, $sort);
+    $table = viewTable("staff", $order, $sort);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -36,17 +36,20 @@
                 <form action="staff_view_details.php" method="post">
                     <table>
                         <tr>
-                            <th><a href="staff_view.php?order=username&sort=<?php echo !$sort?>">Username</th>
-                            <th><a href="staff_view.php?order=firstName&sort=<?php echo !$sort?>">First Name</th>
-                            <th><a href="staff_view.php?order=surname&sort=<?php echo !$sort?>">Surname</th>
-                            <th><a href="staff_view.php?order=position&sort=<?php echo !$sort?>">Position</th>
-                            <th><a href="staff_view.php?order=ward&sort=<?php echo !$sort?>">Ward</th>
+                            <th><a href="staff_view.php?order=username&sort=<?php echo !$sort ?>">Username</th>
+                            <th><a href="staff_view.php?order=firstName&sort=<?php echo !$sort ?>">First Name</th>
+                            <th><a href="staff_view.php?order=surname&sort=<?php echo !$sort ?>">Surname</th>
+                            <th><a href="staff_view.php?order=gender&sort=<?php echo !$sort ?>">Gender</th>
+                            <th><a href="staff_view.php?order=dateOfBirth&sort=<?php echo !$sort ?>">Date ofBirth</th>
+                            <th><a href="staff_view.php?order=position&sort=<?php echo !$sort ?>">Position</th>
+                            <th><a href="staff_view.php?order=ward&sort=<?php echo !$sort ?>">Ward</th>
                             <td>
                                 <input id="btnSubmit" type="submit" name="details"
                                     value="View Details" style="float: right;">
-                            <td>
+                            </td>
                         </tr>
-                        <?php for ($i = 1; $i <= $staff[0]; $i++) {
+                        <?php for ($i = 1; $i <= $table[0]; $i++) {
+                            $staff = new Staff($table[$i]);
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -55,14 +58,16 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td><?php echo idString($staff[$i]['username']) ?></td>
-                                    <td><?php echo $staff[$i]['firstName'] ?></td>
-                                    <td><?php echo $staff[$i]['surname'] ?></td>
-                                    <td><?php echo position($staff[$i]['position']) ?></td>
-                                    <td><?php echo $staff[$i]['ward'] ?></td>
+                                    <td><?php echo $staff->username ?></td>
+                                    <td><?php echo $staff->firstName ?></td>
+                                    <td><?php echo $staff->surname ?></td>
+                                    <td><?php echo gender($staff->gender) ?></td>
+                                    <td><?php echo $staff->dateOfBirth ?></td>
+                                    <td><?php echo position($staff->position) ?></td>
+                                    <td><?php echo $staff->ward ?></td>
                                     <td>
                                         <input id="radio" type="radio" name="id"
-                                            value="<?php echo $staff[$i]['staffID'] ?>">
+                                            value="<?php echo $staff->staffID ?>">
                                     </td>
                                 </tr>
                         <?php } ?>

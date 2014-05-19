@@ -3,8 +3,7 @@
 <?php
     if(isset($_SESSION))
     {
-        //Destroy current session
-        session_unset();
+        require('includes/lib/end_session.php');
     }
 ?>
 

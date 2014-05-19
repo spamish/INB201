@@ -1,52 +1,6 @@
 <?php
     require_once('classes.php');
     
-    function position($position)
-    {
-        switch($position)
-        {
-            case "doctor":
-                return "Doctor";
-                break;
-            case "surgeon":
-                return "Surgeon";
-                break;
-            case "nurse":
-                return "Nurse";
-                break;
-            case "receptionist":
-                return "Receptionist";
-                break;
-            case "technician":
-                return "Medical Technician";
-                break;
-            case "administrator":
-                return "System Administrator";
-                break;
-            default:
-                return "Inactive";
-                break;
-        }
-    }
-    
-    function searchStaff($id)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
-        
-        $sql = "SELECT *
-                FROM staff
-                WHERE staffID = '$id'";
-        $records = mysql_query($sql, $resource);
-
-        return mysql_fetch_array($records);
-    }
-    
-    function searchSalaries()
-    {
-        
-    }
-    
     function searchRooms($roomNumber, $ward)
     {
         $resource = new Connection();
@@ -94,40 +48,53 @@
         $result = mysql_query($sql, $resource);
         $equipment = mysql_fetch_array($result);
         
-        if ($equipment)
-        {
-            return $equipment;
-        }
+        return $equipment;
     }
     
-    function searchProcedure()
-    {
-        
-    }
-    
-    function searchPolicy()
-    {
-        
-    }
-    
-    function createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward, $hash)
+    function createStaff($staff)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
+                
+        $sql = "SELECT *
+                FROM staff";
+        $records = mysql_query($sql, $resource);
+        $staff->staffID = (mysql_num_rows($records) + 1);
+        
+        $sql = "INSERT INTO staff (staffID,
+                                   username,
+                                   firstName,
+                                   surname,
+                                   gender,
+                                   dateOfBirth, 
+                                   mobilePhone,
+                                   address,
+                                   roster,
+                                   salary,
+                                   position,
+                                   ward,
+                                   hash)
+                VALUES ('" . $staff->staffID . "', '"
+                           . $staff->username . "', '"
+                           . $staff->firstName . "', '"
+                           . $staff->surname . "', '"
+                           . $staff->gender . "', '"
+                           . $staff->dateOfBirth . "', '"
+                           . $staff->mobilePhone . "', '"
+                           . $staff->address . "', '"
+                           . $staff->roster . "', '"
+                           . $staff->salary . "', '"
+                           . $staff->position . "', '"
+                           . $staff->ward . "', '"
+                           . $staff->hash . "')";
+        
+        $records = mysql_query($sql, $resource);
         
         $sql = "SELECT *
                 FROM staff";
         $records = mysql_query($sql, $resource);
-        $count = mysql_num_rows($records) + 1;
         
-        $sql = "INSERT INTO staff (staffID, username, firstName, surname, dateOfBirth, phoneNumber, salary, position, ward, hash)
-                VALUES ('$count', '$username', '$firstName', '$surname', '$dateOfBirth', '$phoneNumber', '$salary', '$position', '$ward', '$hash')";
-        $records = mysql_query($sql, $resource);
-    }
-    
-    function createSalary()
-    {
-        
+        return new Staff(mysql_fetch_array($records));
     }
     
     function createRoom($roomNumber, $ward, $roomCapacity, $occupiedBeds)
@@ -216,36 +183,30 @@
         }
     }
     
-    function createProcedure()
-    {
-        
-    }
-    
-    function createPolicy()
-    {
-    
-    }
-    
-    function editStaff($id, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward)
+    function editStaff($staff)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
         $sql = "UPDATE staff
-                SET firstName = '$firstName',
-                    surname = '$surname',
-                    dateOfBirth = '$dateOfBirth',
-                    phoneNumber = '$phoneNumber',
-                    salary = '$salary',
-                    position = '$position',
-                    ward = '$ward'
-                WHERE staffID = '$id'";
+                SET firstName = '" . $staff->firstName . "',
+                    surname = '" . $staff->surname . "',
+                    gender = '" . $staff->gender . "',
+                    dateOfBirth = '" . $staff->dateOfBirth . "',
+                    mobilePhone = '" . $staff->mobilePhone . "',
+                    address = '" . $staff->address . "'
+                    roster = '" . $staff->roster . "'
+                    salary = '" . $staff->salary . "',
+                    position = '" . $staff->position . "',
+                    ward = '" . $staff->ward . "'
+                WHERE staffID = '" . $staff->staffID . "'";
         $records = mysql_query($sql, $resource);
-    }
-    
-    function editSalary()
-    {
         
+        $sql = "SELECT *
+                FROM staff";
+        $records = mysql_query($sql, $resource);
+        
+        return new Staff(mysql_fetch_array($records));
     }
     
     function editRoom($id, $roomCapacity)
@@ -272,21 +233,6 @@
         $records = mysql_query($sql, $resource);
     }
     
-    function editProcedure()
-    {
-        
-    }
-    
-    function editPolicy()
-    {
-        
-    }
-    
-    function deleteSalary()
-    {
-        
-    }
-    
     function deleteRoom($table, $roomNumber)
     {
         $resource = new Connection();
@@ -298,13 +244,136 @@
         $records = mysql_query($sql, $resource);
     }
     
-    function deleteProcedure()
+    function uniqueUsername()
     {
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
+        $sql = "SELECT username
+                FROM (
+                    SELECT 1
+                    AS username
+                    ) q1
+                WHERE NOT
+                EXISTS (
+                    SELECT 1
+                    FROM staff
+                    WHERE username =1
+                    )
+                UNION ALL
+                SELECT *
+                FROM (
+                    SELECT username +1
+                    FROM staff t
+                    WHERE NOT EXISTS (
+                        SELECT 1
+                        FROM staff ti
+                        WHERE ti.username = t.username +1
+                        )
+                    ORDER BY username
+                    LIMIT 1
+                    ) q2
+                ORDER BY username
+                LIMIT 1";
+        $result = mysql_query($sql, $resource);
+        $id = mysql_fetch_array($result);
+        
+        return $id['username'];
     }
     
-    function deletePolicy()
+    function assignRoster($roster)
     {
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
+        while(1)
+        {
+            $sql = "SELECT *
+                    FROM rosters
+                    WHERE start = '" . $roster->start . "'
+                    AND finish = '" . $roster->finish . "'";
+            
+            $records = mysql_query($sql, $resource);
+            
+            if (mysql_num_rows($records) > 0)
+            {
+                return new Roster(mysql_fetch_array($records));
+            }
+            else
+            {
+                $sql = "SELECT *
+                        FROM rosters";
+                $records = mysql_query($sql, $resource);
+                $count = mysql_num_rows($records) + 1;
+                
+                $sql = "INSERT INTO rosters (rosterID, start, finish)
+                        VALUES ('$count', '" . $roster->start . "', '"
+                                             . $roster->finish . "')";
+                
+                $records = mysql_query($sql, $resource);
+            }
+        }
+    }
+    
+    function assignSalary($salary)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        while(1)
+        {
+            $sql = "SELECT *
+                    FROM salaries
+                    WHERE payRate = '" . $salary->payRate . "'
+                    AND nextDate = '" . $salary->nextDate . "'";
+            
+            $records = mysql_query($sql, $resource);
+            
+            if (mysql_num_rows($records) > 0)
+            {
+                return new Salary(mysql_fetch_array($records));
+            }
+            else
+            {
+                $sql = "SELECT *
+                        FROM salaries";
+                $records = mysql_query($sql, $resource);
+                $count = mysql_num_rows($records) + 1;
+                
+                $sql = "INSERT INTO salaries (salaryID, payRate, nextDate)
+                        VALUES ('$count', '" . $salary->payRate . "', '"
+                                             . $salary->nextDate . "')";
+                
+                $records = mysql_query($sql, $resource);
+            }
+        }
+    }
+    
+    function position($position)
+    {
+        switch($position)
+        {
+            case "doctor":
+                return "Doctor";
+                break;
+            case "surgeon":
+                return "Surgeon";
+                break;
+            case "nurse":
+                return "Nurse";
+                break;
+            case "receptionist":
+                return "Receptionist";
+                break;
+            case "technician":
+                return "Medical Technician";
+                break;
+            case "administrator":
+                return "System Administrator";
+                break;
+            default:
+                return "Inactive";
+                break;
+        }
     }
 ?>

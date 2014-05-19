@@ -1,36 +1,86 @@
 <?php
     require_once('classes.php');
     
-    function timestamp($input = null)
+    function assignAddress($address)
     {
-        if (!isset($input))
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        for ($i = 0; $i < 3; $i++)
         {
-            $input = time();
+            $sql = "SELECT *
+                    FROM addresses
+                    WHERE ";
+            if (isset($address->house))
+            {
+                $sql .= "house = '" . $address->house
+                     . "' AND street = '" . $address->street
+                     . "' AND suburb = '" . $address->suburb
+                     . "' AND postcode = '" . $address->postcode
+                     . "' AND region = '" . $address->region
+                     . "' AND country = '" . $address->country . "'";
+            }
+            $sql .= " AND unit " . (isset($address->unit) ? ("= '" . $address->unit . "'") : "IS NULL");
+            $sql .= " AND homePhone " . (isset($address->homePhone) ? ( "= '" . $address->homePhone . "'") : "IS NULL");
+            echo $sql;
+            
+            $records = mysql_query($sql, $resource);
+            
+            if (mysql_num_rows($records) > 0)
+            {
+                return new Address(mysql_fetch_array($records));
+            }
+            else
+            {
+                return createAddress($address);
+            }
         }
-        date_default_timezone_set('Australia/Brisbane');
-        return date('Y-m-d H:i:s', $input);
     }
     
-    function roomNumber($string)
+    function createAddress($address)
     {
-        $length = strlen($string);
+        $resource = new Connection();
+        $resource = $resource->Connect();
         
-        for ($j = $length; $j < 6; $j++)
-        {
-            $string = "0" . $string;
-        }
-        return $string;
-    }
-    
-    function idString($string)
-    {
-        $length = strlen($string);
+        $sql = "SELECT *
+                FROM addresses";
+        $records = mysql_query($sql, $resource);
+        $address->addressID = mysql_num_rows($records) + 1;
         
-        for ($j = $length; $j < 12; $j++)
+        $insert = "INSERT INTO addresses (addressID";
+        $values = "VALUES ('" . $address->addressID;
+        
+        if (isset($address->homePhone))
         {
-            $string = "0" . $string;
+            $insert .= ", homePhone";
+            $values .= "', '" . $address->homePhone;
         }
-        return $string;
+        
+        if (isset($address->house))
+        {
+            $insert .= ", house, street, suburb, postcode, region, country";
+            $values .= "', '" . $address->house
+                     . "', '" . $address->street
+                     . "', '" . $address->suburb
+                     . "', '" . $address->postcode
+                     . "', '" . $address->region
+                     . "', '" . $address->country;
+        }
+        
+        $insert .= isset($address->unit) ? ", unit)" : ")";
+        $values .= isset($address->unit) ? ("', '" . $address->unit . "')") : "')";
+        echo $sql = $insert . " " . $values;
+        
+        $records = mysql_query($sql, $resource);
+        
+        $sql = "SELECT *
+            FROM addresses
+            WHERE addressID = '" . $address->addressID . "'";
+        echo $sql;
+        
+        $records = mysql_query($sql, $resource);
+        
+        return new Address(mysql_fetch_array($records));
     }
     
     function getStaffInfo($username)
@@ -43,7 +93,7 @@
                 WHERE username = '$username'";
         $records = mysql_query($sql, $resource);
         
-        return mysql_fetch_array($records);
+        return new Staff(mysql_fetch_array($records));
     }
     
     function viewTable($table, $order = null, $sort = true)
@@ -167,35 +217,6 @@
         return $results;
     }
     
-    function condition($state)
-    {
-        switch ($state)
-        {
-            case 0.5:
-                return "Stable";
-                break;
-            case 0.7:
-                return "Urgent";
-                break;
-            case 0.9:
-                return "Critical";
-                break;
-        }
-    }
-    
-    function gender($input)
-    {
-        switch ($input)
-        {
-            case "m":
-                return "Male";
-                break;
-            case "f";
-                return "Female";
-                break;
-        }
-    }
-    
     function viewCurrent($search = null, $options = null)
     {
         //$patientID, $fileID, $firstName, $surname, $roomNumber, $ward, $staff, $order
@@ -209,14 +230,9 @@
                 WHERE discharge IS NULL";
         
         //Add search fields for case file.
-        if (   isset($search['file'])
-            || isset($search['roomNumber'])
-            || isset($search['ward']))
-        {
-            $sql .= (isset($search['file']) ? (" AND fileID = '" . $search['file'] . "'") : "")
-                  . (isset($search['roomNumber']) ? (" AND roomNumber = '" . $search['roomNumber'] . "'") : "")
-                  . (isset($search['ward']) ? (" AND ward = '" . $search['ward'] . "'") : "");
-        }
+        $sql .= (isset($search['file']) ? (" AND fileID = '" . $search['file'] . "'") : "")
+              . (isset($search['roomNumber']) ? (" AND roomNumber = '" . $search['roomNumber'] . "'") : "")
+              . (isset($search['ward']) ? (" AND ward = '" . $search['ward'] . "'") : "");
         
         //Add sorting options to view function.
         if (   isset($options['roomNumber'])
@@ -283,5 +299,66 @@
             }
         }
         return $results;
+    }
+    
+    function timestamp($input = null)
+    {
+        if (!isset($input))
+        {
+            $input = time();
+        }
+        date_default_timezone_set('Australia/Brisbane');
+        return date('Y-m-d H:i:s', $input);
+    }
+    
+    function roomNumber($string)
+    {
+        $length = strlen($string);
+        
+        for ($j = $length; $j < 6; $j++)
+        {
+            $string = "0" . $string;
+        }
+        return $string;
+    }
+    
+    function idString($string)
+    {
+        $length = strlen($string);
+        
+        for ($j = $length; $j < 12; $j++)
+        {
+            $string = "0" . $string;
+        }
+        return $string;
+    }
+    
+    function condition($state)
+    {
+        switch ($state)
+        {
+            case 0.5:
+                return "Stable";
+                break;
+            case 0.7:
+                return "Urgent";
+                break;
+            case 0.9:
+                return "Critical";
+                break;
+        }
+    }
+    
+    function gender($input)
+    {
+        switch ($input)
+        {
+            case "m":
+                return "Male";
+                break;
+            case "f";
+                return "Female";
+                break;
+        }
     }
 ?>

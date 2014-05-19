@@ -9,7 +9,6 @@
             { ?>
                 <a id="btnSubmit" href="/inb201/index.php">Logout</a><br>
                 <a id="btnSubmit" href="/inb201/change_password.php">Change Password</a><br>
-            <?php }
-        ?>
+        <?php } ?>
     </div>
 </div><!-- end #header -->

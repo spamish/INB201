@@ -6,26 +6,25 @@
     require('../includes/password_functions.php');
     require('../includes/functions.php');
     
-    $id = $_POST['id'];
+    $staff = new Staff($_POST);
+    
     if (isset($_POST['reset']))
     {
         $password = substr(md5(rand()), 0, 10);
         
-        changePassword($id, $password);
+        changePassword($staff->staffID, $password);
     }
     elseif (isset($_POST['update']))
     {
-        $firstName = $_POST['firstName'];
-        $surname = $_POST['surname'];
-        $dateOfBirth = $_POST['dateOfBirth'];
-        $phoneNumber = $_POST['phoneNumber'];
-        $salary = $_POST['salary'];
-        $position = $_POST['position'];
-        $ward = $_POST['ward'];
+        //Check if address, roster or salary have been changed.
+        $address = assignAddress(new Address($_POST));
+        $roster = assignRoster(new Roster($_POST));
+        $salary = assignSalary(new Salary($_POST));
+        $staff->address = $address->addressID;
+        $staff->roster = $roster->rosterID;
+        $staff->salary = $salary->salaryID;
         
-        editStaff($id, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward);
-        
-        $staff = viewTable("staff");
+        $staff = editStaff($staff);
     }
 ?>
 
@@ -56,20 +55,20 @@
                             <th>First Name</th>
                             <th>Surname</th>
                             <th>Date of Birth</th>
-                            <th>Phone Number</th>
+                            <th>Mobile Phone</th>
                             <th>Salary</th>
                             <th>Position</th>
                             <th>Ward</th>
                         </tr>
                         <tr id="tableRowA">
-                            <td><?php echo $staff[$id]['username'] ?></td>
-                            <td><?php echo $staff[$id]['firstName'] ?></td>
-                            <td><?php echo $staff[$id]['surname'] ?></td>
-                            <td><?php echo $staff[$id]['dateOfBirth'] ?></td>
-                            <td><?php echo $staff[$id]['phoneNumber'] ?></td>
-                            <td><?php echo $staff[$id]['salary'] ?></td>
-                            <td><?php echo position($staff[$id]['position']) ?></td>
-                            <td><?php echo $staff[$id]['ward'] ?></td>
+                            <td><?php echo $staff->username ?></td>
+                            <td><?php echo $staff->firstName ?></td>
+                            <td><?php echo $staff->surname ?></td>
+                            <td><?php echo $staff->dateOfBirth ?></td>
+                            <td><?php echo $staff->mobilePhone ?></td>
+                            <td><?php echo $staff->salary ?></td>
+                            <td><?php echo position($staff->position) ?></td>
+                            <td><?php echo $staff->ward ?></td>
                         </tr>
                     </table>
                 <?php } ?>

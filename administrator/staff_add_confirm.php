@@ -6,37 +6,54 @@
     require('../includes/password_functions.php');
     require('../includes/functions.php');
     
+    $staff = new Staff($_POST);
+    
+    //Check if username already exists or generates a new one.
     if(isset($_POST['generate']))
     {
-        $username = 0;
-        while(!getStaffInfo($username))
-        {
-            $username++;
-        }
+        echo $staff->username = uniqueUsername();
+        $check = 1;
     }
     else
     {
-        $username = $_POST['username'];
-        $check = !getStaffInfo($username);
+        $check = !getStaffInfo($staff->username);
     }
     
+    //Creates staff member.
     if ($check)
     {
-        $firstName = $_POST['firstName'];
-        $surname = $_POST['surname'];
-        $dateOfBirth = $_POST['dateOfBirth'];
-        $phoneNumber = $_POST['phoneNumber'];
+        $address = assignAddress(new Address($_POST));
+        $roster = assignRoster(new Roster($_POST));
+        $salary = assignSalary(new Salary($_POST));
+        $staff->address = $address->addressID;
+        $staff->roster = $roster->rosterID;
+        $staff->salary = $salary->salaryID;
         
-        $salary = $_POST['salary'];
-        $position = $_POST['position'];
-        $ward = $_POST['ward'];
+        //Assigns wards to positions where ward is dedicated.
+        switch ($staff->position)
+        {
+            case "receptionist":
+                $staff->ward = "A";
+                break;
+            case "technician":
+                $staff->ward = "E";
+                break;
+            case "administrator":
+                $staff->ward = "F";
+                break;
+            case "surgeon":
+                $staff->ward = "G";
+                break;
+            default:
+                break;
+        }
+        
+        //Generate a temporary password.
         $password = substr(md5(rand()), 0, 10);
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $staff->hash = password_hash($password, PASSWORD_DEFAULT);
         
-        createStaff($username, $firstName, $surname, $dateOfBirth, $phoneNumber, $salary, $position, $ward, $hash);
-        
-        $staff = getStaffInfo($username);
-        $id = $staff['staffID'];
+        //Create staff member.
+        $staff = createStaff($staff);
     }
 ?>
 
@@ -63,22 +80,20 @@
                             <th>Username</th>
                             <th>First Name</th>
                             <th>Surname</th>
+                            <th>Gender</th>
                             <th>Date of Birth</th>
-                            <th>Phone Number</th>
-                            <th>Salary</th>
                             <th>Position</th>
                             <th>Ward</th>
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td><?php echo $staff['username'] ?></td>
-                            <td><?php echo $staff['firstName'] ?></td>
-                            <td><?php echo $staff['surname'] ?></td>
-                            <td><?php echo $staff['dateOfBirth'] ?></td>
-                            <td><?php echo $staff['phoneNumber'] ?></td>
-                            <td><?php echo $staff['salary'] ?></td>
-                            <td><?php echo position($staff['position']) ?></td>
-                            <td><?php echo $staff['ward'] ?></td>
+                            <td><?php echo $staff->username ?></td>
+                            <td><?php echo $staff->firstName ?></td>
+                            <td><?php echo $staff->surname ?></td>
+                            <td><?php echo $staff->gender ?></td>
+                            <td><?php echo $staff->dateOfBirth ?></td>
+                            <td><?php echo position($staff->position) ?></td>
+                            <td><?php echo $staff->ward ?></td>
                         </tr>
                     </table>
                 <?php }

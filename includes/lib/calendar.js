@@ -147,7 +147,7 @@ calendar = {
 					if(day == d) class_name += " selected";
 					
 					class_name += " " + this.weekdays[j].toLowerCase();
-
+                    
 					this.wrt("<td class='days"+class_name+"'><a href='javascript:calendar.selectDate(\""+year+"\",\""+mon+"\",\""+w+"\")'>"+w+"</a></td>");
 					d++;
 				} else {
