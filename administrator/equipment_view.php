@@ -4,7 +4,12 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $equipment = viewTable("equipment");
+    $url[0] = "equipment_view.php?order=";
+    $url[1] = "&sort=";
+    $order = (isset($_GET['order']) ? $_GET['order'] : null);
+    $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
+    
+    $table = viewTable("equipment", null, $order, $sort);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -25,35 +30,44 @@
                 <form action="equipment_edit.php" method="post">
                     <table>
                         <tr>
-                            <th><a href="equipment_view.php?order=roomNumber">Equipment Room</th>
-                            <th><a href="equipment_view.php?order=code">Test Code</th>
-                            <th><a href="equipment_view.php?order=duration">Test Duration</th>
+                            <th><a href="<?php echo $url[0] . "roomNumber" . $url[1] . !$sort ?>">Equipment Room</th>
+                            <th><a href="<?php echo $url[0] . "code" . $url[1] . !$sort ?>">Test Code</th>
+                            <th><a href="<?php echo $url[0] . "duration" . $url[1] . !$sort ?>">Test Duration</th>
+                            <th><a href="<?php echo $url[0] . "cost" . $url[1] . !$sort ?>">Cost of Test</th>
                             <th>Test Description</th>
-                            <td><input id="btnSubmit" type="submit" name="update"
-                                value="Update" style="float:right;"></td>
-                            <td><input id="btnSubmit" type="submit" name="remove"
-                                value="Remove" style="float:right;"></td>
+                            <td>
+                                <input id="btnSubmit" type="submit" name="update"
+                                    value="Update" style="float:right;">
+                                <input id="btnSubmit" type="submit" name="remove"
+                                    value="Remove" style="float:right;">
+                            </td>
                             
                         </tr>
-                        <?php for ($i = 1; $i <= $equipment[0]; $i++) {
-                            if ($i % 2 == 0)
-                            { ?>
-                                <tr id="tableRowA">
+                        <?php
+                            for ($i = 1; $i <= $table[0]; $i++)
+                            {
+                                $equipment = new Equipment($table[$i]);
+                                
+                                if ($i % 2 == 0)
+                                { ?>
+                                    <tr id="tableRowA">
+                                <?php }
+                                else
+                                { ?>
+                                    <tr id="tableRowB">
+                                <?php } ?>
+                                        <td><?php echo "e" . $equipment->roomNumber ?></td>
+                                        <td><?php echo $equipment->code ?></td>
+                                        <td><?php echo $equipment->duration->format('H:i') ?></td>
+                                        <td><?php echo $equipment->cost ?></td>
+                                        <td><?php echo $equipment->description ?></td>
+                                        <td>
+                                            <input id="radio" type="radio" name="equipmentID"
+                                                value="<?php echo $equipment->equipmentID ?>">
+                                        </td>
+                                    <tr>
                             <?php }
-                            else
-                            { ?>
-                                <tr id="tableRowB">
-                            <?php } ?>
-                                    <td><?php echo "e" . roomNumber($equipment[$i]['roomNumber']) ?></td>
-                                    <td><?php echo $equipment[$i]['code'] ?></td>
-                                    <td><?php echo $equipment[$i]['duration'] ?></td>
-                                    <td><?php echo $equipment[$i]['description'] ?></td>
-                                    <td>
-                                        <input id="radio" type="radio" name="id"
-                                            value="<?php echo $equipment[$i]['equipmentID'] ?>">
-                                    </td>
-                                <tr>
-                        <?php } ?>
+                        ?>
                     </table>
                 </form>
             </div> <!-- end #content -->

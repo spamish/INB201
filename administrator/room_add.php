@@ -18,6 +18,7 @@
             <?php include('../includes/sidebar.php'); ?>
             <div id="content"> <!-- All content goes here -->
                 <h2>Add Room</h2>
+                <p>Enter room number as numeric component, alphabetic prefix will be added automatically.</p>
                 <form action="room_add_confirm.php" method="post" style="float:left;width=50%;">
                     <table>
                         <tr>
@@ -27,7 +28,6 @@
                         <tr>
                             <td align="right">
                                 <select name="ward">
-                                    <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
                                     <option value="D">D</option>
@@ -37,7 +37,7 @@
                         </tr>
                         <tr>
                             <td align="right">Number of Beds</td>
-                            <td align="left"><input type="text" name="roomCapacity" required/></td>
+                            <td align="left"><input type="text" name="capacity" required/></td>
                         </tr>
                         <tr>
                             <td align="right"></td>

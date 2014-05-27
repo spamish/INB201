@@ -5,26 +5,18 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    if (!isset($_POST['id']))
+    if (!isset($_POST['equipmentID']))
     {
-        header ("Location: room_view.php");
+        header ("Location: equipment_view.php");
     }
-    $id = $_POST['id'];
-    $equipment = viewTable("equipment");
     
-    if (isset($_POST['remove'])) //Check for populated schedule.
+    $results = viewTable("equipment", new Equipment($_POST));
+    $equipment = new Equipment($results[1]);
+    
+    if (isset($_POST['remove'])) //CHECK FOR POPULATED SCHEDULE!
     {
-        deleteRoom("equipment", $equipment[$id]['roomNumber']);
-        header ("Location: room_view.php");
-    }
-    elseif (isset($_POST['update']))
-    {
-        $roomNumber = $equipment[$id]['roomNumber'];
-        $code = $equipment[$id]['code'];
-        $duration = $equipment[$id]['duration'];
-        $description = $equipment[$id]['description'];
-        
-        editEquipment($id, $code, $duration, $description);
+        delete("equipment", "equipmentID", $equipment->equipmentID);
+        header ("Location: equipment_view.php");
     }
 ?>
 
@@ -44,39 +36,40 @@
                 { ?>
                     <h2>Edit Room</h2>
                     <form action="equipment_edit_confirm.php" method="post" style="float:left;width=50%;">
+                        <input type="hidden" name="equipmentID" value="<?php echo $equipment->equipmentID ?>">
                         <table>
                             <tr>
                                 <td align="right">Room Number</td>
                                 <td align="left">
-                                    <?php echo $roomNumber ?>
+                                    <?php echo $equipment->roomNumber ?>
                                 </td>
+                            </tr>
                             <tr>
                                 <td align="right">Test Code</td>
                                 <td align="left"><input type="text" name="code" 
-                                    required value="<?php echo $code ?>"/></td>
-                            </tr>
+                                    required value="<?php echo $equipment->code ?>"></td>
                             </tr>
                             <tr>
                                 <td align="right">Test Duration</td>
                                 <td align="left"><input type="text" name="duration" 
-                                    required value="<?php echo $duration ?>"/></td>
+                                    required value="<?php echo $equipment->duration->format('H:i') ?>"></td>
+                            </tr>
+                            <tr>
+                                <td align="right">Cost of Test</td>
+                                <td align="left"><input type="text" name="cost" 
+                                    required value="<?php echo $equipment->cost ?>"></td>
                             </tr>
                             <tr>
                                 <td align="right">Test Description</td>
                                 <td align="left">
                                     <textarea rows="4" cols="32"
-                                        name="description"><?php echo $description ?></textarea>
+                                        name="description"><?php echo $equipment->description ?></textarea>
                                 </td>
-                            </tr>
-                            <tr>
-                                </td>
-                                <td align="right"></td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td align="left">
                                     <input id="btnSubmit" type="submit" name="save" value="Save">
-                                    <input type="hidden" name="id" value="<?php echo $id ?>">
                                 </td>
                             </tr>
                         </table>

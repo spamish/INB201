@@ -4,7 +4,12 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $theaters = viewTable("theaters");
+    $url[0] = "theater_view.php?order=";
+    $url[1] = "&sort=";
+    $order = (isset($_GET['order']) ? $_GET['order'] : null);
+    $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
+    
+    $table = viewTable("theaters", null, $order, $sort);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -25,12 +30,12 @@
                 <form action="theater_add.php" method="post">
                     <table>
                         <tr>
-                            <th><a href="theater_view.php?order=roomNumber">Theater Room</th>
+                            <th><a href="<?php echo $url[0] . "roomNumber" . $url[1] . !$sort ?>">Theater Room</th>
                             <td><input id="btnSubmit" type="submit" name="remove"
                                 value="Remove" style="float:right;"></td>
-                            
                         </tr>
-                        <?php for ($i = 1; $i <= $theaters[0]; $i++) {
+                        <?php for ($i = 1; $i <= $table[0]; $i++) {
+                            $theater = new Theater($table[$i]);
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -39,10 +44,10 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td><?php echo "g" . roomNumber($theaters[$i]['roomNumber']) ?></td>
+                                    <td><?php echo "g" . $theater->roomNumber ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="id"
-                                            value="<?php echo $theaters[$i]['theaterID'] ?>">
+                                        <input id="radio" type="radio" name="theaterID"
+                                            value="<?php echo $theater->theaterID ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

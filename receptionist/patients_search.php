@@ -23,34 +23,57 @@
                     <table>
                         <tr>
                             <td align="right">Patient ID</td>
-                            <td><input type="text" name="patient" autofocus ></td>
+                            <td><input type="text" name="patientID" autofocus ></td>
                         </tr>
                         <tr>
                             <td align="right">Case ID</td>
-                            <td><input type="text" name="file"></td>
+                            <td><input type="text" name="fileID"></td>
                         </tr>
                         <tr>
-                            <td align="right">First Name or Forename</td>
+                            <td align="right">First Name</td>
                             <td><input type="text" name="firstName"></td>
                         </tr>
                         <tr>
-                            <td align="right">Surname or Postname</td>
+                            <td align="right">Surname</td>
                             <td><input type="text" name="surname"></td>
                         </tr>
                         <tr>
-                            <td align="right">Room Number</td>
-                            <td><input type="text" name="roomNumber"></td>
+                            <td align="right">Gender</td>
+                            <td>
+                                <input type="radio" name="gender" value="m">Male
+                                <input type="radio" name="gender" value="f">Female
+                            </td>
                         </tr>
                         <tr>
-                            <td align="right">Ward</td>
-                            <td><input type="text" name="ward"></td>
+                            <td align="right">Doctor Username</td>
+                            <td><input type="text" name="username"></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Doctor First Name (work in progress)</td>
+                            <td><input type="text" name="docFirstName"></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Doctor Surname (work in progress)</td>
+                            <td><input type="text" name="docSurname"></td>
+                        </tr>
+                        <tr>
+                            <td>Room Number and/or Ward</td>
+                            <td>
+                                <input type="text" name="roomNumber">
+                                <select id="ward" name="ward">
+                                    <option value="-">-</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td>
                                 <input id="btnSubmit" type="submit"
-                                    name="submit" value="Submit">
-                            <td>
+                                    name="search" value="Submit">
+                            </td>
                         </tr>
                     </table>
                 </form>

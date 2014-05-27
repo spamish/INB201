@@ -1,65 +1,16 @@
 <?php
     require_once('classes.php');
     
-    function searchRooms($roomNumber, $ward)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
+    /*
         
-        //Search for the room number in all relevant tables.
-        $sql = "SELECT *
-                FROM rooms
-                WHERE roomNumber = '$roomNumber'
-                AND ward = '$ward'";
-        $result = mysql_query($sql, $resource);
-        $room = mysql_fetch_array($result);
-        
-        if ($room)
-        {
-            return $room;
-        }
-    }
-    
-    function searchTheaters($roomNumber)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
-        
-        $sql = "SELECT *
-                FROM theaters
-                WHERE roomNumber = '$roomNumber'";
-        $result = mysql_query($sql, $resource);
-        $theater = mysql_fetch_array($result);
-        
-        if ($theater)
-        {
-            return $theater;
-        }
-    }
-    
-    function searchEquipment($roomNumber)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
-        
-        $sql = "SELECT *
-                FROM equipment
-                WHERE roomNumber = '$roomNumber'";
-        $result = mysql_query($sql, $resource);
-        $equipment = mysql_fetch_array($result);
-        
-        return $equipment;
-    }
-    
+    */
     function createStaff($staff)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
-                
-        $sql = "SELECT *
-                FROM staff";
-        $records = mysql_query($sql, $resource);
-        $staff->staffID = (mysql_num_rows($records) + 1);
+        
+        $results = viewTable("staff");
+        $staff->staffID = $results[0] + 1;
         
         $sql = "INSERT INTO staff (staffID,
                                    username,
@@ -68,6 +19,7 @@
                                    gender,
                                    dateOfBirth, 
                                    mobilePhone,
+                                   homePhone,
                                    address,
                                    roster,
                                    salary,
@@ -79,8 +31,9 @@
                            . $staff->firstName . "', '"
                            . $staff->surname . "', '"
                            . $staff->gender . "', '"
-                           . $staff->dateOfBirth . "', '"
+                           . $staff->dateOfBirth->format("Y-m-d H:i:s") . "', '"
                            . $staff->mobilePhone . "', '"
+                           . $staff->homePhone . "', '"
                            . $staff->address . "', '"
                            . $staff->roster . "', '"
                            . $staff->salary . "', '"
@@ -90,99 +43,116 @@
         
         $records = mysql_query($sql, $resource);
         
-        $sql = "SELECT *
-                FROM staff";
-        $records = mysql_query($sql, $resource);
-        
-        return new Staff(mysql_fetch_array($records));
+        return $staff;
     }
     
-    function createRoom($roomNumber, $ward, $roomCapacity, $occupiedBeds)
+    /*
+        
+    */
+    function createRoom($room)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
-        $id = 1;
+        $check = new Room();
+        $check->roomID = 1;
+        $room->roomID = 1;
         
         while (1)
         {
             //Iterate through rooms table.
-            $sql = "SELECT *
-                    FROM rooms
-                    WHERE roomID = '$id'";
-            $records = mysql_query($sql, $resource);
+            $results = viewTable("rooms", $check);
             
             //Add data when unique index is found.
-            if (!mysql_fetch_array($records))
+            if (!$results[0])
             {
-                $sql = "INSERT INTO rooms (roomID, roomNumber, ward, roomCapacity, occupiedBeds)
-                        VALUES ('$id', '$roomNumber', '$ward', '$roomCapacity', '$occupiedBeds')";
+                $sql = "INSERT INTO rooms (roomID, roomNumber, ward, capacity, occupied)
+                        VALUES ('" . $room->roomID . "', '"
+                                   . $room->roomNumber . "', '"
+                                   . $room->ward . "', '"
+                                   . $room->capacity . "', '0')";
                 $records = mysql_query($sql, $resource);
                 
                 return;
             }
-            $id++;
+            $check->roomID++;
+            $room->roomID++;
         }
     }
     
-    function createEquipment($roomNumber, $code, $duration, $description)
+    /*
+        
+    */
+    function createEquipment($equipment)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
-        $id = 1;
+        $check = new Equipment();
+        $check->equipmentID = 1;
+        $equipment->equipmentID = 1;
         
         while (1)
         {
             //Iterate through equipment table.
-            $sql = "SELECT *
-                    FROM equipment
-                    WHERE equipmentID = '$id'";
-            $records = mysql_query($sql, $resource);
+            $results = viewTable("equipment", $check);
             
             //Add data when unique index is found.
-            if (!mysql_fetch_array($records))
+            if (!$results[0])
             {
                 //Add data to table.
-                $sql = "INSERT INTO equipment (equipmentID, roomNumber, code, duration, description)
-                        VALUES ('$id', '$roomNumber', '$code', '$duration', '$description')";
+                $sql = "INSERT INTO equipment (equipmentID, roomNumber, code, duration, cost, description)
+                        VALUES ('" . $equipment->equipmentID . "', '"
+                                   . $equipment->roomNumber . "', '"
+                                   . $equipment->code . "', '"
+                                   . $equipment->duration->format('H:i:s') . "', '"
+                                   . $equipment->cost . "', '"
+                                   . $equipment->description . "')";
                 $records = mysql_query($sql, $resource);
                 
                 return;
             }
-            $id++;
+            $check->equipmentID++;
+            $equipment->equipmentID++;
         }
     }
     
-    function createTheater($roomNumber, $ward, $schedule)
+    /*
+        
+    */
+    function createTheater($theater)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
-        $id = 1;
+        $check = new Theater();
+        $check->theaterID = 1;
+        $theater->theaterID = 1;
         
         while (1)
         {
-            //Iterate through theater table.
-            $sql = "SELECT *
-                    FROM theaters
-                    WHERE theaterID = '$id'";
-            $records = mysql_query($sql, $resource);
+            //Iterate through theaters table.
+            $results = viewTable("theaters", $check);
             
             //Add data when unique index is found.
-            if (!mysql_fetch_array($records))
+            if (!$results[0])
             {
                 //Add data to table.
-                $sql = "INSERT INTO theaters (theaterID, roomNumber, ward, schedule)
-                        VALUES ('$id', '$roomNumber', '$ward', '$schedule')";
+                $sql = "INSERT INTO theaters (theaterID, roomNumber)
+                        VALUES ('" . $theater->theaterID . "', '"
+                                   . $theater->roomNumber . "')";
                 $records = mysql_query($sql, $resource);
                 
                 return;
             }
-            $id++;
+            $check->theaterID++;
+            $theater->theaterID++;
         }
     }
     
+    /*
+        
+    */
     function editStaff($staff)
     {
         $resource = new Connection();
@@ -192,58 +162,46 @@
                 SET firstName = '" . $staff->firstName . "',
                     surname = '" . $staff->surname . "',
                     gender = '" . $staff->gender . "',
-                    dateOfBirth = '" . $staff->dateOfBirth . "',
+                    dateOfBirth = '" . $staff->dateOfBirth->format('Y-m-d H:i:s') . "',
                     mobilePhone = '" . $staff->mobilePhone . "',
-                    address = '" . $staff->address . "'
-                    roster = '" . $staff->roster . "'
+                    homePhone = '" . $staff->homePhone . "',
+                    address = '" . $staff->address . "',
+                    roster = '" . $staff->roster . "',
                     salary = '" . $staff->salary . "',
                     position = '" . $staff->position . "',
                     ward = '" . $staff->ward . "'
                 WHERE staffID = '" . $staff->staffID . "'";
         $records = mysql_query($sql, $resource);
         
-        $sql = "SELECT *
-                FROM staff";
-        $records = mysql_query($sql, $resource);
+        $results = viewTable("staff", $staff);
         
-        return new Staff(mysql_fetch_array($records));
+        return new Staff($results[1]);
     }
     
-    function editRoom($id, $roomCapacity)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
+    /*
         
-        $sql = "UPDATE rooms
-                SET roomCapacity = '$roomCapacity'
-                WHERE roomID = '$id'";
-        $records = mysql_query($sql, $resource);
-    }
-    
-    function editEquipment($id, $code, $duration, $description)
+    */
+    function editEquipment($equipment)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
         $sql = "UPDATE equipment
-                SET code = '$code',
-                    duration = '$duration',
-                    description = '$description'
-                WHERE equipmentID = '$id'";
+                SET code = '" . $equipment->code . "',
+                    duration = '" . $equipment->duration->format('H:i:s') . "',
+                    cost = '" . $equipment->cost . "',
+                    description = '" . $equipment->description . "'
+                WHERE equipmentID = '" . $equipment->equipmentID . "'";
         $records = mysql_query($sql, $resource);
-    }
-    
-    function deleteRoom($table, $roomNumber)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
         
-        //Delete value.
-        $sql = "DELETE FROM $table
-                WHERE roomNumber = '$roomNumber'";
-        $records = mysql_query($sql, $resource);
+        $results = viewTable("equipment", $equipment);
+        
+        return new Equipment($results[1]);
     }
     
+    /*
+        
+    */
     function uniqueUsername()
     {
         $resource = new Connection();
@@ -281,6 +239,9 @@
         return $id['username'];
     }
     
+    /*
+        
+    */
     function assignRoster($roster)
     {
         $resource = new Connection();
@@ -315,40 +276,37 @@
         }
     }
     
+    /*
+        
+    */
     function assignSalary($salary)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
-        while(1)
+        $results = viewTable("salaries", $salary);
+        
+        if ($results[0])
         {
-            $sql = "SELECT *
-                    FROM salaries
-                    WHERE payRate = '" . $salary->payRate . "'
-                    AND nextDate = '" . $salary->nextDate . "'";
-            
-            $records = mysql_query($sql, $resource);
-            
-            if (mysql_num_rows($records) > 0)
-            {
-                return new Salary(mysql_fetch_array($records));
-            }
-            else
-            {
-                $sql = "SELECT *
-                        FROM salaries";
-                $records = mysql_query($sql, $resource);
-                $count = mysql_num_rows($records) + 1;
-                
-                $sql = "INSERT INTO salaries (salaryID, payRate, nextDate)
-                        VALUES ('$count', '" . $salary->payRate . "', '"
-                                             . $salary->nextDate . "')";
-                
-                $records = mysql_query($sql, $resource);
-            }
+            $salary = new Salary($results[1]);
         }
+        else
+        {
+            $results = viewTable("salaries");
+            $salary->salaryID = $results[0] + 1;
+            
+            $sql = "INSERT INTO salaries (salaryID, payRate, nextDate)
+                    VALUES ('" . $salary->salaryID . "', '"
+                               . $salary->payRate . "', '"
+                               . $salary->nextDate->format('Y-m-d H:i:s') . "')";
+            $records = mysql_query($sql, $resource);
+        }
+        return $salary;
     }
     
+    /*
+        
+    */
     function position($position)
     {
         switch($position)

@@ -5,17 +5,21 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $id = $_POST['id'];
-    $roomCapacity = $_POST['roomCapacity'];
-    $rooms = viewTable("rooms");
-    $check = ($roomCapacity >= $rooms[$id]['occupiedBeds']);
+    $new = new Room($_POST);
     
-    if ($check)
+    $check = new Room();
+    $check->roomID = $new->roomID;
+    
+    $results = viewTable("rooms", $check);
+    $old = new Room($results[1]);
+    
+    if ($check = ($old->occupied <= $new->capacity))
     {
-        editRoom($id, $roomCapacity);
+        update("rooms", "roomID", $new->roomID, "capacity", $new->capacity);
     }
     
-    $rooms = viewTable("rooms");
+    $results = viewTable("rooms", $new);
+    $room = new Room($results[1]);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -44,10 +48,10 @@
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td><?php echo $rooms[$id]['roomNumber'] ?></td>
-                            <td><?php echo $rooms[$id]['ward'] ?></td>
-                            <td><?php echo $rooms[$id]['roomCapacity'] ?></td>
-                            <td><?php echo $rooms[$id]['occupiedBeds'] ?></td>
+                            <td><?php echo $room->roomNumber ?></td>
+                            <td><?php echo $room->ward ?></td>
+                            <td><?php echo $room->capacity ?></td>
+                            <td><?php echo $room->occupied ?></td>
                         </tr>
                     </table>
                 <?php }

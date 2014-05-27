@@ -5,19 +5,18 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $check = !searchAllRooms($_POST['roomNumber']);
+    $room = new Room($_POST);
+    $room->occupied = 0;
     
-    if ($check)
+    $check = new Room();
+    $check->roomNumber = $room->roomNumber;
+    $check->ward = $room->ward;
+    
+    $results = viewTable("rooms", $check);
+    if (!$results[0])
     {
-        $roomNumber = $_POST['roomNumber'];
-        $ward = $_POST['ward'];
-        $roomCapacity = $_POST['roomCapacity'];
-        $occupiedBeds = 0;
-        
-        createRoom($roomNumber, $ward, $roomCapacity, $occupiedBeds);
+        createRoom($room);
     }
-    
-    $room = searchAllRooms($roomNumber);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -34,7 +33,7 @@
 
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
-                <?php if ($check)
+                <?php if (!$results[0])
                 { ?>
                     <p>Adding of room successful.</p>
                     <table>
@@ -46,10 +45,10 @@
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td id="tableCell"><?php echo $room['roomNumber'] ?></td>
-                            <td id="tableCell"><?php echo $room['ward'] ?></td>
-                            <td id="tableCell"><?php echo $room['roomCapacity'] ?></td>
-                            <td id="tableCell"><?php echo $room['occupiedBeds'] ?></td>
+                            <td id="tableCell"><?php echo $room->roomNumber ?></td>
+                            <td id="tableCell"><?php echo $room->ward ?></td>
+                            <td id="tableCell"><?php echo $room->capacity ?></td>
+                            <td id="tableCell"><?php echo $room->occupied ?></td>
                         </tr>
                     </table>
                 <?php }
@@ -62,11 +61,4 @@
             <?php include('../includes/footer.php'); ?>
         </div> <!-- End #wrapper -->
     </body>
-    
-    <?php
-        if (!$check) {
-            header( "refresh:1; url=staff_add.php");
-        }
-        exit;
-    ?>
 </html>

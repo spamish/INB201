@@ -1,23 +1,12 @@
-<a id="btnSidebar" href="">Option A</a>
+<?php
+    if ($_SESSION['ward'])
+    { ?>
+        <a id="btnSidebar" href="/inb201/doctor/next_patient.php">Next Patient</a>
+    <?php }
+?>
 
-<?php if (strpos($_SERVER["PHP_SELF"], "."))
-{ ?>
-    <a id="btnPageActions" href=""
-        style="margin-left:10px;">Sub-option</a>
-<?php } ?>
+<a id="btnSidebar" href="/inb201/doctor/patients_view.php?staffID=<?php echo $_SESSION['login'] ?>">My Patients</a>
+<a id="btnPageActions" href="/inb201/doctor/patients_search.php?staffID=<?php echo $_SESSION['login'] ?>" style="margin-left:10px;">Search</a>
 
-<a id="btnSidebar" href="">Option B</a><br>
-
-<?php if (strpos($_SERVER["PHP_SELF"], "."))
-{ ?>
-    <a id="btnPageActions" href=""
-        style="margin-left:10px;">Sub-option</a><br>
-<?php } ?>
-
-<a id="btnSidebar" href="">Option C</a><br>
-
-<?php if (strpos($_SERVER["PHP_SELF"], "."))
-{ ?>
-    <a id="btnPageActions" href=""
-        style="margin-left:10px;">Sub-option</a><br>
-<?php } ?>
+<a id="btnSidebar" href="/inb201/doctor/patients_view.php">Current Patients</a>
+<a id="btnPageActions" href="/inb201/doctor/patients_search.php" style="margin-left:10px;">Search</a>

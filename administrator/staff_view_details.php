@@ -5,13 +5,13 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    if (!isset($_POST['id']))
+    if (!isset($_GET['id']))
     {
         header ("Location: staff_view.php");
     }
     
     $staff = viewTable("staff");
-    $staff = new Staff($staff[$_POST['id']]);
+    $staff = new Staff($staff[$_GET['id']]);
     
     $address = viewTable("addresses");
     $address = new Address($address[$staff->address]);
@@ -62,7 +62,7 @@
                         </tr>
                         <tr>
                             <td>Date of Birth</td>
-                            <td><?php echo $staff->dateOfBirth ?></td>
+                            <td><?php echo $staff->dateOfBirth->format('j M Y') ?></td>
                         </tr>
                         <tr>
                             <td>Position</td>
@@ -79,11 +79,11 @@
                             <td><?php echo $staff->mobilePhone ?></td>
                         </tr>
                         <?php }
-                        if ($address->homePhone)
+                        if ($staff->homePhone)
                         { ?>
                         <tr>
                             <td>Home Phone</td>
-                            <td><?php echo $address->homePhone ?></td>
+                            <td><?php echo $staff->homePhone ?></td>
                         </tr>
                         <?php } ?>
                         <tr><th>Address Details</th></tr>
@@ -130,12 +130,12 @@
                         </tr>
                         <tr><th>Salary</th></tr>
                         <tr>
-                            <td>Pay Rate</td>
-                            <td><?php echo $salary->payRate ?></td>
+                            <td>Pay Rate (p/h)</td>
+                            <td><?php echo "$" . $salary->payRate ?></td>
                         </tr>
                         <tr>
                             <td>Next Pay Date</td>
-                            <td><?php echo $salary->nextDate ?></td>
+                            <td><?php echo $salary->nextDate->format('j M Y') ?></td>
                         </tr>
                     </table>
             </div> <!-- end #content -->

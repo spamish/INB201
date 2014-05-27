@@ -1,88 +1,42 @@
 <?php
     require_once('classes.php');
     
+    /*
+        
+    */
     function assignAddress($address)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
-        for ($i = 0; $i < 3; $i++)
+        $result = viewTable("addresses", $address);
+        
+        if (!$result[0])
         {
-            $sql = "SELECT *
-                    FROM addresses
-                    WHERE ";
-            if (isset($address->house))
-            {
-                $sql .= "house = '" . $address->house
-                     . "' AND street = '" . $address->street
-                     . "' AND suburb = '" . $address->suburb
-                     . "' AND postcode = '" . $address->postcode
-                     . "' AND region = '" . $address->region
-                     . "' AND country = '" . $address->country . "'";
-            }
-            $sql .= " AND unit " . (isset($address->unit) ? ("= '" . $address->unit . "'") : "IS NULL");
-            $sql .= " AND homePhone " . (isset($address->homePhone) ? ( "= '" . $address->homePhone . "'") : "IS NULL");
-            echo $sql;
+            //Add address details.
+            $insert = "house, street, suburb, postcode, region, country";
+            $values = "'$house', '$street', '$suburb', '$postcode', '$region', '$country'";
             
+            //Add unit details.
+            if (isset($unit))
+            {
+                $insert = ", unit";
+                $values = ", '$unit'";
+            }
+            
+            //Create address.
+            $sql = "INSERT INTO addresses (addressID, " . $insert . ") VALUES ('$count', " . $values . ")";
             $records = mysql_query($sql, $resource);
             
-            if (mysql_num_rows($records) > 0)
-            {
-                return new Address(mysql_fetch_array($records));
-            }
-            else
-            {
-                return createAddress($address);
-            }
+            $result = viewTable("addresses", $address);
         }
+        
+        return new Address($result[1]);
     }
     
-    function createAddress($address)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
+    /*
         
-        $sql = "SELECT *
-                FROM addresses";
-        $records = mysql_query($sql, $resource);
-        $address->addressID = mysql_num_rows($records) + 1;
-        
-        $insert = "INSERT INTO addresses (addressID";
-        $values = "VALUES ('" . $address->addressID;
-        
-        if (isset($address->homePhone))
-        {
-            $insert .= ", homePhone";
-            $values .= "', '" . $address->homePhone;
-        }
-        
-        if (isset($address->house))
-        {
-            $insert .= ", house, street, suburb, postcode, region, country";
-            $values .= "', '" . $address->house
-                     . "', '" . $address->street
-                     . "', '" . $address->suburb
-                     . "', '" . $address->postcode
-                     . "', '" . $address->region
-                     . "', '" . $address->country;
-        }
-        
-        $insert .= isset($address->unit) ? ", unit)" : ")";
-        $values .= isset($address->unit) ? ("', '" . $address->unit . "')") : "')";
-        echo $sql = $insert . " " . $values;
-        
-        $records = mysql_query($sql, $resource);
-        
-        $sql = "SELECT *
-            FROM addresses
-            WHERE addressID = '" . $address->addressID . "'";
-        echo $sql;
-        
-        $records = mysql_query($sql, $resource);
-        
-        return new Address(mysql_fetch_array($records));
-    }
-    
+    */
     function getStaffInfo($username)
     {
         $resource = new Connection();
@@ -96,243 +50,155 @@
         return new Staff(mysql_fetch_array($records));
     }
     
-    function viewTable($table, $order = null, $sort = true)
+    /*
+        
+    */
+    function viewTable($table, $parameters = null, $order = null, $sort = true, $limit = 0, $count = 0)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
         //View sorted by id in ascending order.
-        $sql = "SELECT *
-                FROM $table";
-        
+        $sql = "SELECT * FROM $table"
+             . addParameters($parameters);
         
         //Add sorting options to view function.
-        if (isset($order))
+        if ($order)
         {
             $sql .= " ORDER BY " . $order . ($sort ? " ASC" : " DESC");
         }
+        
+        if ($count > 0)
+        {
+            $sql .= " LIMIT $limit,$count";
+        }
         $records = mysql_query($sql, $resource);
-        $results[0] = 0;
+        
+        if (!$results[0] = mysql_num_rows($records))
+        {
+            return null;
+        }
         
         while ($row = mysql_fetch_array($records))
         {
             $results[] = $row;
-            $results[0]++;
         }
         
         return $results;
     }
     
+    /*
+        
+    */
     function createNote($note)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
         
-        $file =  $note['file'];
-        $type = $note['type'];
-        $staff = $note['staff'];
-        $time = timestamp();
-        $details = $note['details'];
+        $records = viewTable("notes");
+        $note->noteID = $records[0] + 1;
         
-        $sql = "SELECT *
-                FROM notes";
+        $sql = "INSERT INTO notes (noteID, file, type, staff, timestamp, details)
+                VALUES ('" . $note->noteID . "', '"
+                           . $note->file . "', '"
+                           . $note->type . "', '"
+                           . $note->staff . "', '"
+                           . $note->timestamp->format('Y-m-d H:i:s') . "', '"
+                           . $note->details . "')";
         $records = mysql_query($sql, $resource);
-        $count = mysql_num_rows($records) + 1;
-        
-        $sql = "INSERT INTO notes (noteID, file, type, staff, time, details)
-                VALUES ('$count', '$file', '$type', '$staff', '$time', '$details')";
-        $records = mysql_query($sql, $resource);
+        echo $sql;
     }
     
-    function viewNotes($file, $option = null, $type = null)
+    /*
+        Searches for all active case files.
+    */
+    function viewCurrent($file = null, $patient = null, $room = null, $staff = null)
     {
         $resource = new Connection();
         $resource = $resource->Connect();
+        $return[0] = 0;
         
-        //View sorted by id in ascending order.
-        $sql = "SELECT *
-                FROM notes
-                WHERE file = '$file'";
+        //Searches for any room parameters given.
+        $result['room'] = viewTable("rooms", $room);
         
-        //Add sorting options to view function.
-        if (isset($option))
+        $reference = viewTable("staff");
+        $result['staff'] = viewTable("staff", $staff);
+        
+        if ($result['staff'][0] && ($result['staff'][0] != $reference[0]))
         {
-            $sql .= " AND $option = '$type'";
-        }
-        $records = mysql_query($sql, $resource);
-        
-        while ($row = mysql_fetch_array($records))
-        {
-            $results[] = $row;
+            $staff = new Staff($result['staff'][1]);
+            $file->doctor = $staff->staffID;
         }
         
-        return $results;
-    }
-    
-    function searchUnidentified($forename, $postname)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
+        $file->discharge = "NULL";
+        $result['file'] = viewTable("files", $file);
         
-        //Search for the file number.
-        $sql = "SELECT *
-                FROM unidentified
-                WHERE forename = '$forename'
-                AND postname = '$postname'";
-        $result = mysql_query($sql, $resource);
-        return mysql_fetch_array($result);
-    }
-    
-    function searchPatients($firstName, $surname, $gender = null, $dateOfBirth = null)
-    {
-        $resource = new Connection();
-        $resource = $resource->Connect();
-        
-        //Search for the patient number.
-        $sql = "SELECT *
-                FROM patients
-                WHERE firstName = '$firstName'
-                AND surname = '$surname'";
-        
-        //Inclulde if gender is specified.
-        if (isset($gender))
+        for ($i = 1; $i <= $result['file'][0]; $i++)
         {
-            $sql .= " AND gender = '$gender'";
-        }
-        //Include if date of birth is specified.
-        if (isset($dateOfBirth))
-        {
-            $sql .= " AND dateOfBirth = '$dateOfBirth'";
-        }
-        $records = mysql_query($sql, $resource);
-        
-        $results[0] = 0;
-        
-        while ($row = mysql_fetch_array($records))
-        {
-            $results[] = $row;
-            $results[0]++;
-        }
-        
-        return $results;
-    }
-    
-    function viewCurrent($search = null, $options = null)
-    {
-        //$patientID, $fileID, $firstName, $surname, $roomNumber, $ward, $staff, $order
-        $resource = new Connection();
-        $resource = $resource->Connect();
-        $results[0] = 0;
-        
-        //Search cases for active ones.
-        $sql = "SELECT *
-                FROM files
-                WHERE discharge IS NULL";
-        
-        //Add search fields for case file.
-        $sql .= (isset($search['file']) ? (" AND fileID = '" . $search['file'] . "'") : "")
-              . (isset($search['roomNumber']) ? (" AND roomNumber = '" . $search['roomNumber'] . "'") : "")
-              . (isset($search['ward']) ? (" AND ward = '" . $search['ward'] . "'") : "");
-        
-        //Add sorting options to view function.
-        if (   isset($options['roomNumber'])
-            || isset($options['ward']))
-        {
-            $sql .= " ORDER BY " . $order . ($sort ? " ASC" : " DESC");
-        }
-        
-        $files = mysql_query($sql, $resource);
-        
-        if(mysql_num_rows($files))
-        {
-            while ($row = mysql_fetch_array($files))
+            if (isset($result['file'][$i]['patient']))
             {
-                if (!isset($search['patient']) || ($row['patient'] == $search['patient']))
-                {
-                    if ($id = $row['patient'])
-                    {
-                        $sql = "SELECT *
-                                FROM patients
-                                WHERE patientID = '$id'";
-                        
-                        //Add search fields for patient file.
-                        if (   isset($search['firstName'])
-                            || isset($search['surname']))
-                        {
-                            $sql .= (isset($search['firstName']) ? (" AND firstName = '" . $search['firstName'] . "'") : "")
-                                  . (isset($search['surname']) ? (" AND surname = '" . $search['surname'] . "'") : "");
-                        }
-                        
-                        $record = mysql_query($sql, $resource);
-                        
-                        while ($patient = mysql_fetch_array($record))
-                        {
-                            $patient['file'] = $row['fileID'];
-                            $results[] = $patient;
-                            $results[0]++;
-                        }
-                    }
-                    else
-                    {
-                        $id = $row['fileID'];
-                        $sql = "SELECT *
-                                FROM unidentified
-                                WHERE file = '$id'";
-                        
-                        //Add search fields for unidentified file.
-                        if (   isset($search['firstName'])
-                            || isset($search['surname']))
-                        {
-                            $sql .= (isset($search['firstName']) ? (" AND forename = '" . $search['firstName'] . "'") : "")
-                                  . (isset($search['surname']) ? (" AND postname = '" . $search['surname'] . "'") : "");
-                        }
-                        
-                        $record = mysql_query($sql, $resource);
-                        
-                        while ($patient = mysql_fetch_array($record))
-                        {
-                            $results[] = $patient;
-                            $results[0]++;
-                        }
-                    }
-                }
+                $identified = new Patient();
+                $identified->file = $patient->patientID;
+                $identified->firstName = $patient->firstName;
+                $identified->surname = $patient->surname;
+                $identified->gender = $patient->gender;
+                $result['patient'] = viewTable("patients", $identified);
+            }
+            else
+            {
+                $unidentified = new Patient();
+                $unidentified->file = $result['file'][$i]['fileID'];
+                $unidentified->firstName = $patient->firstName;
+                $unidentified->surname = $patient->surname;
+                $unidentified->gender = $patient->gender;
+                
+                $result['patient'] = viewTable("unidentified", $unidentified);
+            }
+            if ($result['patient'][0] != 0)
+            {
+                $return[0]++;
+                $case['file'] = $result['file'][$i];
+                $case['patient'] = $result['patient'][1];
+                //$case['staff']
+                //$case['room']
+                
+                $return[] = $case;
             }
         }
-        return $results;
+        return $return;
     }
     
-    function timestamp($input = null)
-    {
-        if (!isset($input))
-        {
-            $input = time();
-        }
-        date_default_timezone_set('Australia/Brisbane');
-        return date('Y-m-d H:i:s', $input);
-    }
-    
-    function roomNumber($string)
-    {
-        $length = strlen($string);
+    /*
         
-        for ($j = $length; $j < 6; $j++)
-        {
-            $string = "0" . $string;
-        }
-        return $string;
-    }
-    
-    function idString($string)
+    */
+    function update($table, $index, $id, $type, $value)
     {
-        $length = strlen($string);
-        
-        for ($j = $length; $j < 12; $j++)
-        {
-            $string = "0" . $string;
-        }
-        return $string;
+        $resource = new Connection();
+        $resource = $resource->Connect();
+                
+        $sql = "UPDATE $table
+                SET $type = '$value'
+                WHERE $index = '$id'";
+        $records = mysql_query($sql, $resource);
     }
     
+    /*
+        
+    */
+    function delete($table, $index, $id)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        //Delete value.
+        $sql = "DELETE FROM $table
+                WHERE $index = '$id'";
+        $records = mysql_query($sql, $resource);
+    }
+    
+    /*
+        
+    */
     function condition($state)
     {
         switch ($state)
@@ -349,6 +215,9 @@
         }
     }
     
+    /*
+        
+    */
     function gender($input)
     {
         switch ($input)
@@ -360,5 +229,47 @@
                 return "Female";
                 break;
         }
+    }
+    
+    /*
+        Returns an array of sql search parameters.
+    */
+    function addParameters($input = null)
+    {
+        $return = "";
+        if ($input)
+        {
+            $count = 0;
+            
+            foreach ($input as $type => $value)
+            {
+                if ($value)
+                {
+                    $return .= (($count++ == 0) ? "" : " AND ");
+                    if (gettype($value) == 'object')
+                    {
+                        $return .= $type . " = '" . $value->format('Y-m-d H:i:s') . "' ";
+                    }
+                    elseif (($pos = strpos($value, "LIKE.")) !== FALSE)
+                    {
+                        $return .= $type . " LIKE '" . substr($value, $pos+5) . "%' ";
+                    }
+                    elseif ($value == "NULL")
+                    {
+                        $return .= $type . " IS NULL ";
+                    }
+                    else
+                    {
+                        $return .= $type . " = '" . $value . "' ";
+                    }
+                }
+            }
+            
+            if($count)
+            {
+                $return = " WHERE " . $return;
+            }
+        }
+        return $return;
     }
 ?>

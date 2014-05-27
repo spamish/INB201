@@ -7,12 +7,9 @@
     
     if (isset($_POST['remove']))
     {
-        if(isset($_POST['id']))
+        if(isset($_POST['theaterID'])) //CHECK FOR POPULATED SCHEDULE!
         {
-            $id = $_POST['id'];
-            $theater = viewTable("theaters");
-            
-            deleteRoom("theaters", $theater[$id]['roomNumber']);
+            delete("theaters", "theaterID", $_POST['theaterID']);
         }
         header ("Location: theater_view.php");
     }
@@ -30,26 +27,15 @@
             <?php include('../includes/header.php'); ?>
             <?php include('../includes/sidebar.php'); ?>
             <div id="content"> <!-- All content goes here -->
-                <h2>Add Room</h2>
+                <h2>Add Operating Theater</h2>
                 <form action="theater_add_confirm.php" method="post" style="float:left;width=50%;">
                     <table>
                         <tr>
-                            <td align="right">Ward</td>
-                            <td align="left">Room Number</td>
+                            <td align="right">Room Number</td>
+                            <td><input type="text" name="roomNumber" required/></td>
                         </tr>
                         <tr>
-                            <td align="right">
-                                <select name="ward">
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                </select>
-                            </td>
-                            <td align="left"><input type="text" name="roomNumber" required/></td>
-                        </tr>
-                        <tr>
-                            <td align="right"></td>
+                            <td></td>
                             <td align="left">
                                 <input id="btnSubmit" type="submit" name="save" value="Save">
                             </td>

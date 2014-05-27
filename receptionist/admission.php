@@ -30,28 +30,17 @@
             
             <div id="content"> <!-- All content goes here -->
                 <h2>Admit Patient</h2>
+                <p>If date of birth is unknown, submit as unidentified but fill in name details.</p>
                 <form id="admission" action="admission_extended.php" method="post">
                     <table>
-                        <tr>
-                            <td align="right">Hospital Entrance</td>
-                            <td><input id="walkIn" type="radio" name="entrance"
-                                value="1" onclick="setEntrance()" required>Walk-in</td>
-                            <td><input id="paramedics" type="radio" name="entrance"
-                                value="2" onclick="setEntrance()">Paramedics</td>
-                            <td><input id="emergency" type="radio" name="entrance"
-                                value="3" onclick="setEntrance()">Emercengy</td>
-                        </tr>
-                        <tr><td><br></td></tr>
                         <tr>
                             <!-- Deselect checkbox if unable to identify patient -->
                             <td>
                                 ID available
                                 <input id="identified" type="checkbox"
-                                    name="identification" onchange="setID()" checked>
-                                <input id="unidentified" type="checkbox"
-                                    name="unidentified" style="display: none">
+                                    name="identified" onchange="setID()" checked>
                             </td>
-                            <!-- Sets patient with psedu ID (ajax call) or first name
+                            <!-- Sets patient with psedu ID or first name
                             and surname fields depending on checkbox selection -->
                             <td align="right">First Name</td>
                             <td><input id="firstName" type="text" name="firstName" required autofocus ></td>
@@ -80,7 +69,7 @@
                         </tr>
                         <tr>
                             <td align="right" valign="top">Admission Notes</td>
-                            <td><textarea rows="6" cols="60" name="notes"></textarea></td>
+                            <td><textarea rows="6" cols="60" name="details"></textarea></td>
                         </tr>
                         <tr>
                             <td></td>

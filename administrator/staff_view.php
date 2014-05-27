@@ -5,17 +5,12 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $order = isset($_GET['order']) ? $_GET['order'] : null;
-    if (isset($_GET['sort']))
-    {
-        $sort = ($_GET['sort']) ? true : false;
-    }
-    else
-    {
-        $sort = false;
-    }
+    $url[0] = "staff_view.php?order=";
+    $url[1] = "&sort=";
+    $order = (isset($_GET['order']) ? $_GET['order'] : null);
+    $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
     
-    $table = viewTable("staff", $order, $sort);
+    $table = viewTable("staff", null, $order, $sort);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -33,16 +28,16 @@
             <div id="content"> <!-- All content goes here -->
 
                 <h2>Staff Members</h2>
-                <form action="staff_view_details.php" method="post">
+                <form action="staff_view_details.php" method="get">
                     <table>
                         <tr>
-                            <th><a href="staff_view.php?order=username&sort=<?php echo !$sort ?>">Username</th>
-                            <th><a href="staff_view.php?order=firstName&sort=<?php echo !$sort ?>">First Name</th>
-                            <th><a href="staff_view.php?order=surname&sort=<?php echo !$sort ?>">Surname</th>
-                            <th><a href="staff_view.php?order=gender&sort=<?php echo !$sort ?>">Gender</th>
-                            <th><a href="staff_view.php?order=dateOfBirth&sort=<?php echo !$sort ?>">Date ofBirth</th>
-                            <th><a href="staff_view.php?order=position&sort=<?php echo !$sort ?>">Position</th>
-                            <th><a href="staff_view.php?order=ward&sort=<?php echo !$sort ?>">Ward</th>
+                            <th><a href="<?php echo $url[0] . "username" . $url[1] . !$sort ?>">Username</th>
+                            <th><a href="<?php echo $url[0] . "firstName" . $url[1] . !$sort ?>">First Name</th>
+                            <th><a href="<?php echo $url[0] . "surname" . $url[1] . !$sort ?>">Surname</th>
+                            <th><a href="<?php echo $url[0] . "gender" . $url[1] . !$sort ?>">Gender</th>
+                            <th><a href="<?php echo $url[0] . "dateOfBirth" . $url[1] . !$sort ?>">Date ofBirth</th>
+                            <th><a href="<?php echo $url[0] . "position" . $url[1] . !$sort ?>">Position</th>
+                            <th><a href="<?php echo $url[0] . "ward" . $url[1] . !$sort ?>">Ward</th>
                             <td>
                                 <input id="btnSubmit" type="submit" name="details"
                                     value="View Details" style="float: right;">
@@ -62,7 +57,7 @@
                                     <td><?php echo $staff->firstName ?></td>
                                     <td><?php echo $staff->surname ?></td>
                                     <td><?php echo gender($staff->gender) ?></td>
-                                    <td><?php echo $staff->dateOfBirth ?></td>
+                                    <td><?php echo $staff->dateOfBirth->format('g M Y') ?></td>
                                     <td><?php echo position($staff->position) ?></td>
                                     <td><?php echo $staff->ward ?></td>
                                     <td>

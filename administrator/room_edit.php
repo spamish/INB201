@@ -5,24 +5,18 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    if (!isset($_POST['id']))
+    if (!isset($_POST['roomID']))
     {
         header ("Location: room_view.php");
     }
-    $id = $_POST['id'];
-    $rooms = viewTable("rooms");
     
-    if (isset($_POST['remove']) && ($rooms[$id]['occupiedBeds'] == 0))
+    $results = viewTable("rooms", new Room($_POST));
+    $room = new Room($results[1]);
+    
+    if (isset($_POST['remove']) && ($room->occupied == 0))
     {
-        deleteRoom("rooms", $rooms[$id]['roomNumber']);
+        delete("rooms", "roomID", $room->roomID);
         header ("Location: room_view.php");
-    }
-    elseif (isset($_POST['update']))
-    {
-        $roomNumber = $rooms[$id]['roomNumber'];
-        $ward = $rooms[$id]['ward'];
-        $roomCapacity = $rooms[$id]['roomCapacity'];
-        $occupiedBeds = $rooms[$id]['occupiedBeds'];
     }
 ?>
 
@@ -49,32 +43,28 @@
                             </tr>
                             <tr>
                                 <td align="right">
-                                    <?php echo $ward ?>
+                                    <?php echo $room->ward ?>
                                 </td>
                                 <td align="left">
-                                    <?php echo $roomNumber ?>
+                                    <?php echo $room->roomNumber ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">Number of Beds</td>
-                                <td align="left"><input type="text" name="roomCapacity" 
-                                    required value="<?php echo $roomCapacity ?>"/></td>
+                                <td align="left"><input type="text" name="capacity" 
+                                    required value="<?php echo $room->capacity ?>"/></td>
                             </tr>
                             <tr>
                                 <td align="right">Occupied Beds</td>
                                 <td align="left">
-                                    <?php echo $occupiedBeds ?>
+                                    <?php echo $room->occupied ?>
                                 </td>
-                            </tr>
-                            <tr>
-                                </td>
-                                <td align="right"></td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td align="left">
-                                    <input id="btnSubmit" type="submit" name="save" value="Save">
-                                    <input type="hidden" name="id" value="<?php echo $id ?>">
+                                    <input id="btnSubmit" type="submit" name="update" value="Update">
+                                    <input type="hidden" name="roomID" value="<?php echo $room->roomID ?>">
                                 </td>
                             </tr>
                         </table>

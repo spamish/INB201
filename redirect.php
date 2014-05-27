@@ -6,6 +6,7 @@
     
     $staff = new Staff();
     $staff = getStaffInfo($_POST['username']);
+    
     if ($staff->staffID)
     {
         $check = verifyPassword($staff->staffID, $_POST['password']);
@@ -17,10 +18,20 @@
     
     if ($check)
     {
+        $date = new DateTime();
+        
         $_SESSION['login'] = $staff->staffID;
         $_SESSION['firstName'] = $staff->firstName;
         $_SESSION['surname'] = $staff->surname;
         $_SESSION['position'] = $staff->position;
+        $_SESSION['ward'] = $staff->ward;
+        if ($staff->lastLogin)
+        {
+            $_SESSION['lastLogin'] = $staff->lastLogin->format('g:ia')
+            . " on " . $staff->lastLogin->format('D jS M Y');
+        }
+        
+        update("staff", "staffID", $staff->staffID, "lastLogin", $date->format('Y-m-d H:i:s'));
     }
     else
     {
@@ -30,11 +41,16 @@
     //Developer backdoor.
     if (($_POST['username'] == "0") && ($_POST['password'] == "admin"))
     {
+        $date = new DateTime();
         $check = true;
+        
         $_SESSION['login'] = 0.1;
         $_SESSION['firstName'] = "TeamTOUCH";
         $_SESSION['surname'] = "Administrator";
-        $_SESSION['position'] = "administrator";
+        $_SESSION['position'] = "";
+        $_SESSION['ward'] = "";
+        $_SESSION['lastLogin'] = $date->format('g:ia')
+            . " on " . $date->format('D jS M Y');
     }
 ?>
 
@@ -78,7 +94,7 @@
         }
         else
         {
-            header( "refresh:1; url=index.php");
+            //header( "refresh:1; url=index.php");
         }
         exit;
     ?>

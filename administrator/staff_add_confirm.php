@@ -11,12 +11,16 @@
     //Check if username already exists or generates a new one.
     if(isset($_POST['generate']))
     {
-        echo $staff->username = uniqueUsername();
-        $check = 1;
+        $staff->username = uniqueUsername();
+        $check = true;
     }
     else
     {
-        $check = !getStaffInfo($staff->username);
+        $check = new Staff();
+        $check->username = $staff->username;
+        
+        $results = viewTable("staff", $check);
+        $check = ($results[0] ? false : true);
     }
     
     //Creates staff member.
@@ -90,8 +94,8 @@
                             <td><?php echo $staff->username ?></td>
                             <td><?php echo $staff->firstName ?></td>
                             <td><?php echo $staff->surname ?></td>
-                            <td><?php echo $staff->gender ?></td>
-                            <td><?php echo $staff->dateOfBirth ?></td>
+                            <td><?php echo gender($staff->gender) ?></td>
+                            <td><?php echo $staff->dateOfBirth->format('j M Y') ?></td>
                             <td><?php echo position($staff->position) ?></td>
                             <td><?php echo $staff->ward ?></td>
                         </tr>

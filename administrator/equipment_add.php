@@ -22,19 +22,27 @@
                     <table>
                         <tr>
                             <td align="right">Room Number</td>
-                            <td align="left"><input type="text" name="roomNumber" required/></td>
+                            <td><input type="text" name="roomNumber" required/></td>
                         </tr>
                         <tr>
-                            <td align="right">Operator Staff ID</td>
-                            <td align="left"><input type="text" name="staff" required/></td>
+                            <td align="right">Test Code</td>
+                            <td><input type="text" name="code" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Test Duration</td>
+                            <td><input type="text" name="duration" required/></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Cost of Test</td>
+                            <td><input type="text" name="cost" required/></td>
                         </tr>
                         <tr>
                             <td align="right" valign="top">Equipment Description</td>
-                            <td align="left"><textarea rows="4" cols="32" name="type"></textarea></td>
+                            <td><textarea rows="4" cols="32" name="description"></textarea></td>
                         </tr>
                         <tr>
                             <td align="right"></td>
-                            <td align="left">
+                            <td>
                                 <input id="btnSubmit" type="submit" name="save" value="Save">
                             </td>
                         </tr>

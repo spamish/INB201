@@ -53,43 +53,18 @@ function setID()
 {
     if (document.getElementById("identified").checked)
     {
-        document.getElementById("unidentified").checked = false;
         document.getElementById("admission").action = "admission_extended.php";
-        document.getElementById("firstName").disabled = false;
-        document.getElementById("surname").disabled = false;
+        document.getElementById("firstName").required = true;
+        document.getElementById("surname").required = true;
         document.getElementById("date").disabled = false;
         return;
     }
     else
     {
-        document.getElementById("unidentified").checked = true;
         document.getElementById("admission").action = "admission_summary.php";
-        document.getElementById("firstName").disabled = true;
-        document.getElementById("surname").disabled = true;
+        document.getElementById("firstName").required = false;
+        document.getElementById("surname").required = false;
         document.getElementById("date").disabled = true;
-        return;
-    }
-}
-
-function setEntrance()
-{
-    var id = !document.getElementById("identified").checked;
-    if (document.getElementById("paramedics").checked || id)
-    {
-        document.getElementById("admission").action = "admission_summary.php";
-        document.getElementById("date").required = false;
-        return;
-    }
-    else if (document.getElementById("emergency").checked || id)
-    {
-        document.getElementById("admission").action = "admission_summary.php";
-        document.getElementById("date").required = false;
-        return;
-    }
-    else
-    {
-        document.getElementById("admission").action = "admission_extended.php";
-        document.getElementById("date").required = true;
         return;
     }
 }

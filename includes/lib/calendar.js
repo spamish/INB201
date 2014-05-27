@@ -17,6 +17,7 @@ calendar = {
 	today : new Date(),
 	opt : {},
 	data: [],
+    toggle: 0,
 
 	//Functions
 	/// Used to create HTML in a optimized way.
@@ -157,7 +158,6 @@ calendar = {
 			this.wrt("</tr>");
 		}
 		this.wrt("</table>");
-		this.wrt("<input type='button' value='Cancel' class='calendar-cancel' onclick='calendar.hideCalendar();' />");
 
 		document.getElementById(this.opt['calendar']).innerHTML = this.data.join("");
 		this.data = [];
@@ -224,7 +224,16 @@ calendar = {
 		else {
 			input.onclick=function(){
 				ths.opt['input'] = this.id;
-				ths.showCalendar();
+                switch (ths.toggle) {
+                    case 1:
+                        ths.toggle--;
+                        ths.showCalendar();
+                        break;
+                    case 0:
+                        ths.toggle++;
+                        ths.hideCalendar();
+                        break;
+                }
 			};
 		}
 	},

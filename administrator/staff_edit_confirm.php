@@ -55,8 +55,6 @@
                             <th>First Name</th>
                             <th>Surname</th>
                             <th>Date of Birth</th>
-                            <th>Mobile Phone</th>
-                            <th>Salary</th>
                             <th>Position</th>
                             <th>Ward</th>
                         </tr>
@@ -64,9 +62,7 @@
                             <td><?php echo $staff->username ?></td>
                             <td><?php echo $staff->firstName ?></td>
                             <td><?php echo $staff->surname ?></td>
-                            <td><?php echo $staff->dateOfBirth ?></td>
-                            <td><?php echo $staff->mobilePhone ?></td>
-                            <td><?php echo $staff->salary ?></td>
+                            <td><?php echo $staff->dateOfBirth->format('j M Y') ?></td>
                             <td><?php echo position($staff->position) ?></td>
                             <td><?php echo $staff->ward ?></td>
                         </tr>

@@ -84,6 +84,13 @@ h2 {
 	font-weight:bold;
 }
 
+#tableRowA {
+    background-color:#cff;
+}
+
+#tableRowB {
+    background-color:#6fc;
+}
 
 #sidebar {
     width: 140px;

@@ -5,20 +5,10 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $id = $_POST['id'];
-    $equipment = viewTable("equipment");
-    $check = 1;
-    
-    if ($check)
+    if ($check = 1) //CHECK FOR POPULATED SCHEDULE!
     {
-        $code = $_POST['code'];
-        $duration = $_POST['duration'];
-        $description = $_POST['description'];
-        
-        editEquipment($id, $code, $duration, $description);
+        $equipment = editEquipment(new Equipment($_POST));
     }
-    
-    $equipment = viewTable("equipment");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -43,20 +33,18 @@
                             <th>Room Number</th>
                             <th>Test Code</th>
                             <th>Test Duration</th>
+                            <th>Cost of Test</th>
                             <th>Test Description</th>
                         </tr>
                         
                         <tr>
-                            <td><?php echo $equipment[$id]['roomNumber'] ?></td>
-                            <td><?php echo $equipment[$id]['code'] ?></td>
-                            <td><?php echo $equipment[$id]['duration'] ?></td>
-                            <td><?php echo $equipment[$id]['description'] ?></td>
+                            <td><?php echo $equipment->roomNumber ?></td>
+                            <td><?php echo $equipment->code ?></td>
+                            <td><?php echo $equipment->duration->format('H:i') ?></td>
+                            <td><?php echo $equipment->cost ?></td>
+                            <td><?php echo $equipment->description ?></td>
                         </tr>
                     </table>
-                <?php }
-                else
-                { ?>
-                    <p></p>
                 <?php } ?>
             </div> <!-- end #content -->
             

@@ -63,7 +63,10 @@
                             </tr>
                             <tr>
                                 <td align="right">Date of Birth</td>
-                                <td><input id="date" type="text" name="dateOfBirth" required/></td>
+                                <td>
+                                    <img id="imgDate" src="/inb201/calendar.gif" alt="Calendar Icon">
+                                    <input id="date" type="text" name="dateOfBirth" required/>
+                                </td>
                             </tr>
                             <tr><td><br></td></tr>
                             <tr>
@@ -152,7 +155,10 @@
                             </tr>
                             <tr>
                                 <td align="right">Next Pay Date</td>
-                                <td><input id="pay" type="text" name="nextDate" required></td>
+                                <td>
+                                    <img id="imgPay" src="/inb201/calendar.gif" alt="Calendar Icon">
+                                    <input id="pay" type="text" name="nextDate" required>
+                                </td>
                             </tr>
                             <tr>
                                 <td></td>

@@ -5,18 +5,13 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $check = !searchAllRooms($_POST['roomNumber']);
+    $theater = new Theater($_POST);
+    $result = viewTable("theaters", $theater);
     
-    if ($check)
+    if (!$result[0])
     {
-        $roomNumber = $_POST['roomNumber'];
-        $ward = $_POST['ward'];
-        $schedule = $roomNumber;
-        
-        createTheater($roomNumber, $ward, $schedule);
+        createTheater($theater);
     }
-    
-    $theater = searchAllRooms($roomNumber);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -33,18 +28,16 @@
 
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
-                <?php if ($check)
+                <?php if (!$result[0])
                 { ?>
                     <p>Adding of operating theater successful.</p>
                     <table>
                         <tr id="tableRowHeader">
-                            <th>Ward</th>
                             <th>Room Number</th>
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td><?php echo $theater['ward'] ?></td>
-                            <td><?php echo $theater['roomNumber'] ?></td>
+                            <td><?php echo "g" . $theater->roomNumber ?></td>
                         </tr>
                     </table>
                 <?php }
@@ -57,11 +50,4 @@
             <?php include('../includes/footer.php'); ?>
         </div> <!-- End #wrapper -->
     </body>
-    
-    <?php
-        if (!$check) {
-            header( "refresh:1; url=staff_add.php");
-        }
-        exit;
-    ?>
 </html>

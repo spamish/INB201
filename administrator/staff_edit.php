@@ -53,6 +53,7 @@
                             <td align="right">Password</td>
                             <td align="left">
                                 <input id="btnSubmit" type="submit" name="reset" value="Reset">
+                                <input type="hidden" name="staffID" value="<?php echo $staff->staffID ?>"/>
                             </td>
                         </tr>
                         <tr>
@@ -96,8 +97,9 @@
                         <tr>
                             <td align="right">Date of Birth</td>
                             <td>
+                                <img src="/inb201/calendar.gif" alt="Calendar Icon">
                                 <input id="date" type="date" name="dateOfBirth" required
-                                    value="<?php echo $staff->dateOfBirth ?>"/>
+                                    value="<?php echo $staff->dateOfBirth->format('Y-m-d') ?>"/>
                             </td>
                         </tr>
                         <tr><td><br></td></tr>
@@ -214,7 +216,7 @@
                             <td align="right">Home Phone</td>
                             <td>
                                 <input type="text" name="homePhone"
-                                    value="<?php echo isset($address->homePhone) ? $address->homePhone : "" ?>"/>
+                                    value="<?php echo isset($staff->homePhone) ? $staff->homePhone : "" ?>"/>
                             </td>
                         </tr>
                         <tr><th>Address</th></tr>
@@ -290,15 +292,15 @@
                         <tr>
                             <td align="right">Next Pay Date</td>
                             <td>
+                                <img src="/inb201/calendar.gif" alt="Calendar Icon">
                                 <input id="pay" type="text" name="nextDate" required
-                                    value="<?php echo $salary->nextDate ?>">
+                                    value="<?php echo $salary->nextDate->format('Y-m-d') ?>">
                             </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td align="left">
                                 <input id="btnSubmit" type="submit" name="update" value="Save"/>
-                                <input type="hidden" name="id" value="<?php echo $staff->staffID ?>"/>
                             </td>
                         </tr>
                     </table>

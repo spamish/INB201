@@ -8,27 +8,12 @@
     $file = new File($results[1]);
     $patient = new Patient();
     
-    $discharge = new Note();
-    $discharge->type = "discharge";
-    $discharge->file = $file->fileID;
-    $results = viewTable("notes", $discharge);
-    $discharge = $results[0];
-    
     //Select related patient details.
     if($file->patient)
     {
         $patient->patientID = $file->patient;
         $results = viewTable("patients", $patient);
         $patient = new Patient($results[1]);
-        
-        if ($patient->address)
-        {
-            $address = new Address();
-            $address->addressID = $patient->address;
-            $results = viewTable("addresses", $address);
-            $address = new Address($results[1]);
-        }
-        
         $patient->identified = true;
     }
     else
@@ -37,6 +22,17 @@
         $results = viewTable("unidentified", $patient);
         $patient = new Patient($results[1]);
         $patient->identified = false;
+    }
+    $note = new Note();
+    $note->file = $file->fileID;
+    $notes = viewTable("notes", $note);
+    
+    if ($file->doctor)
+    {
+        $staff = new Staff();
+        $staff->staffID = $file->doctor;
+        $results = viewTable("staff", $staff);
+        $staff = new Staff($results[1]);
     }
 ?>
 
@@ -55,6 +51,14 @@
             <div id="content"> <!-- All content goes here -->
                 
                 <h2>Patient Information</h2>
+                <div id="actions">
+                    <a id="btnAction" href="">Transfer to Ward</a>
+                    <a id="btnAction" href="add_operation.php?fileID=<?php echo $file->fileID ?>">Book Operation</a>
+                    <a id="btnAction" href="add_test.php?fileID=<?php echo $file->fileID ?>">Book Test</a>
+                    <a id="btnAction" href="add_order.php?fileID=<?php echo $file->fileID ?>">Add Order</a>
+                    <a id="btnAction" href="add_note.php?fileID=<?php echo $file->fileID ?>">Add Note</a>
+                    <a id="btnAction" href="discharge.php?fileID=<?php echo $file->fileID ?>">Discharge Patient</a>
+                </div> <!-- end #actions -->
                 
                 <div id="patientDetails">
                 <?php
@@ -80,75 +84,15 @@
                     </p>
                 </div> <!-- end #patientDetails -->
                 
-                <?php
-                    if ($patient->identified)
-                    { ?>
-                        <div id="contactDetails">
-                            <h3>Contact Details <a id="btnSubmit" href="">Update</a></h3>
-                            <p>Mobile Phone: <?php echo $patient->mobilePhone ?><br>
-                            Home Phone: <?php echo $patient->homePhone ?><br>
-                            <?php
-                                if($patient->address)
-                                { ?>
-                                    Address: <?php echo ($address->unit ? ($address->unit . " /") : "") ?>
-                                    <?php echo $address->house ?>
-                                    <?php echo $address->street ?><br>
-                                    Suburb: <?php echo $address->suburb ?><br>
-                                    Postcode: <?php echo $address->postcode ?><br>
-                                    State: <?php echo $address->region ?><br>
-                                    Country: <?php echo $address->country ?><br>
-                                <?php }
-                                else
-                                {
-                                    echo "No address set.";
-                                }
-                            ?></p>
-                        </div> <!-- end #contactDetails -->
-                        
-                        <div id="insuranceDetails">
-                            <h3>Insurance Details <a id="btnSubmit" href="">Update</a></h3>
-                            
-                            <p><?php
-                                if($patient->insurance)
-                                {
-                                    echo "Insurance.";
-                                }
-                                else
-                                {
-                                    echo "No insurance.";
-                                }
-                            ?></p>
-                        </div> <!-- end #insuranceDetails -->
-                        
-                        <div id="guardianDetails">
-                            <h3>Parent, Guardian or Next of Kin Details <a id="btnSubmit" href="">Update</a></h3>
-                            <p><?php
-                                if($patient->insurance)
-                                {
-                                    echo "Guardian.";
-                                }
-                                else
-                                {
-                                    echo "No details entered.";
-                                }
-                            ?></p>
-                        </div> <!-- end #guardianDetails -->
-                    <?php }
-                ?>
-                
                 <div id="fileDetails">
-                    <h3>Case File Details <?php
-                        if ($discharge)
-                        { ?>
-                            <a id="btnSubmit" href="">Process Discharge</a>
-                        <?php }
-                    ?></h3>
+                    <h3>Case File Details</h3>
                     <p>Case Number: <?php echo $file->fileID ?><br>
                     Admission: <?php echo $file->admission->format('g:i a D jS M Y') ?><br>
                     Primary Doctor: <?php
                         if($file->doctor)
                         {
-                            echo "Doctor.";
+                            echo $staff->firstName . " " . $staff->surname;
+                            echo "<br>Username: " . $staff->username;
                         }
                         else
                         {
@@ -168,6 +112,26 @@
                         }
                     ?></p>
                 </div> <!-- end #fileDetails -->
+                
+                <div id="notes">
+                    <h3>Patient Notes</h3>
+                    <?php
+                        for ($i = 1; $i <= $notes[0]; $i++)
+                        {
+                            $note = new Note($notes[$i]);
+                            ?>
+                            <p><?php echo ucfirst($note->type) ?><br>
+                            <?php echo $note->timestamp->format('h:ia D, jS M Y') ?><br>
+                            <?php echo $note->staff ?><br>
+                            <?php echo $note->details ?><br>
+                        <?php }
+                    ?>
+                </div> <!-- end #notes -->
+                
+                <div id="history">
+                    <h3>Patient History</h3>
+                    
+                </div> <!-- end #history -->
                 
             </div> <!-- end #content -->
             

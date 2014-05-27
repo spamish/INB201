@@ -4,11 +4,12 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    if (isset($_GET['order'])):
-        $rooms = viewTable("rooms", $_GET['order']);
-    else:
-        $rooms = viewTable("rooms");
-    endif;
+    $url[0] = "room_view.php?order=";
+    $url[1] = "&sort=";
+    $order = (isset($_GET['order']) ? $_GET['order'] : null);
+    $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
+    
+    $table = viewTable("rooms", null, $order, $sort);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -29,16 +30,19 @@
                 <form action="room_edit.php" method="post">
                     <table>
                         <tr>
-                            <th><a href="room_view.php?order=roomNumber">Room Number</a></th>
-                            <th><a href="room_view.php?order=ward">Ward</a></th>
-                            <th><a href="room_view.php?order=roomCapacity">Room Capacity</th>
+                            <th><a href="<?php echo $url[0] . "roomNumber" . $url[1] . !$sort ?>">Room Number</a></th>
+                            <th><a href="<?php echo $url[0] . "ward" . $url[1] . !$sort ?>">Ward</a></th>
+                            <th><a href="<?php echo $url[0] . "capacity" . $url[1] . !$sort ?>">Room Capacity</th>
                             <th>Occupied Beds</th>
-                            <td><input id="btnSubmit" type="submit" name="update"
-                                value="Update" style="float:right;"></td>
-                            <td><input id="btnSubmit" type="submit" name="remove"
-                                value="Remove" style="float:right;"></td>
+                            <td>
+                                <input id="btnSubmit" type="submit" name="update"
+                                    value="Update" style="float:right;">
+                                <input id="btnSubmit" type="submit" name="remove"
+                                    value="Remove" style="float:right;">
+                            </td>
                         </tr>
-                        <?php for ($i = 1; $i <= $rooms[0]; $i++) {
+                        <?php for ($i = 1; $i <= $table[0]; $i++) {
+                            $room = new Room($table[$i]);
                             if ($i % 2 == 0)
                             { ?>
                                 <tr id="tableRowA">
@@ -47,13 +51,13 @@
                             { ?>
                                 <tr id="tableRowB">
                             <?php } ?>
-                                    <td><?php echo strtolower($rooms[$i]['ward']) . roomNumber($rooms[$i]['roomNumber']) ?></td>
-                                    <td><?php echo $rooms[$i]['ward'] ?></td>
-                                    <td><?php echo $rooms[$i]['roomCapacity'] ?></td>
-                                    <td><?php echo $rooms[$i]['occupiedBeds'] ?></td>
+                                    <td><?php echo strtolower($room->ward) . $room->roomNumber ?></td>
+                                    <td><?php echo $room->ward ?></td>
+                                    <td><?php echo $room->capacity ?></td>
+                                    <td><?php echo $room->occupied ?></td>
                                     <td>
-                                        <input id="radio" type="radio" name="id"
-                                            value="<?php echo $rooms[$i]['roomID'] ?>">
+                                        <input id="radio" type="radio" name="roomID"
+                                            value="<?php echo $room->roomID ?>">
                                     </td>
                                 <tr>
                         <?php } ?>

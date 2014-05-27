@@ -2,74 +2,47 @@
 
 <?php
     require('../includes/start_session.php');
-    require('../includes/recep_functions.php');
     require('../includes/functions.php');
     
-    $append = isset($_POST['append']);
-    $patient = new Patient($_POST);
-    
-    //Update patient details.
-    if ($append)
-    {
-        $search = $patient;
-        $mobilePhone = $patient->mobilePhone;
-        $search->mobilePhone = null;
-        $homePhone = $patient->homePhone;
-        $search->homePhone = null;
-        
-        $result = viewTable("patients", $search);
-        $search->patientID = $result[1]['patientID'];
-        
-        if (strlen($_POST['mobilePhone']) > 0)
-        {
-            $patient = updatePatient($search, "mobilePhone", $mobilePhone);
-        }
-        
-        if (strlen($_POST['homePhone']) > 0)
-        {
-            $patient = updatePatient($search, "homePhone", $homePhone);
-        }
-        
-        $address = new Address($_POST);
-        
-        if (   $address->house
-            && $address->street
-            && $address->suburb
-            && $address->postcode
-            && $address->region
-            && $address->country)
-        {
-            $address = assignAddress($address);
-            $patient = updatePatient($search, "address", $address->addressID);
-        }
-        
-        //Add guardian information.
-        
-        $patient->identified = true;
-    }
+    $date = new DateTime();
     
     $file = new File($_POST);
-    $file->admission = timestamp();
+    update("files", "fileID", $file->fileID, "discharge", $date->format('Y-m-d H:i:s'));
     
-    $file = createFile($file);
+    $results = viewTable("files", $file);
+    $file = new File($results[1]);
     
-    $note = new Note($_POST);
-    $note->file = $file->fileID;
-    $note->type = "admission";
-    $note->timestamp = $file->admission;
-    $note->staff = $_SESSION['login'];
+    $patient = new Patient();
     
-    $note = createNote($note);
-    
-    if ($patient->identified)
+    //Select related patient details.
+    if($file->patient)
     {
-        updateFile($file, "patient", $patient->patientID);
+        $patient->patientID = $file->patient;
+        $results = viewTable("patients", $patient);
+        $patient = new Patient($results[1]);
+        $patient->identified = true;
     }
     else
     {
         $patient->file = $file->fileID;
-        createUnidentified($patient);
+        $results = viewTable("unidentified", $patient);
+        $patient = new Patient($results[1]);
+        $patient->identified = false;
     }
+    
+    $note = new Note($_POST);
+    $date = new DateTime();
+    $note->file = $file->fileID;
+    $note->type = "discharge";
+    $note->timestamp = $file->discharge;
+    $note->staff = $_SESSION['login'];
+    
+    createNote($note);
+    
+    $staff = new Staff();
+    $staff->staffID = $_SESSION['login'];
+    $results = viewTable("staff", $staff);
+    $staff = new Staff($results[1]);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -104,7 +77,7 @@
                         <td><?php echo $patient->firstName ?></td>
                         <td><?php echo $patient->surname ?></td>
                         <td><?php echo gender($patient->gender) ?></td>
-                        <td><?php echo $patient->dateOfBirth ?></td>
+                        <td><?php echo (isset($patient->dateOfBirth) ? $patient->dateOfBirth->format('jS M Y') : "") ?></td>
                     </tr>
                 </table>
                 <h3>Case Information</h3>
@@ -112,23 +85,26 @@
                     <tr>
                         <th>Case ID</th>
                         <th>Admission Time</th>
-                        <th>Condition</th>
+                        <th>Discharge Time</th>
                     </tr>
                     <tr>
                         <td><?php echo $file->fileID ?></td>
-                        <td><?php echo $file->admission ?></td>
-                        <td><?php echo condition($file->state) ?></td>
+                        <td><?php echo $file->admission->format('g:ia jS M Y') ?></td>
+                        <td><?php echo $file->discharge->format('g:ia jS M Y') ?></td>
                     </tr>
                 </table>
-                <h3>Case Notes</h3>
+                <h3>Discharge Notes</h3>
                 <table>
                     <tr>
                         <th align="right">By Staff</th>
-                        <td><?php echo $note->staff ?></td>
+                        <td>
+                            <?php echo $staff->firstName
+                               . " " . $staff->surname?>
+                        </td>
                     </tr>
                     <tr>
                         <th align="right">Created</th>
-                        <td><?php echo $note->timestamp ?></td>
+                        <td><?php echo $note->timestamp->format('g:ia jS M Y') ?></td>
                     </tr>
                     <tr>
                         <th align="right">Details</th>
