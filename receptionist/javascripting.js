@@ -71,58 +71,28 @@ function setID()
 
 function selectInputs()
 {
-    if (document.getElementById("radRoom").checked)
+    if (document.getElementById("radio").value == 'room')
     {
-        document.getElementById("room").disabled = false;
+        document.getElementById("room").style.display = 'none';
         document.getElementById("ward").disabled = true;
-        document.getElementById("doctor").disabled = true;
+        document.getElementById("number").disabled = true;
+        document.getElementById("doctor").style.display = 'none';
     }
     
-    if (document.getElementById("radWard").checked)
+    if (document.getElementById("radio").value == 'ward')
     {
-        document.getElementById("room").disabled = false;
-        document.getElementById("ward").disabled = false;
-        document.getElementById("doctor").disabled = false;
-    }
-    
-    if (document.getElementById("radDoctor").checked)
-    {
-        document.getElementById("room").disabled = true;
+        document.getElementById("room").style.display = 'none';
         document.getElementById("ward").disabled = true;
-        document.getElementById("doctor").disabled = false;
+        document.getElementById("number").disabled = true;
+        document.getElementById("doctor").style.display = 'none';
     }
-}
-
-function incStaff()
-{
-    var counter = document.getElementById("count");
-    var count = counter.value;
-    counter.value++;
     
-    var table = document.getElementById("table");
-    var row = table.rows.length - 1;
-    var input = table.insertRow(row);
-    
-    var construct = "<td>Username ";
-    construct += counter.value;
-    construct += "</td><td><input type=\"text\" name=\"staff"
-    construct += counter.value;
-    construct += "\" required></td>";
-    
-    input.innerHTML = construct;
-}
-
-function decStaff()
-{
-    var counter = document.getElementById("count");
-    var count = counter.value;
-    if (count > 1)
+    if (document.getElementById("radio").value == 'doctor')
     {
-        counter.value--;
-        
-        var table = document.getElementById("table");
-        var row = table.rows.length - 2;
-        
-        table.deleteRow(row);
+        document.getElementById("room").style.display = 'none';
+        document.getElementById("ward").disabled = true;
+        document.getElementById("number").disabled = true;
+        document.getElementById("doctor").style.display = 'none';
     }
+    
 }

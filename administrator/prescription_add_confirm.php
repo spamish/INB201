@@ -5,13 +5,12 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    if (isset($_POST['remove']))
+    $prescription = new Prescription($_POST);
+    
+    $check = checkCode($prescription);
+    if ($check)
     {
-        if(isset($_POST['theaterID'])) //CHECK FOR POPULATED SCHEDULE!
-        {
-            delete("theaters", "theaterID", $_POST['theaterID']);
-        }
-        header ("Location: theater_view.php");
+        createPrescription($prescription);
     }
 ?>
 
@@ -26,22 +25,30 @@
         <div id="wrapper">
             <?php include('../includes/header.php'); ?>
             <?php include('../includes/sidebar.php'); ?>
+
             <div id="content"> <!-- All content goes here -->
-                <h2>Add Operating Theater</h2>
-                <form action="theater_add_confirm.php" method="post" style="float:center;width=50%;">
+                <h2>Summary</h2>
+                <?php if ($check)
+                { ?>
+                    <p>Adding of medicine prescription successful.</p>
                     <table>
                         <tr>
-                            <td align="right">Room Number</td>
-                            <td><input type="text" name="roomNumber" required/></td>
+                            <th>Prescription Code</th>
+                            <th>Cost of Prescription</th>
+                            <th>Prescription Description</th>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td align="left">
-                                <input id="btnSubmit" type="submit" name="save" value="Save">
-                            </td>
+                        
+                        <tr id="tableRowA">
+                            <td><?php echo $prescription->code ?></td>
+                            <td><?php echo $prescription->cost ?></td>
+                            <td><?php echo $prescription->description ?></td>
                         </tr>
                     </table>
-                </form>
+                <?php }
+                else
+                { ?>
+                    <p>The code is not unique.</p>
+                <?php } ?>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>

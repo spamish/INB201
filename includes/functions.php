@@ -2,7 +2,8 @@
     require_once('classes.php');
     
     /*
-        
+        Searches addresses and if it doesn't exist then create a new entry.
+        Then returns that address.
     */
     function assignAddress($address)
     {
@@ -15,17 +16,24 @@
         {
             //Add address details.
             $insert = "house, street, suburb, postcode, region, country";
-            $values = "'$house', '$street', '$suburb', '$postcode', '$region', '$country'";
+            $values = "'" . $address->house . "', '"
+                          . $address->street . "', '"
+                          . $address->suburb . "', '"
+                          . $address->postcode . "', '"
+                          . $address->region . "', '"
+                          . $address->country . "'";
             
             //Add unit details.
             if (isset($unit))
             {
                 $insert = ", unit";
-                $values = ", '$unit'";
+                $values = ", '" . $address->unit . "'";
             }
             
+            $result = viewTable("addresses");
+            
             //Create address.
-            $sql = "INSERT INTO addresses (addressID, " . $insert . ") VALUES ('$count', " . $values . ")";
+            $sql = "INSERT INTO addresses (addressID, " . $insert . ") VALUES ('" . $result[0] . "', " . $values . ")";
             $records = mysql_query($sql, $resource);
             
             $result = viewTable("addresses", $address);
@@ -35,7 +43,8 @@
     }
     
     /*
-        
+        Retrieves staff information.
+        *doesn't return the hash of the password*
     */
     function getStaffInfo($username)
     {
@@ -51,7 +60,14 @@
     }
     
     /*
-        
+        Returns array with data from a table;
+        Variables
+        table: defined the table to retrieve data from.
+        parameters: accepts an object that defined search parameters.
+        order: defines the column that the table should be ordered by.
+        sort: defined if ordering is asc or desc.
+        limit: defines first row of table to select.
+        count: defined number of rows to return.
     */
     function viewTable($table, $parameters = null, $order = null, $sort = true, $limit = 0, $count = 0)
     {
@@ -88,7 +104,7 @@
     }
     
     /*
-        
+        Creates a note.
     */
     function createNote($note)
     {
@@ -106,7 +122,6 @@
                            . $note->timestamp->format('Y-m-d H:i:s') . "', '"
                            . $note->details . "')";
         $records = mysql_query($sql, $resource);
-        echo $sql;
     }
     
     /*
@@ -169,7 +184,37 @@
     }
     
     /*
+    
+    */
+    function surgeons($operation)
+    {
+        $surgeon = new Staff();
+        $surgeon->position = "surgeon";
+        $results = viewTable("staff", $surgeon);
         
+        $operation->surgeons = unserialize($operation->surgeons);
+        
+        echo $results[0] . "<br>";
+        for ($i = 1; $i <= $results[0]; $i++)
+        {
+            $staff = new Staff($results[$i]);
+            $j = 0;
+            
+            while (isset($operation->surgeons[$j]))
+            {
+                if ($staff->staffID == $operation->surgeons[$j])
+                {
+                    $surgeons[] = $staff;
+                }
+                $j++;
+            }
+        }
+        
+        return $surgeons = false;
+    }
+    
+    /*
+        Updates a row in a table.
     */
     function update($table, $index, $id, $type, $value)
     {
@@ -183,7 +228,7 @@
     }
     
     /*
-        
+        Deletes a row in a table.
     */
     function delete($table, $index, $id)
     {
@@ -197,7 +242,8 @@
     }
     
     /*
-        
+        Takes the float of state and translates to corresponding state.
+        eg. 0.5 => Stable
     */
     function condition($state)
     {
@@ -216,7 +262,8 @@
     }
     
     /*
-        
+        Returns the gender value as the corresponding string.
+        m => Male, f => Female
     */
     function gender($input)
     {

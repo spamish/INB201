@@ -5,45 +5,9 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $check = true;
-    $i = 1;
-    
-    while (isset($_POST['staff' . $i]))
+    if ($check = 1) //CHECK FOR POPULATED SCHEDULE!
     {
-        $staff = new Staff();
-        $staff->username = $_POST['staff' . $i];
-        $results = viewTable("staff", $staff);
-        
-        if ($results[0])
-        {
-            $staff = new Staff($results[1]);
-            
-            if ($staff->position == "technician")
-            {
-                $technicians[] = $staff->staffID;
-            }
-            else
-            {
-                $error = "A selected medical technician is assigned to a different role.";
-                $check = false;
-            }
-        }
-        else
-        {
-            $error = "A selected medical technician doesn't exist.";
-            $check = false;
-        }
-        
-        $i++;
-    }
-    
-    sort($technicians);
-    $equipment = new Equipment($_POST);
-    $equipment->technicians = serialize($technicians);
-    
-    if ($check) //CHECK FOR POPULATED SCHEDULE!
-    {
-        editEquipment($equipment);
+        $equipment = editEquipment(new Equipment($_POST));
     }
 ?>
 
@@ -66,31 +30,21 @@
                     <p>Updating of medical equipment successful.</p>
                     <table>
                         <tr>
-                            <th>Equipment Room</th>
+                            <th>Room Number</th>
                             <th>Test Code</th>
                             <th>Test Duration</th>
                             <th>Cost of Test</th>
-                            <th>Capable Technicians</th>
-                            <th>Equipment Description</th>
+                            <th>Test Description</th>
                         </tr>
                         
-                        <tr id="tableRowA">
+                        <tr>
                             <td><?php echo $equipment->roomNumber ?></td>
                             <td><?php echo $equipment->code ?></td>
                             <td><?php echo $equipment->duration->format('H:i') ?></td>
                             <td><?php echo $equipment->cost ?></td>
-                            <td><?php $equipment->technicians = unserialize($equipment->technicians);
-                            for ($i = 0; $i < count($equipment->technicians); $i++)
-                            {
-                                echo $equipment->technicians[$i] . "<br>";
-                            } ?></td>
                             <td><?php echo $equipment->description ?></td>
                         </tr>
                     </table>
-                <?php }
-                else
-                { ?>
-                    <p><?php echo $error ?></p>
                 <?php } ?>
             </div> <!-- end #content -->
             

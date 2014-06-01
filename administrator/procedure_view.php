@@ -4,12 +4,12 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $url[0] = "equipment_view.php?order=";
+    $url[0] = "procedure_view.php?order=";
     $url[1] = "&sort=";
     $order = (isset($_GET['order']) ? $_GET['order'] : null);
     $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
     
-    $table = viewTable("equipment", null, $order, $sort);
+    $table = viewTable("procedures", null, $order, $sort);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -26,14 +26,13 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Medical Equipment</h2>
-                <form action="equipment_edit.php" method="post">
+                <h2>Operation Procedures</h2>
+                <form action="procedure_edit.php" method="post">
                     <table>
                         <tr>
-                            <th><a href="<?php echo $url[0] . "roomNumber" . $url[1] . !$sort ?>">Equipment Room</th>
-                            <th><a href="<?php echo $url[0] . "code" . $url[1] . !$sort ?>">Test Code</th>
-                            <th><a href="<?php echo $url[0] . "duration" . $url[1] . !$sort ?>">Test Duration</th>
-                            <th><a href="<?php echo $url[0] . "cost" . $url[1] . !$sort ?>">Cost of Test</th>
+                            <th><a href="<?php echo $url[0] . "code" . $url[1] . !$sort ?>">Procedure Code</th>
+                            <th><a href="<?php echo $url[0] . "duration" . $url[1] . !$sort ?>">Procedure Duration</th>
+                            <th><a href="<?php echo $url[0] . "cost" . $url[1] . !$sort ?>">Cost of Procedure</th>
                             <td>
                                 <input id="btnSubmit" type="submit" name="update"
                                     value="Update" style="float:right;">
@@ -42,11 +41,12 @@
                                 <input id="btnSubmit" type="submit" name="remove"
                                     value="Remove" style="float:right;">
                             </td>
+                            
                         </tr>
                         <?php
                             for ($i = 1; $i <= $table[0]; $i++)
                             {
-                                $equipment = new Equipment($table[$i]);
+                                $procedure = new Procedure($table[$i]);
                                 
                                 if ($i % 2 == 0)
                                 { ?>
@@ -56,18 +56,17 @@
                                 { ?>
                                     <tr id="tableRowB">
                                 <?php } ?>
-                                        <td><?php echo "e" . $equipment->roomNumber ?></td>
-                                        <td><?php echo $equipment->code ?></td>
-                                        <td><?php echo $equipment->duration->format('H:i') ?></td>
-                                        <td><?php echo $equipment->cost ?></td>
+                                        <td><?php echo $procedure->code ?></td>
+                                        <td><?php echo $procedure->duration->format('H:i') ?></td>
+                                        <td><?php echo $procedure->cost ?></td>
                                         <td>
-                                            <input id="radio" type="radio" name="equipmentID"
-                                                value="<?php echo $equipment->equipmentID ?>">
+                                            <input id="radio" type="radio" name="procedureID"
+                                                value="<?php echo $procedure->procedureID ?>">
                                         </td>
                                         <td>
                                             <a id="btnSubmit"
-                                                href="equipment_view_details.php?equipmentID=<?php
-                                                echo $equipment->equipmentID ?>">View Details</a>
+                                                href="procedure_view_details.php?procedureID=<?php
+                                                echo $procedure->procedureID ?>">View Details</a>
                                         </td>
                                     <tr>
                             <?php }

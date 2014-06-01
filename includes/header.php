@@ -1,5 +1,6 @@
 <div id="header">
     <div style="float:left;">
+
         <h1>Townsville Outskirts Universal Children's Hospital</h1>
     </div>
     <div id="headerFunctions" style="float: right;">

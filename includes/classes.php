@@ -59,6 +59,7 @@
         public $code;
         public $duration;
         public $cost;
+        public $technicians;
         public $description;
         
         //Construct class.
@@ -69,6 +70,7 @@
             $this->code = (isset($equipment['code']) ? $equipment['code'] : null);
             $this->duration = (isset($equipment['duration']) ? new DateTime($equipment['duration']) : null);
             $this->cost = (isset($equipment['cost']) ? $equipment['cost'] : null);
+            $this->technicians = (isset($equipment['technicians']) ? $equipment['technicians'] : null);
             $this->description = (isset($equipment['description']) ? $equipment['description'] : null);
         }
     }
@@ -83,7 +85,6 @@
         public $patient;
         public $admission;
         public $discharge;
-        public $processed;
         public $state;
         public $doctor;
         public $room;
@@ -182,6 +183,33 @@
     /*
         
     */
+    class Operation
+    {
+        //Declare variables.
+        public $operationID;
+        public $file;
+        public $theater;
+        public $start;
+        public $finish;
+        public $procedure;
+        public $surgeons;
+        
+        //Construct class.
+        function __construct ($note = null)
+        {
+            $this->operationID = (isset($note['operationID']) ? $note['operationID'] : null);
+            $this->file = (isset($note['file']) ? $note['file'] : null);
+            $this->theater = (isset($note['theater']) ? $note['theater'] : null);
+            $this->start = (isset($note['start']) ? new DateTime($note['start']) : null);
+            $this->finish = (isset($note['finish']) ? new DateTime($note['finish']) : null);
+            $this->procedure = (isset($note['procedure']) ? $note['procedure'] : null);
+            $this->surgeons = (isset($note['surgeons']) ? $note['surgeons'] : null);
+        }
+    }
+    
+    /*
+        
+    */
     class Patient
     {
         //Declare variables.
@@ -219,12 +247,34 @@
     /*
         
     */
+    class Prescription
+    {
+        //Declare variables.
+        public $prescriptionID;
+        public $code;
+        public $cost;
+        public $description;
+        
+        //Construct class.
+        function __construct ($prescription = null)
+        {
+            $this->prescriptionID = (isset($prescription['prescriptionID']) ? $prescription['prescriptionID'] : null);
+            $this->code = (isset($prescription['code']) ? $prescription['code'] : null);
+            $this->cost = (isset($prescription['cost']) ? $prescription['cost'] : null);
+            $this->description = (isset($prescription['description']) ? $prescription['description'] : null);
+        }
+    }
+    
+    /*
+        
+    */
     class Procedure
     {
         //Declare variables.
         public $procedureID;
         public $code;
         public $duration;
+        public $cost;
         public $surgeons;
         public $required;
         public $description;
@@ -235,6 +285,7 @@
             $this->procedureID = (isset($procedure['procedureID']) ? $procedure['procedureID'] : null);
             $this->code = (isset($procedure['code']) ? $procedure['code'] : null);
             $this->duration = (isset($procedure['duration']) ? new DateTime($procedure['duration']) : null);
+            $this->cost = (isset($procedure['cost']) ? $procedure['cost'] : null);
             $this->surgeons = (isset($procedure['surgeons']) ? $procedure['surgeons'] : null);
             $this->required = (isset($procedure['required']) ? $procedure['required'] : null);
             $this->description = (isset($procedure['description']) ? $procedure['description'] : null);
@@ -340,6 +391,30 @@
             $this->position = (isset($staff['position']) ? $staff['position'] : null);
             $this->ward = (isset($staff['ward']) ? $staff['ward'] : null);
             $this->lastLogin = (isset($staff['lastLogin']) ? new DateTime($staff['lastLogin']) : null);
+        }
+    }
+    
+    /*
+        
+    */
+    class Test
+    {
+        //Declare variables.
+        public $testID;
+        public $file;
+        public $equipment;
+        public $start;
+        public $finish;
+        public $technician;
+        
+        function __construct ($test = null)
+        {
+            $this->testID = (isset($test['testID']) ? $test['testID'] : null);
+            $this->file = (isset($test['file']) ? $test['file'] : null);
+            $this->equipment = (isset($test['equipment']) ? $test['equipment'] : null);
+            $this->start = (isset($test['start']) ? new DateTime($test['start']) : null);
+            $this->finish = (isset($test['finish']) ? new DateTime($test['finish']) : null);
+            $this->technician = (isset($test['technician']) ? $test['technician'] : null);
         }
     }
     

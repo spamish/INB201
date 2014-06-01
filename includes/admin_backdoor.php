@@ -3,7 +3,7 @@
     $_SESSION['ward'] = isset($_GET['ward']) ? $_GET['ward'] : $_SESSION['ward'];
 ?>
 <form action="/inb201/home.php" method="get">
-    <select name="position" style="width:70px;">
+    <select name="position" style="width:140px; height:20px;">
         <?php
             if ($_SESSION['position'] == 'inactive')
             { ?>
@@ -59,7 +59,7 @@
             <?php }
         ?>
     </select>
-    <select name="ward" style="width:30px;">
+    <br><select name="ward" style="width:100px; height:30px: float:left; ">
         <?php
             if ($_SESSION['ward'] == 'A')
             { ?>

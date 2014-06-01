@@ -2,7 +2,48 @@
     require_once('classes.php');
     
     /*
-        
+        Checks if prescription, equipment, and procedure codes are unique.
+    */
+    function checkCode($input)
+    {
+        foreach ($input as $type => $value)
+        {
+            if ($type == "code")
+            {
+                $check = new Equipment();
+                $check->code = $value;
+                $results = viewTable("equipment", $check);
+                
+                if ($results[0])
+                {
+                    return false;
+                }
+                
+                $check = new Procedure();
+                $check->code = $value;
+                $results = viewTable("procedures", $check);
+                
+                if ($results[0])
+                {
+                    return false;
+                }
+                
+                $check = new Prescription();
+                $check->code = $value;
+                $results = viewTable("prescriptions", $check);
+                
+                if ($results[0])
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+        }
+    }
+    
+    /*
+    
     */
     function createStaff($staff)
     {
@@ -101,12 +142,13 @@
             if (!$results[0])
             {
                 //Add data to table.
-                $sql = "INSERT INTO equipment (equipmentID, roomNumber, code, duration, cost, description)
+                $sql = "INSERT INTO equipment (equipmentID, roomNumber, code, duration, cost, technicians, description)
                         VALUES ('" . $equipment->equipmentID . "', '"
                                    . $equipment->roomNumber . "', '"
                                    . $equipment->code . "', '"
                                    . $equipment->duration->format('H:i:s') . "', '"
                                    . $equipment->cost . "', '"
+                                   . $equipment->technicians . "', '"
                                    . $equipment->description . "')";
                 $records = mysql_query($sql, $resource);
                 
@@ -153,6 +195,79 @@
     /*
         
     */
+    function createProcedure($procedure)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        $check = new procedure();
+        $check->procedureID = 1;
+        $procedure->procedureID = 1;
+        
+        while (1)
+        {
+            //Iterate through equipment table.
+            $results = viewTable("procedures", $check);
+            
+            //Add data when unique index is found.
+            if (!$results[0])
+            {
+                //Add data to table.
+                $sql = "INSERT INTO procedures (procedureID, code, duration, cost, required, surgeons, description)
+                        VALUES ('" . $procedure->procedureID . "', '"
+                                   . $procedure->code . "', '"
+                                   . $procedure->duration->format('H:i:s') . "', '"
+                                   . $procedure->cost . "', '"
+                                   . $procedure->required . "', '"
+                                   . $procedure->surgeons . "', '"
+                                   . $procedure->description . "')";
+                $records = mysql_query($sql, $resource);
+                echo $sql;
+                return;
+            }
+            $check->procedureID++;
+            $procedure->procedureID++;
+        }
+    }
+    
+    /*
+        
+    */
+    function createPrescription($prescription)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        $check = new Prescription();
+        $check->prescriptionID = 1;
+        $prescription->prescriptionID = 1;
+        
+        while (1)
+        {
+            //Iterate through equipment table.
+            $results = viewTable("prescriptions", $check);
+            
+            //Add data when unique index is found.
+            if (!$results[0])
+            {
+                //Add data to table.
+                $sql = "INSERT INTO prescriptions (prescriptionID, code, cost, description)
+                        VALUES ('" . $prescription->prescriptionID . "', '"
+                                   . $prescription->code . "', '"
+                                   . $prescription->cost . "', '"
+                                   . $prescription->description . "')";
+                $records = mysql_query($sql, $resource);
+                
+                return;
+            }
+            $check->prescriptionID++;
+            $prescription->prescriptionID++;
+        }
+    }
+    
+    /*
+        
+    */
     function editStaff($staff)
     {
         $resource = new Connection();
@@ -187,16 +302,12 @@
         $resource = $resource->Connect();
         
         $sql = "UPDATE equipment
-                SET code = '" . $equipment->code . "',
-                    duration = '" . $equipment->duration->format('H:i:s') . "',
+                SET duration = '" . $equipment->duration->format('H:i:s') . "',
                     cost = '" . $equipment->cost . "',
+                    technicians = '" . $equipment->technicians . "',
                     description = '" . $equipment->description . "'
                 WHERE equipmentID = '" . $equipment->equipmentID . "'";
         $records = mysql_query($sql, $resource);
-        
-        $results = viewTable("equipment", $equipment);
-        
-        return new Equipment($results[1]);
     }
     
     /*

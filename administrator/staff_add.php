@@ -11,6 +11,8 @@
         <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
         <script type="text/javascript" src="../includes/lib/calendar.js"></script>
         <script type="text/javascript" src="../includes/javascripting.js"></script>
+		<link rel="stylesheet" type="text/css" href="../includes/lib/datepicker.css" /> 
+		<script type="text/javascript" src="../includes/lib/datepicker.js"></script>
         <script type="text/javascript">
             function init()
             {
@@ -156,8 +158,7 @@
                             <tr>
                                 <td align="right">Next Pay Date</td>
                                 <td>
-                                    <img id="imgPay" src="/inb201/calendar.gif" alt="Calendar Icon">
-                                    <input id="pay" type="text" name="nextDate" required>
+                                    <input id='start_dt' class='datepicker' type="text" name="nextDate" required>
                                 </td>
                             </tr>
                             <tr>

@@ -23,6 +23,8 @@
         $patient = new Patient($results[1]);
         $patient->identified = false;
     }
+    
+    $list = viewTable("procedures", null, "code");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -76,8 +78,29 @@
                     <h3>Operation Details</h3>
                     <form action="summary.php" method="post">
                         <input type="hidden" name="function" value="operation">
-                        <input type="hidden" name="file" value="<?php echo $file->fileID ?>">
-                        <input id="btnSubmit" type="submit" name="submit" value="Confirm">
+                        <input type="hidden" name="fileID" value="<?php echo $file->fileID ?>">
+                        <select name="code">
+                            <option value="" selected>-</option>
+                            <?php for ($i = 1; $i <= $list[0]; $i++) {
+                                $operation = new Procedure($list[$i]) ?>
+                                <option value="<?php echo $operation->code?>">
+                                    <?php echo $operation->code ?></option>
+                            <?php } ?>
+                        </select><br>
+                        <input id="btnSubmit" type="submit" name="submit" value="Confirm"><br>
+                        <table>
+                            <?php for ($i = 1; $i <= $list[0]; $i++) {
+                                $operation = new Procedure($list[$i]) ?>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                </tr>
+                                <tr>
+                                    <td><?php echo $operation->code ?></td>
+                                    <td><?php echo $operation->description ?></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
                     </form>
                 </div> <!-- end #discharge -->
                 

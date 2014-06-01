@@ -5,45 +5,44 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    $check = true;
     $i = 1;
-    
     while (isset($_POST['staff' . $i]))
     {
         $staff = new Staff();
-        $staff->username = $_POST['staff' . $i];
+        $staff->username = $_POST['surgeon' . $i];
         $results = viewTable("staff", $staff);
-        
         if ($results[0])
         {
             $staff = new Staff($results[1]);
-            
-            if ($staff->position == "technician")
+            if ($staff->position == "surgeon")
             {
-                $technicians[] = $staff->staffID;
+                $surgeons[] = $staff->staffID;
             }
             else
             {
-                $error = "A selected medical technician is assigned to a different role.";
-                $check = false;
+                $error = "A selected surgeon is assigned to a different role.";
             }
         }
         else
         {
-            $error = "A selected medical technician doesn't exist.";
-            $check = false;
+            $error = "A selected surgeon doesn't exist.";
         }
         
         $i++;
     }
     
-    sort($technicians);
-    $equipment = new Equipment($_POST);
-    $equipment->technicians = serialize($technicians);
+    $procedure = new Procedure($_POST);
+    $procedure->surgeons = serialize($surgeons);
     
-    if ($check) //CHECK FOR POPULATED SCHEDULE!
+    if (checkCode($procedure))
     {
-        editEquipment($equipment);
+        $error = "The procedure code is not unique.";
+        $check = false;
+    }
+    
+    if ($check)
+    {
+        createProcedure($procedure);
     }
 ?>
 
@@ -63,28 +62,20 @@
                 <h2>Summary</h2>
                 <?php if ($check)
                 { ?>
-                    <p>Updating of medical equipment successful.</p>
+                    <p>Adding of operation procedure successful.</p>
                     <table>
                         <tr>
-                            <th>Equipment Room</th>
-                            <th>Test Code</th>
-                            <th>Test Duration</th>
-                            <th>Cost of Test</th>
-                            <th>Capable Technicians</th>
-                            <th>Equipment Description</th>
+                            <th>Procedure Code</th>
+                            <th>Procedure Duration</th>
+                            <th>Cost of Procedure</th>
+                            <th>Procedure Description</th>
                         </tr>
                         
                         <tr id="tableRowA">
-                            <td><?php echo $equipment->roomNumber ?></td>
-                            <td><?php echo $equipment->code ?></td>
-                            <td><?php echo $equipment->duration->format('H:i') ?></td>
-                            <td><?php echo $equipment->cost ?></td>
-                            <td><?php $equipment->technicians = unserialize($equipment->technicians);
-                            for ($i = 0; $i < count($equipment->technicians); $i++)
-                            {
-                                echo $equipment->technicians[$i] . "<br>";
-                            } ?></td>
-                            <td><?php echo $equipment->description ?></td>
+                            <td><?php echo $procedure->code ?></td>
+                            <td><?php echo $procedure->duration->format('H:i') ?></td>
+                            <td><?php echo $procedure->cost ?></td>
+                            <td><?php echo $procedure->description ?></td>
                         </tr>
                     </table>
                 <?php }

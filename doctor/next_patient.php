@@ -25,14 +25,13 @@
     $file = new File();
     $file->fileID = $queue[0][1];
     
-    updateFile($file, "doctor", $_SESSION['login']);
+    update("files", "fileID", $file->fileID, "doctor", $_SESSION['login']);
     
-    $date = new DateTime();
     $note = new Note();
     $note->file = $file->fileID;
     $note->type = "transfer";
     $note->staff = $_SESSION['login'];
-    $note->timestamp = $date->format('Y-m-d h:i:s');
+    $note->timestamp = $now;
     $note->details = "Patient assigned to " . $_SESSION['firstName'] . " " . $_SESSION['surname'];
     createNote($note);
     

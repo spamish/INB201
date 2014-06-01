@@ -18,31 +18,31 @@
             <?php include('../includes/header.php'); ?>
             <?php include('../includes/sidebar.php'); ?>
             <div id="content"> <!-- All content goes here -->
-                <h2>Add Medical Equipment</h2>
-                <form action="equipment_add_confirm.php" method="post" style="float:center;width=50%;">
+                <h2>Add Operation Procedure</h2>
+                <form action="procedure_add_confirm.php" method="post" style="float:left;width=50%;">
                     <table id="table">
                         <tr>
-                            <td align="right">Room Number</td>
-                            <td><input type="text" name="roomNumber" required/></td>
+                            <td align="right">Procedure Code</td>
+                            <td><input type="text" name="code" required></td>
                         </tr>
                         <tr>
-                            <td align="right">Test Code</td>
-                            <td><input type="text" name="code" required/></td>
+                            <td align="right">Procedure Duration</td>
+                            <td><input type="text" name="duration" required></td>
                         </tr>
                         <tr>
-                            <td align="right">Test Duration</td>
-                            <td><input type="text" name="duration" required/></td>
+                            <td align="right">Cost of Procedure</td>
+                            <td>$<input type="text" name="cost" required></td>
                         </tr>
                         <tr>
-                            <td align="right">Cost of Test</td>
-                            <td><input type="text" name="cost" required/></td>
-                        </tr>
-                        <tr>
-                            <td align="right" valign="top">Equipment Description</td>
+                            <td align="right" valign="top">Procedure Description</td>
                             <td><textarea rows="4" cols="32" name="description"></textarea></td>
                         </tr>
                         <tr>
-                            <td align="right">Capable Technicians</td>
+                            <td align="right">Required Surgeons</td>
+                            <td><input type="text" name="required" required></td>
+                        </tr>
+                        <tr>
+                            <td align="right">Capable Surgeons</td>
                             <td>
                                 <button type="button" onclick="incStaff()">+</button>
                                 <input id="count" style="width:40px" disabled value="1">

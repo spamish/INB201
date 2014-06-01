@@ -23,6 +23,8 @@
         $patient = new Patient($results[1]);
         $patient->identified = false;
     }
+    
+    $list = viewTable("prescriptions", null, "code");
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -76,7 +78,24 @@
                     <h3>Order Details</h3>
                     <form action="summary.php" method="post">
                         <input type="hidden" name="function" value="order">
-                        <input type="hidden" name="file" value="<?php echo $file->fileID ?>">
+                        <input type="hidden" name="fileID" value="<?php echo $file->fileID ?>">
+                        <select name="code">
+                            <option value="" selected>-</option>
+                            <?php for ($i = 1; $i <= $list[0]; $i++) {
+                                $order = new Prescription($list[$i]) ?>
+                                <option value="<?php echo $order->code?>">
+                                    <?php echo $order->code ?></option>
+                            <?php } ?>
+                        </select>
+                        <table>
+                            <?php for ($i = 1; $i <= $list[0]; $i++) {
+                            $order = new Prescription($list[$i]) ?>
+                            <tr>
+                                <th><?php echo $order->code ?></th>
+                                <td><?php echo $order->description ?></td>
+                            </tr>
+                            <?php } ?>
+                        </table>
                         <input id="btnSubmit" type="submit" name="submit" value="Confirm">
                     </form>
                 </div> <!-- end #discharge -->

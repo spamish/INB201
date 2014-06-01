@@ -7,17 +7,16 @@
     
     if (!isset($_POST['equipmentID']))
     {
-        header ("Location: equipment_view.php");
+        header ("Location: procedure_view.php");
     }
     
     $results = viewTable("equipment", new Equipment($_POST));
     $equipment = new Equipment($results[1]);
-    $equipment->technicians = unserialize($equipment->technicians);
     
     if (isset($_POST['remove'])) //CHECK FOR POPULATED SCHEDULE!
     {
-        delete("equipment", "equipmentID", $equipment->equipmentID);
-        header ("Location: equipment_view.php");
+        //delete("equipment", "equipmentID", $equipment->equipmentID);
+        header ("Location: procedure_view.php");
     }
 ?>
 
@@ -25,7 +24,6 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
-        <script type="text/javascript" src="../includes/javascripting.js"></script>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -39,9 +37,7 @@
                     <h2>Edit Room</h2>
                     <form action="equipment_edit_confirm.php" method="post" style="float:left;width=50%;">
                         <input type="hidden" name="equipmentID" value="<?php echo $equipment->equipmentID ?>">
-                        <input type="hidden" name="roomNumber" value="<?php echo $equipment->roomNumber ?>">
-                        <input type="hidden" name="code" value="<?php echo $equipment->code ?>">
-                        <table id="table">
+                        <table>
                             <tr>
                                 <td align="right">Room Number</td>
                                 <td align="left">
@@ -50,7 +46,8 @@
                             </tr>
                             <tr>
                                 <td align="right">Test Code</td>
-                                <td align="left"><?php echo $equipment->code ?></td>
+                                <td align="left"><input type="text" name="code" 
+                                    required value="<?php echo $equipment->code ?>"></td>
                             </tr>
                             <tr>
                                 <td align="right">Test Duration</td>
@@ -69,26 +66,6 @@
                                         name="description"><?php echo $equipment->description ?></textarea>
                                 </td>
                             </tr>
-                            <tr>
-                                <td align="right">Capable Technicians</td>
-                                <td>
-                                    <button type="button" onclick="incStaff()">+</button>
-                                    <input id="count" style="width:40px" disabled
-                                        value="<?php echo count($equipment->technicians) ?>">
-                                    <button type="button" onclick="decStaff()">-</button>
-                                </td>
-                            </tr>
-                            <?php 
-                            for ($i = 1; $i <= count($equipment->technicians); $i++)
-                            { ?>
-                                <tr>
-                                    <td>Username <?php echo $i ?></td>
-                                    <td>
-                                        <input type="text" name="staff<?php echo $i ?>" required
-                                            value="<?php echo $equipment->technicians[$i - 1] ?>">
-                                    </td>
-                                </tr>
-                            <?php } ?>
                             <tr>
                                 <td></td>
                                 <td align="left">

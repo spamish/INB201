@@ -38,6 +38,22 @@
         $patient = new Patient($results[1]);
         $patient->identified = false;
     }
+    
+    if ($file->doctor)
+    {
+        $staff = new Staff();
+        $staff->staffID = $file->doctor;
+        $results = viewTable("staff", $staff);
+        $staff = new Staff($results[1]);
+    }
+    
+    if ($file->room)
+    {
+        $room = new Room();
+        $room->roomID = $file->room;
+        $results = viewTable("rooms", $room);
+        $room = new Room($results[1]);
+    }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -57,27 +73,39 @@
                 <h2>Patient Information</h2>
                 
                 <div id="patientDetails">
-                <?php
-                    if ($patient->identified)
-                    { ?>
-                        <h3>Patient Details</h3>
-                        <p>Patient ID: <?php echo $patient->patientID ?><br>
-                    <?php }
-                    else
-                    { ?>
-                        <h3>Patient Details <a id="btnSubmit" href="">Update</a></h3><p>
-                    <?php }
-                    ?>
-                    First Name: <?php echo $patient->firstName ?><br>
-                    Surname: <?php echo $patient->surname ?><br>
-                    Gender: <?php echo gender($patient->gender) ?>
-                    <?php
-                        if ($patient->identified)
+				<form>
+					<fieldset>	
+                    <legend><h3>Patient Details</h3></legend>
+                    <table>
+                        <?php if ($patient->identified)
                         { ?>
-                            <br>Date of Birth: <?php echo $patient->dateOfBirth->format('jS M Y') ?>
-                        <?php }
-                    ?>
-                    </p>
+                            <tr>
+                                <th>Patient ID</th>
+                                <td><?php echo $patient->patientID ?></td>
+                           </tr>
+                        <?php } ?>
+                        <tr>
+                            <th>First Name</th>
+                            <td><?php echo $patient->firstName ?></td>
+                        </tr>
+                        <tr>
+                            <th>Surname</th>
+                            <td><?php echo $patient->surname ?></td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td><?php echo gender($patient->gender) ?></td>
+                        </tr>
+                        <?php if ($patient->identified)
+                        { ?>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td><?php echo $patient->dateOfBirth->format('jS M Y') ?></td>
+                            </tr>
+                            <?php } ?>
+                    </table>
+				</fieldset>
+				</form>
                 </div> <!-- end #patientDetails -->
                 
                 <?php
@@ -137,36 +165,56 @@
                 ?>
                 
                 <div id="fileDetails">
-                    <h3>Case File Details <?php
-                        if ($discharge)
-                        { ?>
-                            <a id="btnSubmit" href="">Process Discharge</a>
-                        <?php }
-                    ?></h3>
-                    <p>Case Number: <?php echo $file->fileID ?><br>
-                    Admission: <?php echo $file->admission->format('g:i a D jS M Y') ?><br>
-                    Primary Doctor: <?php
-                        if($file->doctor)
-                        {
-                            echo "Doctor.";
-                        }
-                        else
-                        {
-                            echo "None assigned.";
-                        }
-                    ?><br>
-                    Room: <?php
-                        if($file->room)
-                        {
-                            echo "Room."; ?>
-                            Ward: <br>
-                            <?php
-                        }
-                        else
-                        {
-                            echo "None assigned.";
-                        }
-                    ?></p>
+                    <form>
+					<fieldset>
+                    <legend><h3>Case File Details</h3></legend>
+                    <table>
+                        <tr>
+                            <th>Case Number</th>
+                            <td><?php echo $file->fileID ?></td>
+                        </tr>
+                        <tr>
+                            <th>Admission</th>
+                            <td><?php echo $file->admission->format('g:i a D jS M Y') ?></td>
+                        </tr>
+                        <tr>
+                            <th>Balance</th>
+                            <td>$<?php echo $file->balance ?></td>
+                        </tr>
+                        <tr>
+                            <th>Primary Doctor</th>
+                            <td>
+                                <?php if($file->doctor)
+                                {
+                                    echo $staff->firstName . " " . $staff->surname ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Username</th>
+                                    <td><?php echo $staff->username;
+                                }
+                                else
+                                {
+                                    echo "None assigned.";
+                                } ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Room</th>
+                            <td>
+                                <?php if($file->room)
+                                {
+                                    echo strtolower($room->ward) . $room->roomNumber;
+                                }
+                                else
+                                {
+                                    echo "None assigned.";
+                                } ?>
+                            </td>
+                        </tr>
+                    </table>
+				</fieldset>
+				</form>
                 </div> <!-- end #fileDetails -->
                 
             </div> <!-- end #content -->
