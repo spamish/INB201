@@ -4,10 +4,8 @@
     require('../includes/start_session.php');
     require('../includes/functions.php');
     
-    $url[0] = "patients_view.php?";
-    $url[1] = "order=";
-    $url[2] = "&sort=";
-    echo var_dump($url);
+    $url[0] = "patients_view.php?order=";
+    $url[1] = "&sort=";
     $order = (isset($_GET['order']) ? $_GET['order'] : null);
     $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
     
@@ -32,17 +30,17 @@
         
         $staff = new Staff($_GET);
         
-        $url[0] .= ($patient->patientID ? ("patient = " . $patient->patientID . "&") : "");
-        $url[0] .= ($patient->firstName ? ("firstName = " . $patient->firstName . "&") : "");
-        $url[0] .= ($patient->surname ? ("surname = " . $patient->surname . "&") : "");
-        $url[0] .= ($patient->gender ? ("gender = " . $patient->gender . "&") : "");
-        $url[0] .= ($file->fileID ? ("fileID = " . $file->fileID . "&") : "");
-        $url[0] .= ($staff->staffID ? ("staffID = " . $staff->staffID . "&") : "");
-        $url[0] .= ($staff->username ? ("username = " . $staff->username . "&") : "");
-        $url[0] .= ($staff->firstName ? ("docFirstName = " . $staff->firstName . "&") : "");
-        $url[0] .= ($staff->surname ? ("docSurname = " . $staff->surname . "&") : "");
-        $url[0] .= ($room->roomNumber ? ("roomNumber = " . $room->roomNumber . "&") : "");
-        $url[0] .= ($room->ward ? ("ward = " . $room->ward . "&") : "");
+        $url .= ($patient->patientID ? ("patient = " . $patient->patientID . "&") : "");
+        $url .= ($patient->firstName ? ("firstName = " . $patient->firstName . "&") : "");
+        $url .= ($patient->surname ? ("surname = " . $patient->surname . "&") : "");
+        $url .= ($patient->gender ? ("gender = " . $patient->gender . "&") : "");
+        $url .= ($file->fileID ? ("fileID = " . $file->fileID . "&") : "");
+        $url .= ($staff->staffID ? ("staffID = " . $staff->staffID . "&") : "");
+        $url .= ($staff->username ? ("username = " . $staff->username . "&") : "");
+        $url .= ($staff->firstName ? ("docFirstName = " . $staff->firstName . "&") : "");
+        $url .= ($staff->surname ? ("docSurname = " . $staff->surname . "&") : "");
+        $url .= ($room->roomNumber ? ("roomNumber = " . $room->roomNumber . "&") : "");
+        $url .= ($room->ward ? ("ward = " . $room->ward . "&") : "");
     }
     
     $patients = viewCurrent($file, $patient, $room, $staff);
@@ -77,14 +75,14 @@
                     <form action="patients_view_details.php" method="get">
                         <table>
                             <tr>
-                                <th><a href="<?php echo $url[0] . $url[1] . "patientID" . $url[2] . !$sort ?>">Patient ID</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "fileID" . $url[2] . !$sort ?>">Case ID</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "firstName" . $url[2] . !$sort ?>">First Name</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "surname" . $url[2] . !$sort ?>">Surname</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "gender" . $url[2] . !$sort ?>">Gender</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "admission" . $url[2] . !$sort ?>">Admission</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "roomNumber" . $url[2] . !$sort ?>">Room Number</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "ward" . $url[2] . !$sort ?>">Ward</th>
+                                <th><a href="<?php echo $url[0] . "patientID" . $url[1] . !$sort ?>">Patient ID</th>
+                                <th><a href="<?php echo $url[0] . "fileID" . $url[1] . !$sort ?>">Case ID</th>
+                                <th><a href="<?php echo $url[0] . "firstName" . $url[1] . !$sort ?>">First Name</th>
+                                <th><a href="<?php echo $url[0] . "surname" . $url[1] . !$sort ?>">Surname</th>
+                                <th><a href="<?php echo $url[0] . "gender" . $url[1] . !$sort ?>">Gender</th>
+                                <th><a href="<?php echo $url[0] . "admission" . $url[1] . !$sort ?>">Admission</th>
+                                <th><a href="<?php echo $url[0] . "roomNumber" . $url[1] . !$sort ?>">Room Number</th>
+                                <th><a href="<?php echo $url[0] . "ward" . $url[1] . !$sort ?>">Ward</th>
                                 <td>
                                     <input id="btnSubmit" type="submit" name="details"
                                         value="View Details" style="float: right;">
@@ -95,11 +93,11 @@
                                 {
                                     $file = new File($patients[$i]['file']);
                                     $patient = new Patient($patients[$i]['patient']);
-                                    if (isset($patients[$i]['room']))
-                                    {
-                                        $room = new Room($patients[$i]['room']);
-                                    }
-                                    //$staff = new Staff($patients[$i]['staff']);
+                                    $room = new Room();//$patients[$i]['room']);
+                                    $staff = new Staff();//$patients[$i]['staff']);
+                                    
+                                    //echo var_dump($file) . "<br><br>";
+                                    //echo var_dump($patient) . "<br><br>";
                                     
                                     if ($i % 2 == 0)
                                     { ?>
@@ -115,8 +113,8 @@
                                             <td><?php echo $patient->surname ?></td>
                                             <td><?php echo gender($patient->gender) ?></td>
                                             <td><?php echo $file->admission->format('Y-m-d H:i:s') ?></td>
-                                            <td><?php echo ($room->roomNumber ? $room->roomNumber : "") ?></td>
-                                            <td><?php echo ($room->ward ? $room->ward : "") ?></td>
+                                            <td><?php //echo $file->roomNumber ?></td>
+                                            <td><?php //echo $file->ward ?></td>
                                             <td>
                                                 <input id="radio" type="radio" name="fileID"
                                                     value="<?php echo $file->fileID ?>">

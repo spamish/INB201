@@ -313,6 +313,24 @@
     /*
         
     */
+    function editProcedure($procedure)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        $sql = "UPDATE equipment
+                SET duration = '" . $procedure->duration->format('H:i:s') . "',
+                    cost = '" . $procedure->cost . "',
+                    surgeons = '" . $procedure->surgeons . "',
+                    required = '" . $procedure->required . "',
+                    description = '" . $procedure->description . "'
+                WHERE procedureID = '" . $procedure->procedureID . "'";
+        $records = mysql_query($sql, $resource);
+    }
+    
+    /*
+        
+    */
     function uniqueUsername()
     {
         $resource = new Connection();

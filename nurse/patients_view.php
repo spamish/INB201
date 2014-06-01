@@ -7,22 +7,18 @@
     $url[0] = "patients_view.php?";
     $url[1] = "order=";
     $url[2] = "&sort=";
-    echo var_dump($url);
     $order = (isset($_GET['order']) ? $_GET['order'] : null);
     $sort = (isset($_GET['sort']) ? ($_GET['sort'] ? true : false) : false);
     
     //Divider search parameters.
     {
+        $_GET['ward'] = $_SESSION['ward'];
+        
         $_GET['identified'] = (isset($_GET['patientID']) ? true : false);
         $_GET['patient'] = (isset($_GET['patientID']) ? $_GET['patientID'] : null);
         
         $file = new File($_GET);
         $patient = new Patient($_GET);
-        
-        if (isset($_GET['ward']))
-        {
-            $_GET['ward'] = (($_GET['ward'] == "-") ? null : $_GET['ward']);
-        }
         $room = new Room($_GET);
         
         $_GET['firstName'] = (isset($_GET['docFirstName']) ? $_GET['docFirstName'] : null);
@@ -42,7 +38,6 @@
         $url[0] .= ($staff->firstName ? ("docFirstName = " . $staff->firstName . "&") : "");
         $url[0] .= ($staff->surname ? ("docSurname = " . $staff->surname . "&") : "");
         $url[0] .= ($room->roomNumber ? ("roomNumber = " . $room->roomNumber . "&") : "");
-        $url[0] .= ($room->ward ? ("ward = " . $room->ward . "&") : "");
     }
     
     $patients = viewCurrent($file, $patient, $room, $staff);
@@ -84,7 +79,6 @@
                                 <th><a href="<?php echo $url[0] . $url[1] . "gender" . $url[2] . !$sort ?>">Gender</th>
                                 <th><a href="<?php echo $url[0] . $url[1] . "admission" . $url[2] . !$sort ?>">Admission</th>
                                 <th><a href="<?php echo $url[0] . $url[1] . "roomNumber" . $url[2] . !$sort ?>">Room Number</th>
-                                <th><a href="<?php echo $url[0] . $url[1] . "ward" . $url[2] . !$sort ?>">Ward</th>
                                 <td>
                                     <input id="btnSubmit" type="submit" name="details"
                                         value="View Details" style="float: right;">
@@ -95,11 +89,11 @@
                                 {
                                     $file = new File($patients[$i]['file']);
                                     $patient = new Patient($patients[$i]['patient']);
-                                    if (isset($patients[$i]['room']))
-                                    {
-                                        $room = new Room($patients[$i]['room']);
-                                    }
-                                    //$staff = new Staff($patients[$i]['staff']);
+                                    $room = new Room();//$patients[$i]['room']);
+                                    $staff = new Staff();//$patients[$i]['staff']);
+                                    
+                                    //echo var_dump($file) . "<br><br>";
+                                    //echo var_dump($patient) . "<br><br>";
                                     
                                     if ($i % 2 == 0)
                                     { ?>
@@ -115,8 +109,7 @@
                                             <td><?php echo $patient->surname ?></td>
                                             <td><?php echo gender($patient->gender) ?></td>
                                             <td><?php echo $file->admission->format('Y-m-d H:i:s') ?></td>
-                                            <td><?php echo ($room->roomNumber ? $room->roomNumber : "") ?></td>
-                                            <td><?php echo ($room->ward ? $room->ward : "") ?></td>
+                                            <td><?php //echo $file->roomNumber ?></td>
                                             <td>
                                                 <input id="radio" type="radio" name="fileID"
                                                     value="<?php echo $file->fileID ?>">

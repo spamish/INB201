@@ -9,7 +9,7 @@
     while (isset($_POST['staff' . $i]))
     {
         $staff = new Staff();
-        $staff->username = $_POST['surgeon' . $i];
+        $staff->username = $_POST['staff' . $i];
         $results = viewTable("staff", $staff);
         if ($results[0])
         {

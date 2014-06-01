@@ -5,9 +5,44 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    if ($check = 1) //CHECK FOR POPULATED SCHEDULE!
+    $i = 1;
+    while (isset($_POST['staff' . $i]))
     {
-        $equipment = editEquipment(new Equipment($_POST));
+        $staff = new Staff();
+        $staff->username = $_POST['staff' . $i];
+        $results = viewTable("staff", $staff);
+        if ($results[0])
+        {
+            $staff = new Staff($results[1]);
+            if ($staff->position == "surgeon")
+            {
+                $surgeons[] = $staff->staffID;
+            }
+            else
+            {
+                $error = "A selected surgeon is assigned to a different role.";
+            }
+        }
+        else
+        {
+            $error = "A selected surgeon doesn't exist.";
+        }
+        
+        $i++;
+    }
+    
+    $procedure = new Procedure($_POST);
+    $procedure->surgeons = serialize($surgeons);
+    
+    if ($procedure->required < 1)
+    {
+        $error = "Must have at least one surgeon required.";
+        $check = false;
+    }
+    
+    if ($check)
+    {
+        editProcedure($procedure);
     }
 ?>
 
@@ -30,21 +65,23 @@
                     <p>Updating of medical equipment successful.</p>
                     <table>
                         <tr>
-                            <th>Room Number</th>
-                            <th>Test Code</th>
-                            <th>Test Duration</th>
-                            <th>Cost of Test</th>
-                            <th>Test Description</th>
+                            <th>Procedure Code</th>
+                            <th>Procedure Duration</th>
+                            <th>Cost of Procedure</th>
+                            <th>Procedure Description</th>
                         </tr>
                         
-                        <tr>
-                            <td><?php echo $equipment->roomNumber ?></td>
-                            <td><?php echo $equipment->code ?></td>
-                            <td><?php echo $equipment->duration->format('H:i') ?></td>
-                            <td><?php echo $equipment->cost ?></td>
-                            <td><?php echo $equipment->description ?></td>
+                        <tr id="tableRowA">
+                            <td><?php echo $procedure->code ?></td>
+                            <td><?php echo $procedure->duration->format('H:i') ?></td>
+                            <td><?php echo $procedure->cost ?></td>
+                            <td><?php echo $procedure->description ?></td>
                         </tr>
                     </table>
+                <?php }
+                else
+                { ?>
+                    <p><?php echo $error ?></p>
                 <?php } ?>
             </div> <!-- end #content -->
             

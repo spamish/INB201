@@ -20,7 +20,7 @@
             
             <div id="login"> <!-- All login content goes here -->
                 
-                <h2>Please enter your email and password to begin.</h2>
+                <h2>Please enter your username and password to begin.</h2>
                 
                 <form action="redirect.php" method="post">
                     <table id="loginTable">

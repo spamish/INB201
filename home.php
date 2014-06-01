@@ -3,12 +3,6 @@
 <?php
     require('includes/start_session.php');
     require('includes/password_functions.php');
-    
-    if(isset($_POST['test']))
-    {
-        echo $test = $_POST['test'];
-        echo "<br>";
-    }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -34,9 +28,6 @@
                 { ?>
                     <p>You last logged in at <?php echo $_SESSION['lastLogin'] ?></p>
                 <?php } ?>
-                <form action="/inb201/home.php" method="post">
-                    <input type="text" name="test" value="<?php echo (isset($test) ? $test : "") ?>"/>
-                    <input id="btnSubmit" type="submit" name="submit">
             </div> <!-- end #content -->
             
             <?php include('includes/footer.php'); ?>

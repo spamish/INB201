@@ -56,7 +56,6 @@
                     . $test->start->format('h:ia') . " on "
                     . $test->start->format('jS M Y') . " in e"
                     . $equipment->roomNumber . ".";
-                $file->balance = $file->balance + $equipment->cost;
             }
             else
             {
@@ -96,7 +95,6 @@
                     . $operation->start->format('h:ia') . " on "
                     . $operation->start->format('jS M Y') . " in g"
                     . $theater->roomNumber . ".";
-                $file->balance = $file->balance + $procedure->cost;
             }
             else
             {

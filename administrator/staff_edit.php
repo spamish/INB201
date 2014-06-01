@@ -35,6 +35,7 @@
             {
                 calendar.set('date');
                 calendar.set('pay');
+                setWard();
             }
         </script>
         <title>T.O.U.C.H. Online System</title>
@@ -110,7 +111,7 @@
                         </tr>
                         <tr>
                             <td align="right">Position</td>
-                            <td>
+                            <td><?php echo $staff->position ?>
                                 <select id="position" name="position" onchange="setWard()">
                                     <?php
                                         if ($staff->position == 'inactive') { ?>
@@ -127,6 +128,14 @@
                                         else
                                         { ?>
                                         <option value="doctor">Doctor</option>
+                                        <?php }
+                                        if ($staff->position == 'surgeon')
+                                        { ?>
+                                        <option value="surgeon" selected>Surgeon</option>
+                                        <?php }
+                                        else
+                                        { ?>
+                                        <option value="surgeon">Surgeon</option>
                                         <?php }
                                         if ($staff->position == 'nurse')
                                         { ?>
@@ -163,8 +172,8 @@
                                     ?>
                                 </select>
                             </td>
-                            <td align="right">
-                                <select name="ward">
+                            <td align="right"><?php echo $staff->ward ?>
+                                <select id="ward" name="ward">
                                     <?php if ($staff->ward == 'A') { ?>
                                         <option value="A" selected>A</option>
                                     <?php } else { ?>
@@ -196,7 +205,7 @@
                                         <option value="F">F</option>
                                     <?php }
                                     if ($staff->ward == 'G') { ?>
-                                        <option value="G" selected>F</option>
+                                        <option value="G" selected>G</option>
                                     <?php } else { ?>
                                         <option value="G">G</option>
                                     <?php } ?>
