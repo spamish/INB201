@@ -69,6 +69,34 @@ function setID()
     }
 }
 
+function setAddress()
+{
+    if (document.getElementById("address").checked)
+    {
+        document.getElementById("homePhone").disabled = true;
+        document.getElementById("unit").disabled = true;
+        document.getElementById("house").disabled = true;
+        document.getElementById("street").disabled = true;
+        document.getElementById("suburb").disabled = true;
+        document.getElementById("postcode").disabled = true;
+        document.getElementById("region").disabled = true;
+        document.getElementById("country").disabled = true;
+        return;
+    }
+    else
+    {
+        document.getElementById("homePhone").disabled = false;
+        document.getElementById("unit").disabled = false;
+        document.getElementById("house").disabled = false;
+        document.getElementById("street").disabled = false;
+        document.getElementById("suburb").disabled = false;
+        document.getElementById("postcode").disabled = false;
+        document.getElementById("region").disabled = false;
+        document.getElementById("country").disabled = false;
+        return;
+    }
+}
+
 function selectInputs()
 {
     if (document.getElementById("radRoom").checked)
@@ -100,12 +128,12 @@ function incStaff()
     counter.value++;
     
     var table = document.getElementById("table");
-    var row = table.rows.length - 1;
+    var row = table.rows.length;
     var input = table.insertRow(row);
     
-    var construct = "<td>Username ";
+    var construct = "<th>Username ";
     construct += counter.value;
-    construct += "</td><td><input type=\"text\" name=\"staff"
+    construct += "</th><td><input type=\"text\" name=\"staff";
     construct += counter.value;
     construct += "\" required></td>";
     
@@ -116,12 +144,13 @@ function decStaff()
 {
     var counter = document.getElementById("count");
     var count = counter.value;
+    
+    var table = document.getElementById("table");
+    var row = table.rows.length - 1;
+    
     if (count > 1)
     {
         counter.value--;
-        
-        var table = document.getElementById("table");
-        var row = table.rows.length - 2;
         
         table.deleteRow(row);
     }

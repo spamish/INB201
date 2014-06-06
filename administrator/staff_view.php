@@ -16,7 +16,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/table.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -38,9 +41,9 @@
                             <th><a href="<?php echo $url[0] . "dateOfBirth" . $url[1] . !$sort ?>">Date ofBirth</th>
                             <th><a href="<?php echo $url[0] . "position" . $url[1] . !$sort ?>">Position</th>
                             <th><a href="<?php echo $url[0] . "ward" . $url[1] . !$sort ?>">Ward</th>
-                            <td>
+                            <td id="selection">
                                 <input id="btnSubmit" type="submit" name="details"
-                                    value="View Details" style="float: right;">
+                                    value="View Details">
                             </td>
                         </tr>
                         <?php for ($i = 1; $i <= $table[0]; $i++) {
@@ -60,8 +63,8 @@
                                     <td><?php echo $staff->dateOfBirth->format('g M Y') ?></td>
                                     <td><?php echo position($staff->position) ?></td>
                                     <td><?php echo $staff->ward ?></td>
-                                    <td>
-                                        <input id="radio" type="radio" name="id"
+                                    <td id="selection">
+                                        <input type="radio" name="staffID"
                                             value="<?php echo $staff->staffID ?>">
                                     </td>
                                 </tr>

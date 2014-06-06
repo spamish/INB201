@@ -15,7 +15,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/table.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -27,19 +30,15 @@
             <div id="content"> <!-- All content goes here -->
 
                 <h2>Operation Procedures</h2>
-                <form action="procedure_edit.php" method="post">
+                <form action="procedure_view_details.php" method="get">
                     <table>
                         <tr>
                             <th><a href="<?php echo $url[0] . "code" . $url[1] . !$sort ?>">Procedure Code</th>
                             <th><a href="<?php echo $url[0] . "duration" . $url[1] . !$sort ?>">Procedure Duration</th>
                             <th><a href="<?php echo $url[0] . "cost" . $url[1] . !$sort ?>">Cost of Procedure</th>
-                            <td>
-                                <input id="btnSubmit" type="submit" name="update"
-                                    value="Update" style="float:right;">
-                            </td>
-                            <td>
-                                <input id="btnSubmit" type="submit" name="remove"
-                                    value="Remove" style="float:right;">
+                            <td id="selection">
+                                <input id="btnSubmit" type="submit" name="details"
+                                    value="View Details"/>
                             </td>
                             
                         </tr>
@@ -59,14 +58,9 @@
                                         <td><?php echo $procedure->code ?></td>
                                         <td><?php echo $procedure->duration->format('H:i') ?></td>
                                         <td><?php echo $procedure->cost ?></td>
-                                        <td>
-                                            <input id="radio" type="radio" name="procedureID"
+                                        <td id="selection">
+                                            <input type="radio" name="procedureID"
                                                 value="<?php echo $procedure->procedureID ?>">
-                                        </td>
-                                        <td>
-                                            <a id="btnSubmit"
-                                                href="procedure_view_details.php?procedureID=<?php
-                                                echo $procedure->procedureID ?>">View Details</a>
                                         </td>
                                     <tr>
                             <?php }

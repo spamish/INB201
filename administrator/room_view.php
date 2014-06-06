@@ -15,7 +15,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/table.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -34,11 +37,11 @@
                             <th><a href="<?php echo $url[0] . "ward" . $url[1] . !$sort ?>">Ward</a></th>
                             <th><a href="<?php echo $url[0] . "capacity" . $url[1] . !$sort ?>">Room Capacity</th>
                             <th>Occupied Beds</th>
-                            <td>
+                            <td id="selection">
                                 <input id="btnSubmit" type="submit" name="update"
-                                    value="Update" style="float:right;">
+                                    value="Update">
                                 <input id="btnSubmit" type="submit" name="remove"
-                                    value="Remove" style="float:right;">
+                                    value="Remove">
                             </td>
                         </tr>
                         <?php for ($i = 1; $i <= $table[0]; $i++) {
@@ -55,8 +58,8 @@
                                     <td><?php echo $room->ward ?></td>
                                     <td><?php echo $room->capacity ?></td>
                                     <td><?php echo $room->occupied ?></td>
-                                    <td>
-                                        <input id="radio" type="radio" name="roomID"
+                                    <td id="selection">
+                                        <input type="radio" name="roomID"
                                             value="<?php echo $room->roomID ?>">
                                     </td>
                                 <tr>

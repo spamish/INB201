@@ -8,7 +8,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -18,27 +21,25 @@
             <?php include('../includes/sidebar.php'); ?>
             <div id="content"> <!-- All content goes here -->
                 <h2>Add Medicine Prescription</h2>
-                <form action="prescription_add_confirm.php" method="post" style="float:center;width=50%;">
-                    <table>
-                        <tr>
-                            <td align="right">Prescription Code</td>
-                            <td><input type="text" name="code" required/></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Cost of Prescription</td>
-                            <td>$<input type="text" name="cost" required/></td>
-                        </tr>
-                        <tr>
-                            <td align="right" valign="top">Prescription Description</td>
-                            <td><textarea rows="4" cols="32" name="description"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td align="right"></td>
-                            <td>
-                                <input id="btnSubmit" type="submit" name="save" value="Save">
-                            </td>
-                        </tr>
-                    </table>
+                <form action="prescription_add_confirm.php" method="post">
+                    <fieldset style="width:90%;">
+                        <legend><h3>Prescription Details</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Prescription Code</th>
+                                <td><input type="text" name="code" required/></td>
+                            </tr>
+                            <tr>
+                                <th>Cost of Prescription</th>
+                                <td>$<input type="text" name="cost" required/></td>
+                            </tr>
+                            <tr>
+                                <th valign="top">Prescription Description</th>
+                                <td><textarea rows="4" cols="32" name="description"></textarea></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <h2 style="width:90%;"><input id="btnSubmit" type="submit" name="save" value="Save"/></h2>
                 </form>
             </div> <!-- end #content -->
             

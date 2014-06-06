@@ -1,0 +1,98 @@
+
+        <style>
+            <?php include('../styles/style.css') ?>
+        </style>
+
+h1{
+    
+	position:absolute;
+    
+	text-align:left;
+    
+	color:#FFFFFF;
+    
+	font-size:35px;
+    
+	color:#FFF;	
+    
+}
+
+table,td,th
+{
+	border:2px solid blue;
+    border-collapse:collapse;
+	margin-left: auto;
+	margin-right: auto;
+	font-size:18px;
+	text-align:center;
+}
+
+th
+{
+	background-color:#0ac;
+	color:white;
+}
+
+h2 {
+    margin: 1em 0 0.5em 0;
+    color: #343434;
+    font-family: 'Ultra', sans-serif;   
+    font-size: 36px;
+    line-height: 42px;
+    text-transform: uppercase;
+    text-shadow: 0 2px white, 0 3px #777;
+	font-weight:bold;
+}
+
+#view {
+	
+    background-color:#ffffff;
+	
+    border: 1px solid black;
+	
+    border-collapse:collapse;
+	
+    text-align:left;
+	
+    width:100%;
+	
+}
+
+#email th {
+	
+    width:20%;
+	
+
+}
+
+
+
+#edit th {
+	
+    width:10px;
+	
+
+}
+
+
+
+#cell {
+	
+    border-right:1px solid black;
+	
+    text-align:left;
+	
+    padding-left:15px;
+	
+
+}
+
+
+
+#alt {
+	
+    background-color:#DDffff;
+	
+
+}
+ 

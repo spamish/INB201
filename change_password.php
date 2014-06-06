@@ -7,7 +7,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+        <style>
+            <?php include('styles/style.css') ?>
+            <?php include('styles/main.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
     
@@ -18,38 +21,41 @@
             
             <div id="content"> <!-- All content goes here -->
                 <form action="change_password_summary.php" method="post">
-                    <table id="passwordTable">
-                        <tr>
-                            <td id="passwordCell" align="right">Current Password</td>
-                            <td id="passwordCell" align="left">
-                                <input type="password" name="password_old" required/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td id="passwordCell" align="right">Confirm Current Password</td>
-                            <td id="passwordCell" align="left">
-                                <input type="password" name="confirm_old" required/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td id="passwordCell" align="right">New Password</td>
-                            <td id="passwordCell" align="left">
-                                <input type="password" name="password_new" required/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td id="passwordCell" align="right">Confirm New Password</td>
-                            <td id="passwordCell" align="left">
-                                <input type="password" name="confirm_new" required/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td align="left">
-                                <input id="btnSubmit" type="submit" name="save" value="Save">
-                            </td>
-                        </tr>
+                    <fieldset id="password">
+                        <legend><h3>Change Password</h3></legend>
+                        <table>
+                            <tr>
+                                <td align="right">Current Password</td>
+                                <td align="left">
+                                    <input type="password" name="password_old" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">Confirm Current Password</td>
+                                <td align="left">
+                                    <input type="password" name="confirm_old" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">New Password</td>
+                                <td align="left">
+                                    <input type="password" name="password_new" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">Confirm New Password</td>
+                                <td align="left">
+                                    <input type="password" name="confirm_new" required/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td align="left">
+                                    <input id="btnSubmit" type="submit" name="save" value="Save">
+                                </td>
+                            </tr>
                     </table>
+                    </fieldset>
                 </form>
             </div> <!-- end #content -->
             

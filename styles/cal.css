@@ -1,0 +1,45 @@
+.calendar-box {
+	display:none;
+	background-color:#eef;
+	border:1px solid #4aa;
+	position:absolute;
+	width:160px;
+	padding: 0 2px;
+}
+
+.calendar-box select.calendar-month {
+	width:50px;
+}
+
+.calendar-box select.calendar-year {
+	width:55px;
+}
+
+.calendar-box table td {
+	width:10%;
+}
+
+.calendar-box #day {
+    background-color:#bdf;
+}
+
+.calendar-box .calendar-title {
+	text-align:center;
+}
+
+.calendar-box a {
+    color:#248;
+	text-decoration:none;
+}
+
+.calendar-box .today a {
+	padding:0 2px;
+	margin-left:-5px;
+	background-color:#ace;
+}
+
+.calendar-box .selected a {
+	padding:0 2px;
+	margin-left:-5px;
+	background-color:#bdf;
+}

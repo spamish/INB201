@@ -51,7 +51,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/table.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -71,7 +74,7 @@
                         echo "Current Patients";
                     }
                 ?></h2>
-                <div id="viewPatients">
+                <div>
                     <form action="patients_view_details.php" method="get">
                         <table>
                             <tr>
@@ -91,13 +94,13 @@
                             <?php
                                 for ($i = 1; $i <= $patients[0]; $i++)
                                 {
+                                    $room = null;
                                     $file = new File($patients[$i]['file']);
                                     $patient = new Patient($patients[$i]['patient']);
-                                    $room = new Room();//$patients[$i]['room']);
-                                    $staff = new Staff();//$patients[$i]['staff']);
-                                    
-                                    //echo var_dump($file) . "<br><br>";
-                                    //echo var_dump($patient) . "<br><br>";
+                                    if (isset($patients[$i]['room']))
+                                    {
+                                        $room = new Room($patients[$i]['room']);
+                                    }
                                     
                                     if ($i % 2 == 0)
                                     { ?>
@@ -113,10 +116,10 @@
                                             <td><?php echo $patient->surname ?></td>
                                             <td><?php echo gender($patient->gender) ?></td>
                                             <td><?php echo $file->admission->format('Y-m-d H:i:s') ?></td>
-                                            <td><?php //echo $file->roomNumber ?></td>
-                                            <td><?php //echo $file->ward ?></td>
-                                            <td>
-                                                <input id="radio" type="radio" name="fileID"
+                                            <td><?php echo ($room ? $room->roomNumber : "") ?></td>
+                                            <td><?php echo ($room ? $room->ward : "") ?></td>
+                                            <td id="selection">
+                                                <input type="radio" name="fileID"
                                                     value="<?php echo $file->fileID ?>">
                                             </td>
                                         </tr>
@@ -125,7 +128,9 @@
                         </table>
                         <?php if($patients[0] == 0)
                         { ?>
+                            <div id="message">
                                 <p>No results to display.</p>
+                            </div>
                         <?php } ?>
                     </form>
                 </div> <!-- end #viewPatients -->

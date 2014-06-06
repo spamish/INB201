@@ -50,7 +50,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -63,34 +66,60 @@
                 <h2>Summary</h2>
                 <?php if ($check)
                 { ?>
-                    <p>Updating of medical equipment successful.</p>
-                    <table>
-                        <tr>
-                            <th>Equipment Room</th>
-                            <th>Test Code</th>
-                            <th>Test Duration</th>
-                            <th>Cost of Test</th>
-                            <th>Capable Technicians</th>
-                            <th>Equipment Description</th>
-                        </tr>
-                        
-                        <tr id="tableRowA">
-                            <td><?php echo $equipment->roomNumber ?></td>
-                            <td><?php echo $equipment->code ?></td>
-                            <td><?php echo $equipment->duration->format('H:i') ?></td>
-                            <td><?php echo $equipment->cost ?></td>
-                            <td><?php $equipment->technicians = unserialize($equipment->technicians);
-                            for ($i = 0; $i < count($equipment->technicians); $i++)
-                            {
-                                echo $equipment->technicians[$i] . "<br>";
-                            } ?></td>
-                            <td><?php echo $equipment->description ?></td>
-                        </tr>
-                    </table>
+                    <div id="message">
+                        <p>Updating of medical equipment successful.</p>
+                    </div>
+                    
+                    <fieldset>
+                        <legend><h3>Equipment Information</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Room Number</th>
+                                <td><?php echo $equipment->roomNumber ?></td>
+                            </tr>
+                            <tr>
+                                <th>Test Code</th>
+                                <td><?php echo $equipment->code ?></td>
+                            </tr>
+                            <tr>
+                                <th>Test Duration</th>
+                                <td><?php echo $equipment->duration->format('H:i') ?></td>
+                            </tr>
+                            <tr>
+                                <th>Cost of Test</th>
+                                <td>$<?php echo $equipment->cost ?></td>
+                            </tr>
+                            <tr>
+                                <th valign="top">Equipment Description</th>
+                                <td><p><?php echo $equipment->description ?></p></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend><h3>Capable Technicians</h3></legend>
+                        <table>
+                            <tr>
+                                <?php $equipment->technicians = unserialize($equipment->technicians);
+                                for ($i = 0; $i < count($equipment->technicians); $i++)
+                                { ?>
+                                    <td style="padding-right:5px" width="20px" align="right">
+                                        <?php echo $equipment->technicians[$i] ?>
+                                    </td>
+                                    <?php if (!(($i + 1) % 5)) 
+                                    { ?>
+                                        </tr><tr>
+                                    <?php }
+                                } ?>
+                            </tr>
+                        </table>
+                    </fieldset>
                 <?php }
                 else
                 { ?>
-                    <p><?php echo $error ?></p>
+                    <div id="message">
+                        <p><?php echo $error ?></p>
+                    </div>
                 <?php } ?>
             </div> <!-- end #content -->
             

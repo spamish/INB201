@@ -110,7 +110,7 @@ calendar = {
 		this.wrt("</select></th>");
 		this.wrt("<th><a href='javascript:calendar.makeCalendar("+(next_month_year)+","+(next_month)+");' title='"+this.month_names[next_month]+" "+(next_month_year)+"'>&gt;</a></th></tr>");
 		this.wrt("<tr class='header'>");
-		for(var weekday=0; weekday<7; weekday++) this.wrt("<td>"+this.weekdays[weekday]+"</td>");
+		for(var weekday=0; weekday<7; weekday++) this.wrt("<td id='day'>"+this.weekdays[weekday]+"</td>");
 		this.wrt("</tr>");
 		
 		//Get the first day of this month
@@ -175,7 +175,7 @@ calendar = {
 		
 		var xy = this.getPosition(display_element);
 		var width = parseInt(this.getStyle(display_element,'width'));
-		div.style.left=(xy[0]+width+10)+"px";
+		div.style.left=(xy[0]+width+25)+"px";
 		div.style.top=xy[1]+"px";
 
 		// Show the calendar with the date in the input as the selected date
@@ -216,7 +216,7 @@ calendar = {
 		if(!input) return; //If the input field is not there, exit.
 		
 		if(opt) this.opt = opt;
-
+        
 		if(!this.opt['calendar']) this.init();
 		
 		var ths = this;

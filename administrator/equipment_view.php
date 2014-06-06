@@ -15,7 +15,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/table.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -27,20 +30,16 @@
             <div id="content"> <!-- All content goes here -->
 
                 <h2>Medical Equipment</h2>
-                <form action="equipment_edit.php" method="post">
+                <form action="equipment_view_details.php" method="get">
                     <table>
                         <tr>
                             <th><a href="<?php echo $url[0] . "roomNumber" . $url[1] . !$sort ?>">Equipment Room</th>
                             <th><a href="<?php echo $url[0] . "code" . $url[1] . !$sort ?>">Test Code</th>
                             <th><a href="<?php echo $url[0] . "duration" . $url[1] . !$sort ?>">Test Duration</th>
                             <th><a href="<?php echo $url[0] . "cost" . $url[1] . !$sort ?>">Cost of Test</th>
-                            <td>
-                                <input id="btnSubmit" type="submit" name="update"
-                                    value="Update" style="float:right;">
-                            </td>
-                            <td>
-                                <input id="btnSubmit" type="submit" name="remove"
-                                    value="Remove" style="float:right;">
+                            <td id="selection">
+                                <input id="btnSubmit" type="submit" name="details"
+                                    value="View Details"/>
                             </td>
                         </tr>
                         <?php
@@ -60,16 +59,11 @@
                                         <td><?php echo $equipment->code ?></td>
                                         <td><?php echo $equipment->duration->format('H:i') ?></td>
                                         <td><?php echo $equipment->cost ?></td>
-                                        <td>
-                                            <input id="radio" type="radio" name="equipmentID"
-                                                value="<?php echo $equipment->equipmentID ?>">
+                                        <td id="selection">
+                                            <input type="radio" name="equipmentID"
+                                                value="<?php echo $equipment->equipmentID ?>"/>
                                         </td>
-                                        <td>
-                                            <a id="btnSubmit"
-                                                href="equipment_view_details.php?equipmentID=<?php
-                                                echo $equipment->equipmentID ?>">View Details</a>
-                                        </td>
-                                    <tr>
+                                    </tr>
                             <?php }
                         ?>
                     </table>

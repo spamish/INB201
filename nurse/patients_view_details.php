@@ -47,7 +47,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/actions.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -57,22 +61,12 @@
             <?php include('../includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
-                <form>
-					<fieldset>
-						<legend><h2>Patient Information</h2></legend></legend>
-							<div id="actions">
-								<table>
-								<tr id="tableRowB">
-								<td><a id="btnAction" href="add_note.php?fileID=<?php echo $file->fileID ?>">Add Observation</a></td>
-								</tr>
-								</table>
-							</div> <!-- end #actions -->
-					</fieldset>
-				</form>
+                <h2>Patient Information</h2>
+                <div id="actions">
+                   <a id="btnAction" href="add_note.php?fileID=<?php echo $file->fileID ?>">Add Observation</a>
+                </div>
                 
-                <div id="patientDetails">
-				<form>
-					<fieldset>	
+				<fieldset style="height:200px;">
                     <legend><h3>Patient Details</h3></legend>
                     <table>
                         <?php if ($patient->identified)
@@ -80,7 +74,7 @@
                             <tr>
                                 <th>Patient ID</th>
                                 <td><?php echo $patient->patientID ?></td>
-                           </tr>
+                            </tr>
                         <?php } ?>
                         <tr>
                             <th>First Name</th>
@@ -100,66 +94,63 @@
                                 <th>Date of Birth</th>
                                 <td><?php echo $patient->dateOfBirth->format('jS M Y') ?></td>
                             </tr>
-                            <?php } ?>
+                        <?php } ?>
                     </table>
-                </div> <!-- end #patientDetails -->
 				</fieldset>
-				</form>
                 
-                <div id="fileDetails">
-				<form>
-					<fieldset>
+                <fieldset style="height:200px;">
                     <legend><h3>Case File Details</h3></legend>
                     <table>
                         <tr>
                             <th>Case Number</th>
                             <td><?php echo $file->fileID ?></td>
+                        </tr>
                         <tr>
                             <th>Admission</th>
                             <td><?php echo $file->admission->format('g:i a D jS M Y') ?></td>
+                        </tr>
                         <tr>
-                            <th>Primary Doctor</th>
-                            <td>
-                                <?php if($file->doctor)
-                                {
-                                    echo $staff->firstName . " " . $staff->surname ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Username</th>
-                                    <td><?php echo $staff->username;
-                                }
-                                else
-                                {
-                                    echo "None assigned.";
-                                } ?>
-                            </td>
+                            <th>Primary Doctor</th> 
+                            <?php if($file->doctor)
+                            { ?>
+                                <td><?php echo $staff->firstName . " " . $staff->surname ?></td>
+                            </tr>
+                            <tr>
+                                <th>Username</th>
+                                <td><?php echo $staff->username ?></td>
+                            <?php }
+                            else
+                            { ?>
+                                <td>None assigned.</td>
+                            <?php } ?>
                         </tr>
                         <tr>
                             <th>Room</th>
-                            <td>
-                                <?php if($file->room)
-                                {
-                                    echo strtolower($room->ward) . $room->roomNumber;
-                                }
-                                else
-                                {
-                                    echo "None assigned.";
-                                } ?>
-                            </td>
+                            <?php if($file->room)
+                            { ?>
+                                <td><?php echo $room->roomNumber ?></td>
+                            </tr>
+                            <tr>
+                                <th>Ward</th>
+                                <td><?php echo $room->ward ?></td>
+                            <?php }
+                            else
+                            { ?>
+                                <td>None assigned.</td>
+                            <?php } ?>
                         </tr>
                     </table>
-                </div> <!-- end #fileDetails -->
 				</fieldset>
-				</form>
                 
-                <div id="notes">
-                    <h3>Patient Notes</h3>
-                    <?php
-                        for ($i = 1; $i <= $notes[0]; $i++)
-                        {
-                            $note = new Note($notes[$i]);
-                            ?>
+                <fieldset style="width:93%;">
+                    <legend><h3>Patient Notes</h3></legend>
+                    <?php $count = 0;
+                    for ($i = 1; $i <= $notes[0]; $i++)
+                    {
+                        $note = new Note($notes[$i]);
+                        
+                        if ($note->type != "payment")
+                        { ?>
                             <table>
                                 <tr>
                                     <th>Type of Action</th>
@@ -174,14 +165,20 @@
                                     <td><?php echo $note->staff ?></td>
                                 </tr>
                                 <tr>
-                                    <th>Details</th>
+                                    <th valign="top">Details</th>
                                     <td><?php echo $note->details ?></td>
                                 </tr>
                             </table>
                             <br>
-                        <?php }
-                    ?>
-                </div> <!-- end #notes -->
+                        <?php $count++;
+                        }
+                    }
+                    
+                    if (!$count)
+                    { ?>
+                        <p>No notes to display.</p>
+                    <?php } ?>
+                </fieldset>
                 
                 <div id="history">
                 <?php if ($file->patient) { ?>

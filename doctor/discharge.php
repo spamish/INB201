@@ -28,7 +28,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -41,45 +44,61 @@
                 
                 <h2>Discharge Patient</h2>
                 
-                <div id="patientDetails">
-                <?php
-                    if ($patient->identified)
-                    { ?>
-                        <h3>Patient Details</h3>
-                        <p>Patient ID: <?php echo $patient->patientID ?><br>
-                    <?php }
-                    else
-                    { ?>
-                        <h3>Patient Details</h3>
-                        <p>
-                    <?php }
-                    ?>
-                    First Name: <?php echo $patient->firstName ?><br>
-                    Surname: <?php echo $patient->surname ?><br>
-                    Gender: <?php echo gender($patient->gender) ?>
-                    <?php
-                        if ($patient->identified)
+				<fieldset style="height:180px;">
+                    <legend><h3>Patient Details</h3></legend>
+                    <table>
+                        <?php if ($patient->identified)
                         { ?>
-                            <br>Date of Birth: <?php echo $patient->dateOfBirth->format('jS M Y') ?>
-                        <?php }
-                    ?>
-                    </p>
-                </div> <!-- end #patientDetails -->
+                            <tr>
+                                <th>Patient ID</th>
+                                <td><?php echo $patient->patientID ?></td>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <th>First Name</th>
+                            <td><?php echo $patient->firstName ?></td>
+                        </tr>
+                        <tr>
+                            <th>Surname</th>
+                            <td><?php echo $patient->surname ?></td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td><?php echo gender($patient->gender) ?></td>
+                        </tr>
+                        <?php if ($patient->identified)
+                        { ?>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td><?php echo $patient->dateOfBirth->format('jS M Y') ?></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+				</fieldset>
                 
-                <div id="fileDetails">
-                    <h3>Case File Details</h3>
-                    <p>Case Number: <?php echo $file->fileID ?><br>
-                    Admission: <?php echo $file->admission->format('g:i a D jS M Y') ?></p>
-                </div> <!-- end #fileDetails -->
+                <fieldset style="height:180px;">
+                    <legend><h3>Case File Details</h3></legend>
+                    <table>
+                        <tr>
+                            <th>Case Number</th>
+                            <td><?php echo $file->fileID ?></td>
+                        </tr>
+                        <tr>
+                            <th>Admission</th>
+                            <td><?php echo $file->admission->format('g:i a D jS M Y') ?></td>
+                        </tr>
+                        </tr>
+                    </table>
+				</fieldset>
                 
-                <div id="discharge">
-                    <h3>Discharge Notes</h3>
-                    <form action="discharge_summary.php" method="post">
+                <form action="discharge_summary.php" method="post">
+                    <fieldset style="width:93%;">
+                        <legend><h3>Discharge Notes</h3></legend>
                         <input type="hidden" name="fileID" value="<?php echo $file->fileID ?>">
                         <textarea rows="6" cols="60" name="details"></textarea><br>
-                        <input id="btnSubmit" type="submit" name="submit" value="Confirm">
-                    </form>
-                </div> <!-- end #discharge -->
+                        <h2><input id="btnSubmit" type="submit" name="submit" value="Confirm"></h2>
+                    </fieldset>
+                </form>
                 
             </div> <!-- end #content -->
             

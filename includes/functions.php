@@ -31,9 +31,9 @@
             }
             
             $result = viewTable("addresses");
-            
+            $address->addressID = $result[0] + 1;
             //Create address.
-            $sql = "INSERT INTO addresses (addressID, " . $insert . ") VALUES ('" . $result[0] . "', " . $values . ")";
+            $sql = "INSERT INTO addresses (addressID, " . $insert . ") VALUES ('" . $address->addressID . "', " . $values . ")";
             $records = mysql_query($sql, $resource);
             
             $result = viewTable("addresses", $address);
@@ -88,6 +88,7 @@
         {
             $sql .= " LIMIT $limit,$count";
         }
+        
         $records = mysql_query($sql, $resource);
         
         if (!$results[0] = mysql_num_rows($records))
@@ -134,7 +135,7 @@
         $return[0] = 0;
         
         //Searches for any room parameters given.
-        $result['room'] = viewTable("rooms", $room);
+        //$result['room'] = viewTable("rooms", $room);
         
         $reference = viewTable("staff");
         $result['staff'] = viewTable("staff", $staff);
@@ -150,6 +151,14 @@
         
         for ($i = 1; $i <= $result['file'][0]; $i++)
         {
+            $result['room'] = null;
+            if ($result['file'][$i]['room'])
+            {
+                $room = new Room();
+                $room->roomID = $result['file'][$i]['room'];
+                $result['room'] = viewTable("rooms", $room);
+            }
+            
             if (isset($result['file'][$i]['patient']))
             {
                 $identified = new Patient();
@@ -175,7 +184,7 @@
                 $case['file'] = $result['file'][$i];
                 $case['patient'] = $result['patient'][1];
                 //$case['staff']
-                //$case['room']
+                $case['room'] = $result['room'][1];
                 
                 $return[] = $case;
             }

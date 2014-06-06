@@ -48,10 +48,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-        <meta name="author" content="" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
     
@@ -63,54 +63,77 @@
             
             <div id="content"> <!-- All content goes here -->
                 <h2>Summary</h2>
-                <h3>Patient Information</h3>
-                <table>
-                    <tr>
-                        <th>Patient ID</th>
-                        <th>First Name</th>
-                        <th>Surname</th>
-                        <th>Gender</th>
-                        <th>Date of Birth</th>
-                    </tr>
-                    <tr>
-                        <td><?php echo ($patient->identified ? $patient->patientID : "") ?></td>
-                        <td><?php echo $patient->firstName ?></td>
-                        <td><?php echo $patient->surname ?></td>
-                        <td><?php echo gender($patient->gender) ?></td>
-                        <td><?php echo (isset($patient->dateOfBirth) ? $patient->dateOfBirth->format('jS M Y') : "") ?></td>
-                    </tr>
-                </table>
-                <h3>Case Information</h3>
-                <table>
-                    <tr>
-                        <th>Case ID</th>
-                        <th>Admission Time</th>
-                        <th>Discharge Time</th>
-                    </tr>
-                    <tr>
-                        <td><?php echo $file->fileID ?></td>
-                        <td><?php echo $file->admission->format('g:ia jS M Y') ?></td>
-                        <td><?php echo $file->discharge->format('g:ia jS M Y') ?></td>
-                    </tr>
-                </table>
-                <h3>Discharge Notes</h3>
-                <table>
-                    <tr>
-                        <th align="right">By Staff</th>
-                        <td>
-                            <?php echo $staff->firstName
-                               . " " . $staff->surname?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th align="right">Created</th>
-                        <td><?php echo $note->timestamp->format('g:ia jS M Y') ?></td>
-                    </tr>
-                    <tr>
-                        <th align="right">Details</th>
-                        <td><?php echo $note->details ?></td>
-                    </tr>
-                </table>
+                
+				<fieldset style="height:180px;">
+                    <legend><h3>Patient Details</h3></legend>
+                    <table>
+                        <?php if ($patient->identified)
+                        { ?>
+                            <tr>
+                                <th>Patient ID</th>
+                                <td><?php echo $patient->patientID ?></td>
+                            </tr>
+                        <?php } ?>
+                        <tr>
+                            <th>First Name</th>
+                            <td><?php echo $patient->firstName ?></td>
+                        </tr>
+                        <tr>
+                            <th>Surname</th>
+                            <td><?php echo $patient->surname ?></td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td><?php echo gender($patient->gender) ?></td>
+                        </tr>
+                        <?php if ($patient->identified)
+                        { ?>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td><?php echo $patient->dateOfBirth->format('jS M Y') ?></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+				</fieldset>
+                
+                <fieldset style="height:180px;">
+                    <legend><h3>Case File Details</h3></legend>
+                    <table>
+                        <tr>
+                            <th>Case Number</th>
+                            <td><?php echo $file->fileID ?></td>
+                        </tr>
+                        <tr>
+                            <th>Admission</th>
+                            <td><?php echo $file->admission->format('g:i a D jS M Y') ?></td>
+                        </tr>
+                        <tr>
+                            <th>Discharge</th>
+                            <td><?php echo $file->discharge->format('g:i a D jS M Y') ?></td>
+                        </tr>
+                    </table>
+				</fieldset>
+                
+                <fieldset style="width:93%;">
+                    <legend><h3>Discharge Notes</h3></legend>
+                    <table>
+                        <tr>
+                            <th>By Staff</th>
+                            <td>
+                                <?php echo $staff->firstName
+                                   . " " . $staff->surname?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Created</th>
+                            <td><?php echo $note->timestamp->format('g:ia jS M Y') ?></td>
+                        </tr>
+                        <tr>
+                            <th>Details</th>
+                            <td><?php echo $note->details ?></td>
+                        </tr>
+                    </table>
+                </fieldset>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>

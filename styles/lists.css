@@ -1,0 +1,19 @@
+#lists table {
+    border:1px solid #0aa;
+    padding:4px;
+}
+
+#lists th {
+    border:1px solid #0aa;
+    border-collapse:collapse;
+    background-color:#6ce;
+	color:#136;
+    text-align:center;
+    padding:2px;
+}
+
+#lists td {
+    border:1px solid #0aa;
+    border-collapse:collapse;
+    padding:2px;
+}

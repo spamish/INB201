@@ -8,8 +8,8 @@
             if (   !strpos($_SERVER['PHP_SELF'], "index")
                 && !strpos($_SERVER['PHP_SELF'], "redirect"))
             { ?>
-                <a id="btnSubmit" href="/inb201/index.php">Logout</a><br>
                 <a id="btnSubmit" href="/inb201/change_password.php">Change Password</a><br>
+                <a id="btnSubmit" href="/inb201/index.php">Logout</a><br>
         <?php } ?>
     </div>
 </div><!-- end #header -->

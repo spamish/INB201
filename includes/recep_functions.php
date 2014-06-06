@@ -88,7 +88,7 @@
                                . $patient->firstName . "', '"
                                . $patient->surname . "', '"
                                . $patient->gender . "', '"
-                               . $patient->dateOfBirth . "')";
+                               . $patient->dateOfBirth->format('Y-m-d') . "')";
             
             $records = mysql_query($sql, $resource);
             
@@ -112,11 +112,123 @@
         
         $sql = "INSERT INTO files (fileID, admission, state)
                 VALUES ('" . $file->fileID . "', '"
-                           . $file->admission . "', '"
+                           . $file->admission->format('Y-m-d H:i:s') . "', '"
                            . $file->state . "')";
         $records = mysql_query($sql, $resource);
         $return = viewTable("files", $file);
         
         return new File($return[1]);
+    }
+    
+    /*
+    
+    */
+    function viewBalances()
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        $return[0] = 0;
+        
+        //View sorted by id in ascending order.
+        $sql = "SELECT * FROM files
+                WHERE balance > 0";
+        
+        $records = mysql_query($sql, $resource);
+        
+        if (!$result['file'][0] = mysql_num_rows($records))
+        {
+            return null;
+        }
+        
+        while ($row = mysql_fetch_array($records))
+        {
+            $result['file'][] = $row;
+        }
+        
+        for ($i = 1; $i <= $result['file'][0]; $i++)
+        {
+            if (isset($result['file'][$i]['patient']))
+            {
+                $identified = new Patient();
+                $identified->patientID = $result['file'][$i]['patient'];
+                $result['patient'] = viewTable("patients", $identified);
+            }
+            else
+            {
+                $unidentified = new Patient();
+                $unidentified->file = $result['file'][$i]['fileID'];
+                $result['patient'] = viewTable("unidentified", $unidentified);
+            }
+            if ($result['patient'][0] != 0)
+            {
+                $return[0]++;
+                $case['file'] = $result['file'][$i];
+                $case['patient'] = $result['patient'][1];
+                
+                $return[] = $case;
+            }
+        }
+        return $return;
+    }
+    
+    /*
+    
+    */
+    function assignInsurance($insurance)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        $result = viewTable("insurance", $insurance);
+        
+        if (!$result[0])
+        {
+            $result = viewTable("insurance");
+            $insurance->insuranceID = $result[0] + 1;
+            //Create address.
+            $sql = "INSERT INTO insurance (insuranceID, provider, policy, percent, maximum)
+                    VALUES ('" . $insurance->insuranceID . "', '"
+                               . $insurance->provider . "', '"
+                               . $insurance->policy . "', '"
+                               . $insurance->percent . "', '"
+                               . $insurance->maximum . "')";
+            $records = mysql_query($sql, $resource);
+            
+            $result = viewTable("insurance", $insurance);
+        }
+        
+        return new Insurance($result[1]);
+    }
+    
+    /*
+    
+    */
+    function assignGuardian($guardian)
+    {
+        $resource = new Connection();
+        $resource = $resource->Connect();
+        
+        $result = viewTable("guardians", $guardian);
+        
+        if (!$result[0])
+        {
+            $result = viewTable("guardians");
+            $guardian->guardianID = $result[0] + 1;
+            
+            //Create guardian.
+            $sql = "INSERT INTO guardians (guardianID, firstName, surname, gender, mobilePhone, homePhone, address)
+                    VALUES ('" . $guardian->guardianID . "', '"
+                               . $guardian->firstName . "', '"
+                               . $guardian->surname . "', '"
+                               . $guardian->gender . "', '"
+                               . $guardian->mobilePhone . "', '"
+                               . $guardian->homePhone . "', '"
+                               . $guardian->address . "')";
+            $records = mysql_query($sql, $resource);
+            
+            $result = viewTable("guardians", $guardian);
+        }
+        
+        return new Guardian($result[1]);
     }
 ?>

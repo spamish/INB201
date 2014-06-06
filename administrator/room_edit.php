@@ -23,7 +23,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -35,39 +38,37 @@
                 <?php if (isset($_POST['update']))
                 { ?>
                     <h2>Edit Room</h2>
-                    <form action="room_edit_confirm.php" method="post" style="float:left;width=50%;">
-                        <table>
-                            <tr>
-                                <td align="right">Ward</td>
-                                <td align="left">Room Number</td>
-                            </tr>
-                            <tr>
-                                <td align="right">
-                                    <?php echo $room->ward ?>
-                                </td>
-                                <td align="left">
-                                    <?php echo $room->roomNumber ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">Number of Beds</td>
-                                <td align="left"><input type="text" name="capacity" 
-                                    required value="<?php echo $room->capacity ?>"/></td>
-                            </tr>
-                            <tr>
-                                <td align="right">Occupied Beds</td>
-                                <td align="left">
-                                    <?php echo $room->occupied ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td align="left">
-                                    <input id="btnSubmit" type="submit" name="update" value="Update">
-                                    <input type="hidden" name="roomID" value="<?php echo $room->roomID ?>">
-                                </td>
-                            </tr>
-                        </table>
+                    <form action="room_edit_confirm.php" method="post">
+                        <input type="hidden" name="roomID" value="<?php echo $room->roomID ?>"/>
+                        <fieldset style="width:90%;">
+                            <legend><h3>Room Details</h3></legend>
+                            <table>
+                                <tr>
+                                    <th>Ward</th>
+                                    <th align="left">Room Number</th>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <?php echo $room->ward ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $room->roomNumber ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Number of Beds</th>
+                                    <td><input type="text" name="capacity" 
+                                        required value="<?php echo $room->capacity ?>"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Occupied Beds</th>
+                                    <td>
+                                        <?php echo $room->occupied ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <h2 style="width:90%;"><input id="btnSubmit" type="submit" name="update" value="Update"/></h2>
                     </form>
                 <?php }
                 else

@@ -1,0 +1,16 @@
+fieldset {
+    width:45%;
+    float:left;
+}
+
+th {
+    text-align:right;
+}
+
+#message {
+    text-align:center;
+}
+
+.history {
+    margin:10px;
+}

@@ -25,7 +25,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -38,26 +41,37 @@
                 <h2>Summary</h2>
                 <?php if ($check)
                 { ?>
-                    <p>Updating of room successful.</p>
-                    <table>
-                        <tr id="tableRowHeader">
-                            <th>Room Number</th>
-                            <th>Ward</th>
-                            <th>Room Capacity</th>
-                            <th>Occupied Beds</th>
-                        </tr>
-                        
-                        <tr id="tableRowA">
-                            <td><?php echo $room->roomNumber ?></td>
-                            <td><?php echo $room->ward ?></td>
-                            <td><?php echo $room->capacity ?></td>
-                            <td><?php echo $room->occupied ?></td>
-                        </tr>
-                    </table>
+                    <div id="message">
+                        <p>Updating of room successful.</p>
+                    </div>
+                    
+                    <fieldset>
+                        <legend><h3>Room Details</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Ward</th>
+                                <th align="left">Room Number</th>
+                            </tr>
+                            <tr>
+                                <td align="right"><?php echo $room->ward ?></td>
+                                <td><?php echo $room->roomNumber ?></td>
+                            </tr>
+                            <tr>
+                                <th>Number of Beds</th>
+                                <td><?php echo $room->capacity ?></td>
+                            </tr>
+                            <tr>
+                                <th>Occupied Beds</th>
+                                <td><?php echo $room->occupied ?></td>
+                            </tr>
+                        </table>
+                    </fieldset>
                 <?php }
                 else
                 { ?>
-                    <p>Updating of room unsuccessful. Would result in insufficient beds.</p>
+                    <div id="message">
+                        <p>Updating of room unsuccessful. Would result in insufficient beds.</p>
+                    </div>
                 <?php } ?>
             </div> <!-- end #content -->
             

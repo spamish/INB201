@@ -1,23 +1,4 @@
-<a id="btnSidebar" href="">Option A</a>
+<a id="btnSidebar" href="/inb201/technician/test_view.php">My Tests</a>
 
-<?php if (strpos($_SERVER["PHP_SELF"], "."))
-{ ?>
-    <a id="btnPageActions" href=""
-        style="margin-left:10px;">Sub-option</a>
-<?php } ?>
-
-<a id="btnSidebar" href="">Option B</a><br>
-
-<?php if (strpos($_SERVER["PHP_SELF"], "."))
-{ ?>
-    <a id="btnPageActions" href=""
-        style="margin-left:10px;">Sub-option</a><br>
-<?php } ?>
-
-<a id="btnSidebar" href="">Option C</a><br>
-
-<?php if (strpos($_SERVER["PHP_SELF"], "."))
-{ ?>
-    <a id="btnPageActions" href=""
-        style="margin-left:10px;">Sub-option</a><br>
-<?php } ?>
+<a id="btnSidebar" href="/inb201/technician/patients_view.php">Patients</a>
+<a id="btnPageActions" href="/inb201/technician/patients_search.php" style="margin-left:10px;">Search</a>

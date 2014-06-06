@@ -30,7 +30,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+            <?php include('../styles/lists.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -43,67 +47,86 @@
                 
                 <h2>Add Test</h2>
                 
-                <div id="patientDetails">
-                <?php
-                    if ($patient->identified)
-                    { ?>
-                        <h3>Patient Details</h3>
-                        <p>Patient ID: <?php echo $patient->patientID ?><br>
-                    <?php }
-                    else
-                    { ?>
-                        <h3>Patient Details</h3>
-                        <p>
-                    <?php }
-                    ?>
-                    First Name: <?php echo $patient->firstName ?><br>
-                    Surname: <?php echo $patient->surname ?><br>
-                    Gender: <?php echo gender($patient->gender) ?>
-                    <?php
-                        if ($patient->identified)
-                        { ?>
-                            <br>Date of Birth: <?php echo $patient->dateOfBirth->format('jS M Y') ?>
-                        <?php }
-                    ?>
-                    </p>
-                </div> <!-- end #patientDetails -->
-                
-                <div id="fileDetails">
-                    <h3>Case File Details</h3>
-                    <p>Case Number: <?php echo $file->fileID ?><br>
-                    Admission: <?php echo $file->admission->format('g:i a D jS M Y') ?></p>
-                </div> <!-- end #fileDetails -->
-                
-                <div id="test">
-                    <h3>Test Details</h3>
-                    <form action="summary.php" method="post">
-                        <input type="hidden" name="function" value="test">
-                        <input type="hidden" name="fileID" value="<?php echo $file->fileID ?>">
-                        <select name="code">
-                            <option value="" selected>-</option>
-                            <?php for ($i = 1; $i <= $list[0]; $i++) {
-                                $test = new Equipment($list[$i]) ?>
-                                <option value="<?php echo $test->code?>">
-                                    <?php echo $test->code ?></option>
-                            <?php } ?>
-                        </select>
-                        <br><br>
-                        <input id="btnSubmit" type="submit" name="submit" value="Confirm">
-                        <br><br>
-                    </form>
-                </div> <!-- end #test -->
-                
-                <div id="guide">
+				<fieldset style="height:180px;">
+                    <legend><h3>Patient Details</h3></legend>
                     <table>
-                        <?php for ($i = 1; $i <= $list[0]; $i++) {
-                        $test = new Equipment($list[$i]) ?>
+                        <?php if ($patient->identified)
+                        { ?>
+                            <tr>
+                                <th>Patient ID</th>
+                                <td><?php echo $patient->patientID ?></td>
+                            </tr>
+                        <?php } ?>
                         <tr>
-                            <th><?php echo $test->code ?></th>
-                            <td><?php echo $test->description ?></td>
+                            <th>First Name</th>
+                            <td><?php echo $patient->firstName ?></td>
                         </tr>
+                        <tr>
+                            <th>Surname</th>
+                            <td><?php echo $patient->surname ?></td>
+                        </tr>
+                        <tr>
+                            <th>Gender</th>
+                            <td><?php echo gender($patient->gender) ?></td>
+                        </tr>
+                        <?php if ($patient->identified)
+                        { ?>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td><?php echo $patient->dateOfBirth->format('jS M Y') ?></td>
+                            </tr>
                         <?php } ?>
                     </table>
-                </div> <!-- end #guide -->
+				</fieldset>
+                
+                <fieldset style="height:180px;">
+                    <legend><h3>Case File Details</h3></legend>
+                    <table>
+                        <tr>
+                            <th>Case Number</th>
+                            <td><?php echo $file->fileID ?></td>
+                        </tr>
+                        <tr>
+                            <th>Admission</th>
+                            <td><?php echo $file->admission->format('g:i a D jS M Y') ?></td>
+                        </tr>
+                        </tr>
+                    </table>
+				</fieldset>
+                
+                <form action="summary.php" method="post">
+                    <fieldset style="width:93%;">
+                        <legend><h3>Test Details</h3></legend>
+                        <input type="hidden" name="function" value="test">
+                        <input type="hidden" name="fileID" value="<?php echo $file->fileID ?>">
+                        <h2>
+                            <select name="code">
+                                <option value="" selected>-</option>
+                                <?php for ($i = 1; $i <= $list[0]; $i++) {
+                                    $test = new Equipment($list[$i]) ?>
+                                    <option value="<?php echo $test->code?>">
+                                        <?php echo $test->code ?></option>
+                                <?php } ?>
+                            </select><br>
+                            <input id="btnSubmit" type="submit" name="submit" value="Confirm">
+                        </h2>
+                    </fieldset>
+                </form>
+                
+                <fieldset style="width:93%;">
+                    <legend><h3>Tests</h3></legend>
+                    <table id="lists" style="border-collapse:collapse;">
+                        <?php for ($i = 1; $i <= $list[0]; $i++)
+                        {
+                            $test = new Equipment($list[$i]) ?>
+                            <tr>
+                                <th><?php echo $test->code ?></th>
+                                <td><?php echo $test->description ?></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                </fieldset>
+                
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>

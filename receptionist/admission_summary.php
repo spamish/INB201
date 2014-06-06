@@ -5,33 +5,38 @@
     require('../includes/recep_functions.php');
     require('../includes/functions.php');
     
-    $append = isset($_POST['append']);
-    $patient = new Patient($_POST);
+    //Check if patient is identified or not.
+    if (isset($_POST['append']))
+    {
+        $patient = new Patient();
+        $patient->patientID = $_POST['patientID'];
+        $results = viewTable("patients", $patient);
+        $patient = new Patient($results[1]);
+        $patient->identified = true;
+        $append = true;
+    }
+    else
+    {
+        $patient = new Patient($_POST);
+        $patient->identified = false;
+    }
     
     //Update patient details.
-    if ($append)
+    if ($patient->identified)
     {
-        $search = $patient;
-        $mobilePhone = $patient->mobilePhone;
-        $search->mobilePhone = null;
-        $homePhone = $patient->homePhone;
-        $search->homePhone = null;
+        $reference = new Patient($_POST);
+        $reference->patientID = $patient->patientID;
         
-        $result = viewTable("patients", $search);
-        $search->patientID = $result[1]['patientID'];
-        
-        if (strlen($_POST['mobilePhone']) > 0)
+        foreach ($patient as $type => $value)
         {
-            $patient = updatePatient($search, "mobilePhone", $mobilePhone);
-        }
-        
-        if (strlen($_POST['homePhone']) > 0)
-        {
-            $patient = updatePatient($search, "homePhone", $homePhone);
+            if ($patient->$type != $reference->$type)
+            {
+                update("patients", "patientID", $patient->patientID, $type, $reference->$type);
+            }
         }
         
         $address = new Address($_POST);
-        
+        //Update address details.
         if (   $address->house
             && $address->street
             && $address->suburb
@@ -40,19 +45,62 @@
             && $address->country)
         {
             $address = assignAddress($address);
-            $patient = updatePatient($search, "address", $address->addressID);
+            update("patients", "patientID", $patient->patientID, "address", $address->addressID);
         }
         
-        //Add guardian information.
+        //Update guardian address.
+        $guardian = new Guardian($_POST);
         
-        $patient->identified = true;
+        if (isset($_POST['grdAddress']))
+        {
+            $guardian->homePhone = $patient->homePhone;
+            $guardian->address = $address->addressID;
+        }
+        else
+        {
+            $_POST['unit'] = (isset($_POST['grdUnit']) ? $_POST['grdUnit'] : null);
+            $_POST['house'] = (isset($_POST['grdHouse']) ? $_POST['grdHouse'] : null);
+            $_POST['street'] = (isset($_POST['grdStreet']) ? $_POST['grdStreet'] : null);
+            $_POST['suburb'] = (isset($_POST['grdSuburb']) ? $_POST['grdSuburb'] : null);
+            $_POST['postcode'] = (isset($_POST['grdPostcode']) ? $_POST['grdPostcode'] : null);
+            $_POST['region'] = (isset($_POST['grdRegion']) ? $_POST['grdRegion'] : null);
+            $_POST['country'] = (isset($_POST['grdCountry']) ? $_POST['grdCountry'] : null);
+            
+            $address = new Address($_POST);
+            if (   $address->house
+                && $address->street
+                && $address->suburb
+                && $address->postcode
+                && $address->region
+                && $address->country)
+            {
+                $address = assignAddress($address);
+            }
+            $guardian->address = $address->addressID;
+        }
+        
+        //Update guardian details.
+        $_POST['firstName'] = (isset($_POST['grdFirstName']) ? $_POST['grdFirstName'] : null);
+        $_POST['surname'] = (isset($_POST['grdSurname']) ? $_POST['grdSurname'] : null);
+        $_POST['gender'] = (isset($_POST['grdGender']) ? $_POST['grdGender'] : null);
+        $_POST['mobilePhone'] = (isset($_POST['grdMobilePhone']) ? $_POST['grdMobilePhone'] : null);
+        $_POST['homePhone'] = (isset($_POST['grdHomePhone']) ? $_POST['grdHomePhone'] : null);
+        
+        $guardian = assignGuardian($guardian);
+        
+        if ($guardian->guardianID != $patient->guardian)
+        {
+            update("patients", "patientID", $patient->patientID, "guardian", $guardian->guardianID);
+        }
     }
     
+    //Create case file.
     $file = new File($_POST);
-    $file->admission = timestamp();
+    $file->admission = new DateTime();
     
     $file = createFile($file);
     
+    //Add admission note.
     $note = new Note($_POST);
     $note->file = $file->fileID;
     $note->type = "admission";
@@ -61,84 +109,17 @@
     
     $note = createNote($note);
     
+    //Update links to file.
     if ($patient->identified)
     {
-        updateFile($file, "patient", $patient->patientID);
+        update("files", "fileID", $file->fileID, "patient", $patient->patientID);
     }
     else
     {
         $patient->file = $file->fileID;
         createUnidentified($patient);
     }
-?>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-        <meta name="author" content="" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
-        <title>T.O.U.C.H. Online System</title>
-    </head>
     
-    <body>
-        <div id="wrapper">
-            
-            <?php include('../includes/header.php'); ?>
-            <?php include('../includes/sidebar.php'); ?>
-            
-            <div id="content"> <!-- All content goes here -->
-                <h2>Summary</h2>
-                <h3>Patient Information</h3>
-                <table>
-                    <tr>
-                        <th>Patient ID</th>
-                        <th>First Name</th>
-                        <th>Surname</th>
-                        <th>Gender</th>
-                        <th>Date of Birth</th>
-                    </tr>
-                    <tr>
-                        <td><?php echo ($patient->identified ? $patient->patientID : "") ?></td>
-                        <td><?php echo $patient->firstName ?></td>
-                        <td><?php echo $patient->surname ?></td>
-                        <td><?php echo gender($patient->gender) ?></td>
-                        <td><?php echo $patient->dateOfBirth ?></td>
-                    </tr>
-                </table>
-                <h3>Case Information</h3>
-                <table>
-                    <tr>
-                        <th>Case ID</th>
-                        <th>Admission Time</th>
-                        <th>Condition</th>
-                    </tr>
-                    <tr>
-                        <td><?php echo $file->fileID ?></td>
-                        <td><?php echo $file->admission ?></td>
-                        <td><?php echo condition($file->state) ?></td>
-                    </tr>
-                </table>
-                <h3>Case Notes</h3>
-                <table>
-                    <tr>
-                        <th align="right">By Staff</th>
-                        <td><?php echo $note->staff ?></td>
-                    </tr>
-                    <tr>
-                        <th align="right">Created</th>
-                        <td><?php echo $note->timestamp ?></td>
-                    </tr>
-                    <tr>
-                        <th align="right">Details</th>
-                        <td><?php echo $note->details ?></td>
-                    </tr>
-                </table>
-            </div> <!-- end #content -->
-            
-            <?php include('../includes/footer.php'); ?>
-            
-        </div> <!-- End #wrapper -->
-    </body>
-</html>
+    //Display patient information.
+    header ("refresh:0; url=patients_view_details.php?fileID=" . $file->fileID);
+?>

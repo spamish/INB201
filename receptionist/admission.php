@@ -7,10 +7,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-        <meta name="author" content="" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+            <?php include('../styles/cal.css') ?>
+        </style>
         <script type="text/javascript" src="../includes/lib/calendar.js"></script>
         <script type="text/javascript" src="../includes/javascripting.js"></script>
         <script type="text/javascript">
@@ -29,57 +30,61 @@
             <?php include('../includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
-                <h2>Admit Patient</h2>
-                <p>If date of birth is unknown, submit as unidentified but fill in name details.</p>
                 <form id="admission" action="admission_extended.php" method="post">
-                    <table>
-                        <tr>
-                            <!-- Deselect checkbox if unable to identify patient -->
-                            <td>
-                                ID available
-                                <input id="identified" type="checkbox"
-                                    name="identified" onchange="setID()" checked>
-                            </td>
-                            <!-- Sets patient with psedu ID or first name
-                            and surname fields depending on checkbox selection -->
-                            <td align="right">First Name</td>
-                            <td><input id="firstName" type="text" name="firstName" required autofocus ></td>
-                            <td align="right">Surname</td>
-                            <td><input id="surname" type="text" name="surname" required></td>
-                        </tr>
-                        <tr>
-                            <td></td><td></td><td></td>
-                            <td align="right">Date of Birth</td>
-                            <td><input id="date" type="text" name="dateOfBirth" required></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Gender</td>
-                            <td><input type="radio" name="gender" value="m" required>Male</td>
-                            <td><input type="radio" name="gender" value="f">Female</td>
-                        </tr>
-                    </table>
-                    <table>
-                        <tr>
-                            <td align="right">Condition</td>
-                            <td><select id="state" name="state">
+                    <h2>Admit Patient</h2>
+                    <p>If date of birth is unknown, submit as unidentified but fill in name details.</p>
+                    <fieldset style="width:90%;">
+                        <legend><h3>Patient Details</h3></legend>
+                        <!-- Deselect checkbox if unable to identify patient -->
+                        <table>
+                            <tr>
+                                <th>ID available</th>
+                                <td><input id="identified" type="checkbox" checked
+                                    name="identified" onchange="setID()"/></td>
+                            </tr>
+                            <tr>
+                                <!-- Sets patient with psedu ID or first name
+                                and surname fields depending on checkbox selection -->
+                                <th>First Name</th>
+                                <td><input id="firstName" type="text" name="firstName" required autofocus/></td>
+                            </tr>
+                            <tr>
+                                <th>Surname</th>
+                                <td><input id="surname" type="text" name="surname" required/></td>
+                            </tr>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td>
+                                    <input id="date" type="text" name="dateOfBirth" required/>
+                                    <img src="/inb201/calendar.gif" name="Calendar Icon"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Gender</th>
+                                <td>
+                                    <input type="radio" name="gender" value="m" required/>Male
+                                    <input type="radio" name="gender" value="f"/>Female
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    
+                    <fieldset style="width:90%;">
+                        <legend><h3>Admission Details</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Condition</th>
+                                <td><select name="state">
                                     <option value="0.5">Stable</option>
                                     <option value="0.7">Urgent</option>
                                     <option value="0.9">Critical</option>
                                 </select></td>
-                        </tr>
-                        <tr>
-                            <td align="right" valign="top">Admission Notes</td>
-                            <td><textarea rows="6" cols="60" name="details"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input id="btnSubmit" type="submit" name="submit" value="Submit"></td>
-                            <!-- If patient ID is provided, then continue on to the extended patient details
-                            form to add extra data like address, phone and insurance details. If patient is
-                            unidentified or en route then display list of unidentified patients with newly added one
-                            highlighted -->
-                        </tr>
-                    </table>
+                            </tr>
+                        </table>
+                        <b>Notes</b><br>
+                        <textarea rows="6" cols="60" name="details"></textarea>
+                    </fieldset>
+                    <h2 style="width:90%;"><input id="btnSubmit" type="submit" name="submit" value="Submit"/></h2>
                 </form>
             </div> <!-- end #content -->
             

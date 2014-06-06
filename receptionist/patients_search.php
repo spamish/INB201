@@ -7,7 +7,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -20,62 +23,73 @@
 
                 <h2>Search for Patients</h2>
                 <form action="patients_view.php" method="get">
-                    <table>
-                        <tr>
-                            <td align="right">Patient ID</td>
-                            <td><input type="text" name="patientID" autofocus ></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Case ID</td>
-                            <td><input type="text" name="fileID"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">First Name</td>
-                            <td><input type="text" name="firstName"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Surname</td>
-                            <td><input type="text" name="surname"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Gender</td>
-                            <td>
-                                <input type="radio" name="gender" value="m">Male
-                                <input type="radio" name="gender" value="f">Female
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right">Doctor Username</td>
-                            <td><input type="text" name="username"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Doctor First Name (work in progress)</td>
-                            <td><input type="text" name="docFirstName"></td>
-                        </tr>
-                        <tr>
-                            <td align="right">Doctor Surname (work in progress)</td>
-                            <td><input type="text" name="docSurname"></td>
-                        </tr>
-                        <tr>
-                            <td>Room Number and/or Ward</td>
-                            <td>
-                                <input type="text" name="roomNumber">
-                                <select id="ward" name="ward">
-                                    <option value="-">-</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <input id="btnSubmit" type="submit"
-                                    name="search" value="Submit">
-                            </td>
-                        </tr>
-                    </table>
+                    
+                    <fieldset style="height:184px">
+                        <legend><h3>Patient Details</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Patient ID</th>
+                                <td><input type="text" name="patientID" autofocus ></td>
+                            </tr>
+                            <tr>
+                                <th>Case ID</th>
+                                <td><input type="text" name="fileID"></td>
+                            </tr>
+                            <tr>
+                                <th>First Name</th>
+                                <td><input type="text" name="firstName"></td>
+                            </tr>
+                            <tr>
+                                <th>Surname</th>
+                                <td><input type="text" name="surname"></td>
+                            </tr>
+                            <tr>
+                                <th>Gender</th>
+                                <td>
+                                    <input type="radio" name="gender" value="m">Male
+                                    <input type="radio" name="gender" value="f">Female
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    
+                    <fieldset style="height:184px">
+                        <legend><h3>Doctor's Details</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Username</th>
+                                <td><input type="text" name="username"></td>
+                            </tr>
+                            <tr>
+                                <th>First Name</th>
+                                <td><input type="text" name="docFirstName"></td>
+                            </tr>
+                            <tr>
+                                <th align="right">Surname</th>
+                                <td><input type="text" name="docSurname"></td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    
+                    <fieldset style="width:93%">
+                        <legend><h3>Room Details</h3></legend>
+                        <table>
+                            <tr>
+                                <th>Room Number and/or Ward</th>
+                                <td>
+                                    <input type="text" name="roomNumber">
+                                    <select id="ward" name="ward">
+                                        <option value="-">-</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    
+                    <h2><input id="btnSubmit" type="submit" name="submit" value="Submit"></h2>
                 </form>
             </div> <!-- end #content -->
             

@@ -14,13 +14,18 @@
     if ($check)
     {
         changePassword($_SESSION['login'], $_POST['password_new']);
+        
+        header ("refresh:1; url=home.php");
     }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+        <style>
+            <?php include('styles/style.css') ?>
+            <?php include('styles/main.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
     
@@ -33,15 +38,16 @@
                 <?php
                     if ($check)
                     { ?>
-                        <h2>Password Change Successful</h2>
-                        <a id="btnSubmit" href="home.php">Return to home</a>
+                        <h2 id="result">Password Change Successful</h2>
                     <?php }
                     else
                     { ?>
-                        <h2>Password Change Failed</h2>
-                        <p>Either new passwords do not match, old passwords
-                           do not match or the old password is incorrect.</p>
-                        <a id="btnSubmit" href="change_password.php">Try Again</a>
+                        <fieldset id="password">
+                            <legend><h2>Password Change Failed</h2></legend>
+                            <p id="result">Either new passwords do not match, old passwords
+                               do not match or the old password is incorrect.<br><br>
+                            <a id="btnSubmit" href="change_password.php">Try Again</a></p>
+                        </fieldset>
                     <?php }
                 ?>
             </div> <!-- end #content -->

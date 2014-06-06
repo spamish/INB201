@@ -113,18 +113,18 @@
     {
         //Declare variables.
         public $insuranceID;
-        public $insurer;
+        public $provider;
         public $policy;
-        public $rebate;
+        public $percent;
         public $maximum;
         
         //Construct class.
         function __construct ($insurance = null)
         {
             $this->insuranceID = (isset($insurance['insuranceID']) ? $insurance['insuranceID'] : null);
-            $this->insurer = (isset($insurance['insurer']) ? $insurance['insurer'] : null);
+            $this->provider = (isset($insurance['provider']) ? $insurance['provider'] : null);
             $this->policy = (isset($insurance['policy']) ? $insurance['policy'] : null);
-            $this->rebate = (isset($insurance['rebate']) ? $insurance['rebate'] : null);
+            $this->percent = (isset($insurance['percent']) ? $insurance['percent'] : null);
             $this->maximum = (isset($insurance['maximum']) ? $insurance['maximum'] : null);
         }
     }
@@ -173,6 +173,7 @@
         {
             $this->guardianID = (isset($guardian['guardianID']) ? $guardian['guardianID'] : null);
             $this->firstName = (isset($guardian['firstName']) ? $guardian['firstName'] : null);
+            $this->surname = (isset($guardian['surname']) ? $guardian['surname'] : null);
             $this->gender = (isset($guardian['gender']) ? $guardian['gender'] : null);
             $this->mobilePhone = (isset($guardian['mobilePhone']) ? $guardian['mobilePhone'] : null);
             $this->homePhone = (isset($guardian['homePhone']) ? $guardian['homePhone'] : null);

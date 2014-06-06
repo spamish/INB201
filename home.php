@@ -8,10 +8,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <meta name="description" content="" />
-        <meta name="keywords" content="" />
-        <meta name="author" content="" />
-        <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+        <style>
+            <?php include('styles/style.css') ?>
+            <?php include('styles/main.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
     
@@ -22,12 +22,13 @@
             <?php include('includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
-                
-                <h2>Welcome <?php echo $_SESSION['firstName'] . " " . $_SESSION['surname'] ?></h2>
-                <?php if (isset($_SESSION['lastLogin']))
-                { ?>
-                    <p>You last logged in at <?php echo $_SESSION['lastLogin'] ?></p>
-                <?php } ?>
+                <div id="home">
+                    <h2>Welcome <?php echo $_SESSION['firstName'] . " " . $_SESSION['surname'] ?></h2>
+                    <?php if (isset($_SESSION['lastLogin']))
+                    { ?>
+                        <p>You last logged in at <?php echo $_SESSION['lastLogin'] ?></p>
+                    <?php } ?>
+                </div> <!-- end #home -->
             </div> <!-- end #content -->
             
             <?php include('includes/footer.php'); ?>

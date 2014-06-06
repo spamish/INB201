@@ -15,7 +15,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/table.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -27,17 +30,17 @@
             <div id="content"> <!-- All content goes here -->
 
                 <h2>Medicine Prescriptions</h2>
-                <form action="prescription_edit.php" method="post">
+                <form action="prescription_edit.php" method="get">
                     <table>
                         <tr>
                             <th><a href="<?php echo $url[0] . "code" . $url[1] . !$sort ?>">Prescription Code</th>
                             <th><a href="<?php echo $url[0] . "cost" . $url[1] . !$sort ?>">Cost of Prescription</th>
                             <th>Prescription Description</th>
-                            <td>
+                            <td id="selection">
                                 <input id="btnSubmit" type="submit" name="update"
-                                    value="Update" style="float:right;">
+                                    value="Update"/>
                                 <input id="btnSubmit" type="submit" name="remove"
-                                    value="Remove" style="float:right;">
+                                    value="Remove"/>
                             </td>
                             
                         </tr>
@@ -57,9 +60,9 @@
                                         <td><?php echo $prescription->code ?></td>
                                         <td><?php echo $prescription->cost ?></td>
                                         <td><?php echo $prescription->description ?></td>
-                                        <td>
-                                            <input id="radio" type="radio" name="prescriptionID"
-                                                value="<?php echo $prescription->prescriptionID ?>">
+                                        <td id="selection">
+                                            <input type="radio" name="prescriptionID"
+                                                value="<?php echo $prescription->prescriptionID ?>"/>
                                         </td>
                                     <tr>
                             <?php }

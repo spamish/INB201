@@ -11,7 +11,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/actions.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -21,41 +25,61 @@
             <?php include('../includes/sidebar.php'); ?>
             
             <div id="content"> <!-- All content goes here -->
-
-                <h2>Medical Equipment Details</h2>
-                <table id="table">
-                    <tr>
-                        <td align="right">Room Number</td>
-                        <td><?php echo $equipment->roomNumber ?></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Test Code</td>
-                        <td><?php echo $equipment->code ?></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Test Duration</td>
-                        <td><?php echo $equipment->duration->format('H:i') ?></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Cost of Test</td>
-                        <td>$<?php echo $equipment->cost ?></td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">Equipment Description</td>
-                        <td><p><?php echo $equipment->description ?></p></td>
-                    </tr>
-                    <tr>
-                        <td align="right">Capable Technicians</td>
-                    </tr>
-                    <?php $equipment->technicians = unserialize($equipment->technicians);
-                    for ($i = 0; $i < count($equipment->technicians); $i++)
-                    { ?>
+                
+                <h2>Medical Equipment Information</h2>
+                <form id="actions" action="equipment_edit.php" method="get">
+                    <input id="btnAction" type="submit" name="update"
+                        value="Update"/>
+                    <input id="btnAction" type="submit" name="remove"
+                        value="Remove"/>
+                    <input type="hidden" name="equipmentID"
+                        value="<?php echo $equipment->equipmentID ?>"/>
+                </form> <!-- end #actions -->
+                
+                <fieldset>
+                    <legend><h3>Equipment Information</h3></legend>
+                    <table>
                         <tr>
-                            <td>Username <?php echo ($i + 1) ?></td>
-                            <td><?php echo $equipment->technicians[$i] ?></td>
+                            <th>Room Number</th>
+                            <td><?php echo $equipment->roomNumber ?></td>
                         </tr>
-                    <?php } ?>
-                </table>
+                        <tr>
+                            <th>Test Code</th>
+                            <td><?php echo $equipment->code ?></td>
+                        </tr>
+                        <tr>
+                            <th>Test Duration</th>
+                            <td><?php echo $equipment->duration->format('H:i') ?></td>
+                        </tr>
+                        <tr>
+                            <th>Cost of Test</th>
+                            <td>$<?php echo $equipment->cost ?></td>
+                        </tr>
+                        <tr>
+                            <th valign="top">Equipment Description</th>
+                            <td><p><?php echo $equipment->description ?></p></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                
+                <fieldset>
+                    <legend><h3>Capable Technicians</h3></legend>
+                    <table>
+                        <tr>
+                            <?php $equipment->technicians = unserialize($equipment->technicians);
+                            for ($i = 0; $i < count($equipment->technicians); $i++)
+                            { ?>
+                                <td style="padding-right:5px" width="20px" align="right">
+                                    <?php echo $equipment->technicians[$i] ?>
+                                </td>
+                                <?php if (!(($i + 1) % 5)) 
+                                { ?>
+                                    </tr><tr>
+                                <?php }
+                            } ?>
+                        </tr>
+                    </table>
+                </fieldset>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>

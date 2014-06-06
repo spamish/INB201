@@ -1,0 +1,33 @@
+table,td,th {
+    border:1px solid #0aa;
+    border-collapse:collapse;
+    margin: auto;
+    padding:4px;
+    font-size:18px;
+}
+
+th {
+    background-color:#6ce;
+	color:#136;
+}
+
+a {
+    color:#136;
+}
+
+#selection {
+    text-align:center;
+    border:1px solid #8cc;
+}
+
+#tableRowA {
+    background-color:#eff;
+}
+
+#tableRowB {
+    background-color:#dee;
+}
+
+#message {
+    text-align:center;
+}

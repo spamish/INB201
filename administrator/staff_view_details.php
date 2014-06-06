@@ -5,28 +5,38 @@
     require('../includes/admin_functions.php');
     require('../includes/functions.php');
     
-    if (!isset($_GET['id']))
+    if (!isset($_GET['staffID']))
     {
         header ("Location: staff_view.php");
     }
     
-    $staff = viewTable("staff");
-    $staff = new Staff($staff[$_GET['id']]);
+    $results = viewTable("staff", new Staff($_GET));
+    $staff = new Staff($results[1]);
     
-    $address = viewTable("addresses");
-    $address = new Address($address[$staff->address]);
+    $address = new Address();
+    $address->addressID = $staff->address;
+    $results = viewTable("addresses", $address);
+    $address = new Address($results[1]);
     
-    $roster = viewTable("rosters");
-    $roster = new Roster($roster[$staff->roster]);
+    $roster = new Roster();
+    $roster->rosterID = $staff->roster;
+    $results = viewTable("rosters", $roster);
+    $roster = new Roster($results[1]);
     
-    $salary = viewTable("salaries");
-    $salary = new Salary($salary[$staff->salary]);
+    $salary = new Salary();
+    $salary->salaryID = $staff->salary;
+    $results = viewTable("salaries", $salary);
+    $salary = new Salary($results[1]);
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="../style.css" media="screen" />
+        <style>
+            <?php include('../styles/style.css') ?>
+            <?php include('../styles/actions.css') ?>
+            <?php include('../styles/info.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
 
@@ -37,107 +47,132 @@
             
             <div id="content"> <!-- All content goes here -->
 
-                <h2>Staff Details</h2>
-                <form action="staff_edit.php" method="post">
-                    <input id="btnSubmit" type="submit"
-                        name="update" value="Update"><br>
-                    <input type="hidden" name="id"
-                        value="<?php echo $staff->staffID ?>">
+                <h2>Staff Information</h2>
+                <form id="actions" action="staff_edit.php" method="get">
+                    <input id="btnAction" type="submit" name="update" value="Update">
+                    <input type="hidden" name="staffID" value="<?php echo $staff->staffID ?>">
+                </form> <!-- end #actions -->
+                
+                <fieldset style="height:220px;">
+                    <legend><h3>Staff Details</h3></legend>
                     <table>
                         <tr>
-                            <td>Username</td>
+                            <th>Username</th>
                             <td><?php echo $staff->username ?></td>
                         </tr>
                         <tr>
-                            <td>First Name</td>
+                            <th>First Name</th>
                             <td><?php echo $staff->firstName ?></td>
                         </tr>
                         <tr>
-                            <td>Surname</td>
+                            <th>Surname</th>
                             <td><?php echo $staff->surname ?></td>
                         </tr>
                         <tr>
-                            <td>Gender</td>
+                            <th>Gender</th>
                             <td><?php echo gender($staff->gender) ?></td>
                         </tr>
                         <tr>
-                            <td>Date of Birth</td>
+                            <th>Date of Birth</th>
                             <td><?php echo $staff->dateOfBirth->format('j M Y') ?></td>
                         </tr>
+                    </table>
+                </fieldset>
+                
+                <fieldset style="height:220px;">
+                    <legend><h3>Address Details</h3></legend>
+                    <table>
                         <tr>
-                            <td>Position</td>
+                            <?php echo ($address->unit ? "<th>Unit/Number</th>" : "<th>Number</th>") ?>
+                            <?php echo ($address->unit
+                                ? "<td>" . $address->unit .
+                                     "/" . $address->house . "</td>"
+                                : "<td>" . $address->house . "</td>") ?>
+                        </tr>
+                        <tr>
+                            <th>Street</th>
+                            <td><?php echo $address->street ?></td>
+                        </tr>
+                        <tr>
+                            <th>Suburb</th>
+                            <td><?php echo $address->suburb ?></td>
+                        </tr>
+                        <tr>
+                            <th>Postcode</th>
+                            <td><?php echo $address->postcode ?></td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td><?php echo $address->region ?></td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td><?php echo $address->country ?></td>
+                        </tr>
+                    </table>
+                </fieldset>
+                
+                <fieldset style="height:120px;">
+                    <legend><h3>Position</h3></legend>
+                    <table>
+                        <tr>
+                            <th>Role</th>
                             <td><?php echo position($staff->position) ?></td>
                         </tr>
                         <tr>
-                            <td>Ward</td>
+                            <th>Ward</th>
                             <td><?php echo $staff->ward ?></td>
                         </tr>
+                    </table>
+                </fieldset>
+                
+                <fieldset style="height:120px;">
+                    <legend><h3>Contact Details</h3></legend>
+                    <table>
                         <?php if ($staff->mobilePhone)
                         { ?>
                         <tr>
-                            <td>Mobile Phone</td>
+                            <th>Mobile Phone</th>
                             <td><?php echo $staff->mobilePhone ?></td>
                         </tr>
                         <?php }
                         if ($staff->homePhone)
                         { ?>
                         <tr>
-                            <td>Home Phone</td>
+                            <th>Home Phone</th>
                             <td><?php echo $staff->homePhone ?></td>
                         </tr>
                         <?php } ?>
-                        <tr><th>Address Details</th></tr>
+                    </table>
+                </fieldset>
+                
+                <fieldset style="height:120px;">
+                    <legend><h3>Roster</h3></legend>
+                    <table>
                         <tr>
-                            <?php if ($address->unit)
-                            { ?>
-                            <td>Unit</td>
-                            <?php } ?>
-                            <td>Number</td>
-                            <td>Street</td>
-                        </tr>
-                        <tr>
-                            <?php if ($address->unit)
-                            { ?>
-                            <td><?php echo $address->unit ?></td>
-                            <?php } ?>
-                            <td><?php echo $address->house ?></td>
-                            <td><?php echo $address->street ?></td>
-                        </tr>
-                        <tr>
-                            <td>Suburb</td>
-                            <td><?php echo $address->suburb ?></td>
-                        </tr>
-                        <tr>
-                            <td>Postcode</td>
-                            <td>State</td>
-                        </tr>
-                        <tr>
-                            <td><?php echo $address->postcode ?></td>
-                            <td><?php echo $address->region ?></td>
-                        </tr>
-                        <tr>
-                            <td>Country</td>
-                            <td><?php echo $address->country ?></td>
-                        </tr>
-                        <tr><th>Roster</th></tr>
-                        <tr>
-                            <td>Start Time</td>
+                            <th>Start Time</th>
                             <td><?php echo $roster->start ?></td>
                         </tr>
                         <tr>
-                            <td>Finish Time</td>
+                            <th>Finish Time</th>
                             <td><?php echo $roster->finish ?></td>
                         </tr>
-                        <tr><th>Salary</th></tr>
+                    </table>
+                </fieldset>
+                
+                <fieldset style="height:120px;">
+                    <legend><h3>Salary</h3></legend>
+                    <table>
                         <tr>
-                            <td>Pay Rate (p/h)</td>
-                            <td><?php echo "$" . $salary->payRate ?></td>
+                            <th>Pay Rate (p/h)</th>
+                            <td>$<?php echo $salary->payRate ?></td>
                         </tr>
                         <tr>
-                            <td>Next Pay Date</td>
+                            <th>Next Pay Date</th>
                             <td><?php echo $salary->nextDate->format('j M Y') ?></td>
                         </tr>
                     </table>
+                </fieldset>
             </div> <!-- end #content -->
             
             <?php include('../includes/footer.php'); ?>

@@ -32,10 +32,14 @@
         }
         
         update("staff", "staffID", $staff->staffID, "lastLogin", $date->format('Y-m-d H:i:s'));
+        
+        header ("refresh:1; url=home.php");
     }
     else
     {
         $_SESSION['login'] = null;
+        
+        header ("refresh:1; url=index.php");
     }
 ?>
 
@@ -43,7 +47,10 @@
 
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" type="text/css" href="style.css" media="screen" />
+        <style>
+            <?php include('styles/style.css') ?>
+            <?php include('styles/main.css') ?>
+        </style>
         <title>T.O.U.C.H. Online System</title>
     </head>
     
@@ -52,7 +59,7 @@
             
             <?php include('includes/header.php'); ?>
             
-            <div id="login"> <!-- All login content goes here -->
+            <div id="redirect"> <!-- All login content goes here -->
                 
                 <?php if ($check)
                 { ?>
@@ -71,16 +78,4 @@
             
         </div> <!-- End #wrapper -->
     </body>
-
-    <?php
-        if ($check)
-        {
-            header( "refresh:1; url=home.php");
-        }
-        else
-        {
-            //header( "refresh:1; url=index.php");
-        }
-        exit;
-    ?>
 </html>
